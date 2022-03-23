@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "OEyhsFHttfKamqpB4qY2xMpccosu2K5sljCfmuR1MYLaeQ8NuxQu/8drqCPH4/dQFjxF2F+Cf28pbT2u7u+1cQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Ricardo\\Documents\\FATEC\\TG\\BuscaJogosPlus\\GamePriceFinder\\GamePriceFinder.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Ricardo\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}
