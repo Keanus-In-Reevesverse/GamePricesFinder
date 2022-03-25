@@ -2,6 +2,18 @@
   "version": 3,
   "targets": {
     "net6.0": {
+      "EpicGamesStoreNET/1.0.2": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "12.0.1"
+        },
+        "compile": {
+          "lib/netstandard2.0/EpicGamesStoreNET.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/EpicGamesStoreNET.dll": {}
+        }
+      },
       "Newtonsoft.Json/13.0.1": {
         "type": "package",
         "compile": {
@@ -14,6 +26,18 @@
     }
   },
   "libraries": {
+    "EpicGamesStoreNET/1.0.2": {
+      "sha512": "+20i4CQ3CHa/J4Rc+3eTMJd8IUgY5925IYXEUq/b8BE8g7QG2Mulin2AIYy3shk3PLYZ1a2NC+Zan1aicrsJ/g==",
+      "type": "package",
+      "path": "epicgamesstorenet/1.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "epicgamesstorenet.1.0.2.nupkg.sha512",
+        "epicgamesstorenet.nuspec",
+        "lib/netstandard2.0/EpicGamesStoreNET.dll"
+      ]
+    },
     "Newtonsoft.Json/13.0.1": {
       "sha512": "ppPFpBcvxdsfUonNcvITKqLl3bqxWbDCZIzDWHzjpdAHRFfZe0Dw9HmA0+za13IdyrgJwpkDTDA9fHaxOrt20A==",
       "type": "package",
@@ -44,6 +68,7 @@
   },
   "projectFileDependencyGroups": {
     "net6.0": [
+      "EpicGamesStoreNET >= 1.0.2",
       "Newtonsoft.Json >= 13.0.1"
     ]
   },
@@ -86,6 +111,10 @@
       "net6.0": {
         "targetAlias": "net6.0",
         "dependencies": {
+          "EpicGamesStoreNET": {
+            "target": "Package",
+            "version": "[1.0.2, )"
+          },
           "Newtonsoft.Json": {
             "target": "Package",
             "version": "[13.0.1, )"

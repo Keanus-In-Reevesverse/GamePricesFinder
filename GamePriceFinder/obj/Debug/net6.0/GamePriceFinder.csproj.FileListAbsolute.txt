@@ -21,3 +21,4 @@ C:\Users\Ricardo\Documents\FATEC\TG\BuscaJogosPlus\GamePriceFinder\obj\Debug\net
 C:\Users\Ricardo\Documents\FATEC\TG\BuscaJogosPlus\GamePriceFinder\obj\Debug\net6.0\ref\GamePriceFinder.dll
 C:\Users\Ricardo\Documents\FATEC\TG\BuscaJogosPlus\GamePriceFinder\bin\Debug\net6.0\Newtonsoft.Json.dll
 C:\Users\Ricardo\Documents\FATEC\TG\BuscaJogosPlus\GamePriceFinder\obj\Debug\net6.0\GamePriceFinder.csproj.CopyComplete
+C:\Users\Ricardo\Documents\FATEC\TG\BuscaJogosPlus\GamePriceFinder\bin\Debug\net6.0\EpicGamesStoreNET.dll

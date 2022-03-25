@@ -8,10 +8,22 @@
     ".NETCoreApp,Version=v6.0": {
       "GamePriceFinder/1.0.0": {
         "dependencies": {
+          "EpicGamesStoreNET": "1.0.2",
           "Newtonsoft.Json": "13.0.1"
         },
         "runtime": {
           "GamePriceFinder.dll": {}
+        }
+      },
+      "EpicGamesStoreNET/1.0.2": {
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/EpicGamesStoreNET.dll": {
+            "assemblyVersion": "1.0.2.0",
+            "fileVersion": "1.0.2.0"
+          }
         }
       },
       "Newtonsoft.Json/13.0.1": {
@@ -29,6 +41,13 @@
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "EpicGamesStoreNET/1.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+20i4CQ3CHa/J4Rc+3eTMJd8IUgY5925IYXEUq/b8BE8g7QG2Mulin2AIYy3shk3PLYZ1a2NC+Zan1aicrsJ/g==",
+      "path": "epicgamesstorenet/1.0.2",
+      "hashPath": "epicgamesstorenet.1.0.2.nupkg.sha512"
     },
     "Newtonsoft.Json/13.0.1": {
       "type": "package",
