@@ -5,6 +5,10 @@ using GamePriceFinder.Models;
 
 namespace GamePriceFinder
 {
+    //https://stackoverflow.com/questions/36975619/how-to-call-a-rest-web-service-api-from-javascript
+    //https://stackoverflow.com/questions/69478024/require-not-supported-even-though-im-using-import
+    //https://stackoverflow.com/questions/1973140/parsing-json-from-xmlhttprequest-responsejson
+    //https://www.freecodecamp.org/news/here-is-the-most-popular-ways-to-make-an-http-request-in-javascript-954ce8c95aaa/#:~:text=To%20make%20an%20HTTP%20call,to%20fire%20off%20the%20request.
     public class PriceSearcher
     {
         private readonly ApiStoresHandler _apiStoresHandler;
@@ -19,10 +23,18 @@ namespace GamePriceFinder
         {
             var forHonorSteam = await GetSteamPrice();
             var forHonorEpic = await GetEpicPrice(gameName);
+            GetNuuvemPrices();
 
             ChangeGameNames(forHonorEpic.Name, forHonorSteam);
 
             return new List<Game> { forHonorSteam, forHonorEpic };
+        }
+
+        private void GetNuuvemPrices()
+        {
+            var scriptPath = @"C:\Users\Ricardo\Documents\FATEC\TG\ApiNuuvem\my_tests2.js";
+
+            //engine.Execute("const log = console.log; const fetch = require('node-fetch'); const nuuvem = require('nuuvem'); const uri = 'https://localhost:7265/sendGameList/'; const https = require('https'); const agent = new https.Agent({rejectUnauthorized: false});let gameList = [];gameList = nuuvem.checkPrice('for honor').then(function (gameDataArray) {let results = []; gameDataArray.forEach(function (e) {var game = { title: e.title, price: e.price, currency: e.currency };results.push(game);});var json_text = JSON.stringify(results, null, 2);var request = encodeURI(uri + json_text);fetch(request, { agent }).then(function (response) {return response.json();}).then(function (jsonResponse) {console.log(jsonResponse);});});");
         }
 
         private void ChangeGameNames(string gameName, params Game[] games)

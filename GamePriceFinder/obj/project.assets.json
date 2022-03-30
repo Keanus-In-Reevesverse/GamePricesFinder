@@ -78,11 +78,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\tg\\GamePricesFinder\\GamePriceFinder\\GamePriceFinder.csproj",
+      "projectUniqueName": "C:\\Users\\Ricardo\\Documents\\FATEC\\TG\\BuscaJogosPlus\\GamePriceFinder\\GamePriceFinder.csproj",
       "projectName": "GamePriceFinder",
-      "projectPath": "D:\\tg\\GamePricesFinder\\GamePriceFinder\\GamePriceFinder.csproj",
+      "projectPath": "C:\\Users\\Ricardo\\Documents\\FATEC\\TG\\BuscaJogosPlus\\GamePriceFinder\\GamePriceFinder.csproj",
       "packagesPath": "C:\\Users\\Ricardo\\.nuget\\packages\\",
-      "outputPath": "D:\\tg\\GamePricesFinder\\GamePriceFinder\\obj\\",
+      "outputPath": "C:\\Users\\Ricardo\\Documents\\FATEC\\TG\\BuscaJogosPlus\\GamePriceFinder\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\Ricardo\\AppData\\Roaming\\NuGet\\NuGet.Config",
