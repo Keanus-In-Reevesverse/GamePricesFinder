@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "J1UZamK6ZqozG5nhrNw8wfH31SjvD70MVkkawa7Y7dt7jF5SVd3Wn3xKJhURQkbXWCThwsJw1TW1OXu0CWdPdA==",
+  "dgSpecHash": "9xrPHXGYGazkPSzgUYTZjyP1g/HkF/dvEl4pVWuJYkcoHfX2s9deNBOdKNhT8n0j7TPHTWHgMER3t8GWpdilVA==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Ricardo\\Documents\\FATEC\\TG\\BuscaJogosPlus\\GamePriceFinder\\GamePriceFinder.csproj",
+  "projectFilePath": "D:\\tg\\GamePricesFinder\\GamePriceFinder\\GamePriceFinder.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Ricardo\\.nuget\\packages\\epicgamesstorenet\\1.0.2\\epicgamesstorenet.1.0.2.nupkg.sha512",
     "C:\\Users\\Ricardo\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512"

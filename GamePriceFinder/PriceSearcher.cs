@@ -1,80 +1,90 @@
-﻿using GamePriceFinder.Models;
-using GamePriceFinder.Responses;
-using Newtonsoft.Json;
-using System.Net.Http.Headers;
-using System.Web;
+﻿using GamePriceFinder.Enums;
+using GamePriceFinder.Handlers;
+using GamePriceFinder.Http;
+using GamePriceFinder.Models;
 
 namespace GamePriceFinder
 {
     public class PriceSearcher
     {
-        private const string steamUri = "http://store.steampowered.com/api/";
-        private const int forHonorId = 304390;
-
-        private readonly HttpClient _client;
-
+        private readonly ApiStoresHandler _apiStoresHandler;
+        private readonly PriceHandler _priceHandler;
         public PriceSearcher()
         {
-            _client = new HttpClient();
+            _priceHandler = new PriceHandler();
+            _apiStoresHandler = new ApiStoresHandler(_priceHandler);
         }
 
-        private const string epicUri = "https://graphql.epicgames.com/graphql";
-        public async Task<List<String>> GetPrices(string gameName)
+        public async Task<List<Game>> GetPrices(string gameName)
         {
             var forHonorSteam = await GetSteamPrice();
             var forHonorEpic = await GetEpicPrice(gameName);
 
-            return new List<string> { forHonorSteam.Name, forHonorEpic.Name };
+            ChangeGameNames(forHonorEpic.Name, forHonorSteam);
+
+            return new List<Game> { forHonorSteam, forHonorEpic };
         }
 
-        private async Task<Game> GetEpicPrice(string gameName)
+        private void ChangeGameNames(string gameName, params Game[] games)
         {
-            var encoded = HttpUtility.UrlEncode(gameName).Replace(":", "%3A");
-            var request = new EpicGamesStoreNET.Models.Request(encoded);
-            var payload = JsonConvert.SerializeObject(request);
-
-            payload = payload.ToString().Replace("US", "BR");
-            payload = payload.ToString().Replace("en-US", "pt-BR");
-
-            var method = new HttpMethod("POST");
-            HttpContent body = new StringContent(payload);
-            body.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
-
-            var resp = await _client.PostAsync(epicUri, body);
-            var respString = await resp.Content.ReadAsStringAsync();
-
-            var converted = JsonConvert.DeserializeObject<EpicGamesStoreNET.Models.Response>(respString);
-
-            //TODO: Tratamento do preço da epic.
-
-            return new Game { Name = converted.Data.Catalog.SearchStore.Elements[0].Title };
+            for (int i = 0; i < games.Length; i++)
+            {
+                games[i].Name = gameName;
+            }
         }
+
+        private const int forHonorSteamId = 304390;
 
         private async Task<Game> GetSteamPrice()
         {
-            var parameters = $"appdetails?appids={forHonorId}&cc=br&l=br";
+            var steamResponse = await _apiStoresHandler.GetToSteam(forHonorSteamId);
 
-            _client.BaseAddress = new Uri(steamUri);
+            var gameName = string.Empty;
 
-            _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            var price = string.Empty;
 
-            var response = _client.GetAsync(parameters).Result;
-
-            var jsonString = await response.Content.ReadAsStringAsync();
-
-            var steamResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, AppIds>>(jsonString);
-
-            var game = new Game();
-
-            //TODO: Tratamento do preço da steam.
             for (int responseObject = 0; responseObject < steamResponse.Count; responseObject++)
             {
-                game.Name = steamResponse["304390"].data.name;
-                var prices = steamResponse["304390"].data.price_overview;
+                gameName = steamResponse[forHonorSteamId.ToString()].data.name;
+
+                price = steamResponse[forHonorSteamId.ToString()].data.price_overview.final_formatted;
             }
+
+            var game = new Game(gameName);
+
+            await FillGameInformation(ref game, Store.Steam, price, 3);
 
             return game;
         }
 
+        private Task FillGameInformation(ref Game game, Store publisher, string formattedPrice, int cutPrice)
+        {
+            _priceHandler.PriceFormatted = formattedPrice.Replace(".", ",");
+
+            game.Store = publisher;
+
+            var currentPrice = _priceHandler.ConvertPriceToDatabaseType(cutPrice);
+
+            game.GameData.CurrentPrice = currentPrice;
+
+            game.History.Price = currentPrice;
+
+            game.History.ChangeDate = DateTime.Now.ToShortDateString();
+
+            return Task.CompletedTask;
+        }
+
+        private async Task<Game> GetEpicPrice(string gameName)
+        {
+            var epicResponse = await _apiStoresHandler.PostToEpic(gameName);
+
+            var searchedGame = epicResponse.Data.Catalog.SearchStore.Elements[0];
+
+            var game = new Game(searchedGame.Title);
+
+            await FillGameInformation(ref game, Store.Epic, searchedGame.Price.TotalPrice.FmtPrice.DiscountPrice, 2);
+
+            return game;
+        }
     }
 }

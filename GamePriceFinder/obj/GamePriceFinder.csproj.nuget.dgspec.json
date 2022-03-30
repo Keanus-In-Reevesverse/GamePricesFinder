@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\Ricardo\\Documents\\FATEC\\TG\\BuscaJogosPlus\\GamePriceFinder\\GamePriceFinder.csproj": {}
+    "D:\\tg\\GamePricesFinder\\GamePriceFinder\\GamePriceFinder.csproj": {}
   },
   "projects": {
-    "C:\\Users\\Ricardo\\Documents\\FATEC\\TG\\BuscaJogosPlus\\GamePriceFinder\\GamePriceFinder.csproj": {
+    "D:\\tg\\GamePricesFinder\\GamePriceFinder\\GamePriceFinder.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\Ricardo\\Documents\\FATEC\\TG\\BuscaJogosPlus\\GamePriceFinder\\GamePriceFinder.csproj",
+        "projectUniqueName": "D:\\tg\\GamePricesFinder\\GamePriceFinder\\GamePriceFinder.csproj",
         "projectName": "GamePriceFinder",
-        "projectPath": "C:\\Users\\Ricardo\\Documents\\FATEC\\TG\\BuscaJogosPlus\\GamePriceFinder\\GamePriceFinder.csproj",
+        "projectPath": "D:\\tg\\GamePricesFinder\\GamePriceFinder\\GamePriceFinder.csproj",
         "packagesPath": "C:\\Users\\Ricardo\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\Ricardo\\Documents\\FATEC\\TG\\BuscaJogosPlus\\GamePriceFinder\\obj\\",
+        "outputPath": "D:\\tg\\GamePricesFinder\\GamePriceFinder\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\Ricardo\\AppData\\Roaming\\NuGet\\NuGet.Config",
