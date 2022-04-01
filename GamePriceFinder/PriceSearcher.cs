@@ -30,9 +30,57 @@ namespace GamePriceFinder
             return new List<Game> { forHonorSteam, forHonorEpic };
         }
 
+        const string BASE_URL = "https://www.nuuvem.com";
+
+        const string SERCH_PATH = "/catalog/search/";
+
+
         private void GetNuuvemPrices()
         {
-            var scriptPath = @"C:\Users\Ricardo\Documents\FATEC\TG\ApiNuuvem\my_tests2.js";
+            var httpClient = new HttpClient();
+            httpClient.BaseAddress = new Uri(BASE_URL);
+            var response = httpClient.GetAsync(SERCH_PATH + "for honor").Result;
+            var html = response.Content.ReadAsStringAsync().Result;
+
+            
+
+            var doc = new HtmlAgilityPack.HtmlDocument();
+            doc.LoadHtml(html);
+
+            var divs = doc.DocumentNode.Descendants("div");
+
+            var games = new List<Game>();
+
+            foreach (var div in divs)
+            {
+                try
+                {
+                    if (div.Attributes["class"].Value == "product-card--grid")
+                    {
+                        var newDoc = new HtmlAgilityPack.HtmlDocument();
+                        newDoc.LoadHtml(div.InnerHtml);
+                        //var insideDivs = newDoc.DocumentNode.Descendants("h3");
+                        var price = newDoc.DocumentNode.SelectSingleNode("//span[@class='product-price--val']").InnerText.Trim();
+                        var name = newDoc.DocumentNode.SelectSingleNode("//h3[@class='product-title double-line-name']").InnerText.Trim();
+                        var game = new Game(name);
+                        game.Store = Store.Nuuvem;
+                        game.GameData.CurrentPrice = Convert.ToDecimal(price.Remove(0, 2));
+                        games.Add(game);
+                        //foreach (var insideDiv in insideDivs)
+                        //{
+                        //    if (insideDiv.Attributes["class"].Value == "product-title double-line-name")
+                        //    {
+                        //        var a = newDoc.DocumentNode.SelectSingleNode("//h3[@class='product-title double-line-name']");
+                        //    }
+                        //}
+                        //values.Add(div.Attributes["value"].Value);
+                    }
+                }
+                catch (Exception)
+                {
+                    //ignored
+                }
+            }
 
             //engine.Execute("const log = console.log; const fetch = require('node-fetch'); const nuuvem = require('nuuvem'); const uri = 'https://localhost:7265/sendGameList/'; const https = require('https'); const agent = new https.Agent({rejectUnauthorized: false});let gameList = [];gameList = nuuvem.checkPrice('for honor').then(function (gameDataArray) {let results = []; gameDataArray.forEach(function (e) {var game = { title: e.title, price: e.price, currency: e.currency };results.push(game);});var json_text = JSON.stringify(results, null, 2);var request = encodeURI(uri + json_text);fetch(request, { agent }).then(function (response) {return response.json();}).then(function (jsonResponse) {console.log(jsonResponse);});});");
         }

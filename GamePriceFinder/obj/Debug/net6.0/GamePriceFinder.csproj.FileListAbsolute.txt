@@ -46,3 +46,7 @@ D:\tg\GamePricesFinder\GamePriceFinder\obj\Debug\net6.0\refint\GamePriceFinder.d
 D:\tg\GamePricesFinder\GamePriceFinder\obj\Debug\net6.0\GamePriceFinder.pdb
 D:\tg\GamePricesFinder\GamePriceFinder\obj\Debug\net6.0\GamePriceFinder.genruntimeconfig.cache
 D:\tg\GamePricesFinder\GamePriceFinder\obj\Debug\net6.0\ref\GamePriceFinder.dll
+C:\Users\Ricardo\Documents\FATEC\TG\BuscaJogosPlus\GamePriceFinder\bin\Debug\net6.0\HtmlAgilityPack.dll
+C:\Users\Ricardo\Documents\FATEC\TG\BuscaJogosPlus\GamePriceFinder\obj\Debug\net6.0\GamePriceFinder.csproj.ResolveComReference.cache
+C:\Users\Ricardo\Documents\FATEC\TG\BuscaJogosPlus\GamePriceFinder\bin\Debug\net6.0\RevolutionaryLib.dll
+C:\Users\Ricardo\Documents\FATEC\TG\BuscaJogosPlus\GamePriceFinder\bin\Debug\net6.0\RevolutionaryLib.pdb

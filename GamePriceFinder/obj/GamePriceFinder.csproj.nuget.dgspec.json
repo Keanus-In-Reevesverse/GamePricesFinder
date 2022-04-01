@@ -27,7 +27,11 @@
         "frameworks": {
           "net6.0": {
             "targetAlias": "net6.0",
-            "projectReferences": {}
+            "projectReferences": {
+              "C:\\Users\\Ricardo\\Documents\\FATEC\\TG\\BuscaJogosPlus\\RevolutionaryLib\\RevolutionaryLib.csproj": {
+                "projectPath": "C:\\Users\\Ricardo\\Documents\\FATEC\\TG\\BuscaJogosPlus\\RevolutionaryLib\\RevolutionaryLib.csproj"
+              }
+            }
           }
         },
         "warningProperties": {
@@ -43,6 +47,10 @@
             "EpicGamesStoreNET": {
               "target": "Package",
               "version": "[1.0.2, )"
+            },
+            "HtmlAgilityPack": {
+              "target": "Package",
+              "version": "[1.11.42, )"
             },
             "Newtonsoft.Json": {
               "target": "Package",
@@ -69,6 +77,21 @@
           },
           "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
         }
+      }
+    },
+    "C:\\Users\\Ricardo\\Documents\\FATEC\\TG\\BuscaJogosPlus\\RevolutionaryLib\\RevolutionaryLib.csproj": {
+      "restore": {
+        "projectUniqueName": "C:\\Users\\Ricardo\\Documents\\FATEC\\TG\\BuscaJogosPlus\\RevolutionaryLib\\RevolutionaryLib.csproj",
+        "projectName": "RevolutionaryLib",
+        "projectPath": "C:\\Users\\Ricardo\\Documents\\FATEC\\TG\\BuscaJogosPlus\\RevolutionaryLib\\RevolutionaryLib.csproj",
+        "frameworks": {
+          "net48": {
+            "projectReferences": {}
+          }
+        }
+      },
+      "frameworks": {
+        "net48": {}
       }
     }
   }
