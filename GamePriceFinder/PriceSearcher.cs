@@ -39,7 +39,7 @@ namespace GamePriceFinder
         {
             var httpClient = new HttpClient();
             httpClient.BaseAddress = new Uri(BASE_URL);
-            var response = httpClient.GetAsync(SERCH_PATH + "for honor").Result;
+            var response = httpClient.GetAsync(SERCH_PATH + "gta").Result;
             var html = response.Content.ReadAsStringAsync().Result;
 
             
