@@ -2,6 +2,9 @@
 using GamePriceFinder.Handlers;
 using GamePriceFinder.Http;
 using GamePriceFinder.Models;
+using GamePriceFinder.Responses;
+using System.Linq;
+using System.Net.Http.Headers;
 
 namespace GamePriceFinder
 {
@@ -13,7 +16,7 @@ namespace GamePriceFinder
 
     public class PriceSearcher
     {
-        private const int forHonorSteamId = 271590;
+        private const int forHonorSteamId = 304390;
 
         private readonly ApiStoresHandler _apiStoresHandler;
 
@@ -31,18 +34,46 @@ namespace GamePriceFinder
 
         public async Task<List<Game>> GetPrices(string gameName)
         {
-            var forHonorSteam = await GetSteamPrice();
+            var steamGames = await GetSteamPrice();
 
-            var forHonorEpic = await GetEpicPrice(gameName);
+            var epicGames = await GetEpicPrice(gameName);
 
-            var nuuvemGames = await GetNuuvemPrices();
+            var nuuvemGames = await GetNuuvemPrices(gameName);
 
-            return new List<Game> { new Game("isdfhg", Store.Steam), forHonorEpic };
+            var psnGames = await GetToPsn(gameName);
+
+            steamGames.AddRange(epicGames);
+
+            steamGames.AddRange(nuuvemGames);
+
+            steamGames.AddRange(psnGames);
+
+            return steamGames;
         }
 
-        private async Task<List<Game>> GetNuuvemPrices()
+        private string FormatName(string searchString) => searchString.Replace(" ", "+");
+
+        private async Task<List<Game>> GetToPsn(string gameName)
         {
-            var html = await _apiStoresHandler.GetToNuuvem("gta");
+            var responseGameList = await _apiStoresHandler.GetToPsn(FormatName(gameName));
+
+            var games = new List<Game>();
+
+            foreach (var responseGame in responseGameList)
+            {
+                var title = responseGame.name;
+                var price = PriceHandler.ConvertPriceToDatabaseType(responseGame.default_sku.display_price, 2);
+                var game = new Game(title, Store.PlaystationStore);
+                game.GameData.CurrentPrice = price;
+                games.Add(game);
+            }
+            
+            return games;
+        }
+
+        private async Task<List<Game>> GetNuuvemPrices(string gameName)
+        {
+            var html = await _apiStoresHandler.GetToNuuvem(gameName);
 
             var doc = new HtmlAgilityPack.HtmlDocument();
 
@@ -58,7 +89,7 @@ namespace GamePriceFinder
                 {
                     if (div.Attributes["class"].Value == "product-card--grid")
                     {
-                        gameList.Add(ExtractPrices(div));
+                        gameList.Add(ExtractNuuvemPrices(div));
                     }
                 }
                 catch (Exception)
@@ -70,26 +101,16 @@ namespace GamePriceFinder
             return gameList;
         }
 
-        private Game ExtractPrices(HtmlAgilityPack.HtmlNode div)
+        private Game ExtractNuuvemPrices(HtmlAgilityPack.HtmlNode div)
         {
             var newDoc = new HtmlAgilityPack.HtmlDocument();
             newDoc.LoadHtml(div.InnerHtml);
             var price = newDoc.DocumentNode.SelectSingleNode("//span[@class='product-price--val']").InnerText.Trim();
             var name = newDoc.DocumentNode.SelectSingleNode("//h3[@class='product-title double-line-name']").InnerText.Trim();
             var game = new Game(name, Store.Nuuvem);
-            game.GameData.CurrentPrice = Convert.ToDecimal(price.Remove(0, 2));
+            game.GameData.CurrentPrice =  PriceHandler.ConvertPriceToDatabaseType(price, 3);
             return game;
         }
-
-        private void ChangeGameNames(string gameName, params Game[] games)
-        {
-            for (int i = 0; i < games.Length; i++)
-            {
-                games[i].Name = gameName;
-            }
-        }
-
-        
 
         private async Task<List<Game>> GetSteamPrice()
         {
@@ -109,20 +130,17 @@ namespace GamePriceFinder
 
                 var game = new Game(gameName, Store.Steam);
                 
-                steamGames.Add(game);
-
                 await FillGameInformation(ref game, price, 3);
 
+                steamGames.Add(game);
             }
 
             return steamGames;
         }
 
-        private Task FillGameInformation(ref Game game, string formattedPrice, int cutPrice)
+        private Task FillGameInformation(ref Game game, string commaFormattedPrice, int cutPrice)
         {
-            _priceHandler.PriceFormatted = formattedPrice.Replace(".", ",");
-
-            var currentPrice = _priceHandler.ConvertPriceToDatabaseType(cutPrice);
+            var currentPrice = PriceHandler.ConvertPriceToDatabaseType(commaFormattedPrice.Replace(".", ","), cutPrice);
 
             game.GameData.CurrentPrice = currentPrice;
 
@@ -133,17 +151,24 @@ namespace GamePriceFinder
             return Task.CompletedTask;
         }
 
-        private async Task<Game> GetEpicPrice(string gameName)
+        private async Task<List<Game>> GetEpicPrice(string gameName)
         {
             var epicResponse = await _apiStoresHandler.PostToEpic(gameName);
 
             var searchedGame = epicResponse.Data.Catalog.SearchStore.Elements[0];
 
-            var game = new Game(searchedGame.Title, Store.Epic);
+            var games = new List<Game>();
 
-            await FillGameInformation(ref game, searchedGame.Price.TotalPrice.FmtPrice.DiscountPrice, 2);
+            for (int i = 0; i < epicResponse.Data.Catalog.SearchStore.Elements.Length; i++)
+            {
+                var currentGame = epicResponse.Data.Catalog.SearchStore.Elements[i];
+                var title = currentGame.Title;
+                var game = new Game(title, Store.Epic);
+                await FillGameInformation(ref game, currentGame.Price.TotalPrice.FmtPrice.DiscountPrice, 2);
+                games.Add(game);
+            }
 
-            return game;
+            return games;
         }
     }
 }

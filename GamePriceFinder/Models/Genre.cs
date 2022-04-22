@@ -2,7 +2,7 @@
 
 namespace GamePriceFinder.Models
 {
-    public class Genre : IGenre
+    public class GameGenre : IGenre
     {
         public int GenreId { get; set; }
         public string Description { get; set; }

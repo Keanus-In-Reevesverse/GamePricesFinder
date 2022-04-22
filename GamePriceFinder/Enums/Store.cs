@@ -4,6 +4,7 @@
     {
         Steam = 0,
         Epic = 1,
-        Nuuvem = 2
+        Nuuvem = 2,
+        PlaystationStore = 3
     }
 }

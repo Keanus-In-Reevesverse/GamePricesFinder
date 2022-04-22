@@ -23,6 +23,6 @@ namespace GamePriceFinder.Models
 
         public History History { get; set; }
 
-        public Genre Genre { get; set; }
+        public GameGenre Genre { get; set; }
     }
 }

@@ -16,6 +16,12 @@ namespace GamePriceFinder.Http
 
         private const string NuuvemSearchPath = "/catalog/search/";
 
+        private const string PsnUri = "https://store.playstation.com/store/api/chihiro/00_09_000/";
+
+        private const string PsnFirstSearchPath = "tumbler/br/pt/999/";
+
+        private const string PsnSecondSearchPath = "?size=10&start=0";
+
         private readonly PriceHandler _priceHandler;
 
         
@@ -69,13 +75,30 @@ namespace GamePriceFinder.Http
 
         public async Task<string> GetToNuuvem(string gameName)
         {
-            var httpClient2 = new HttpClient();
+            var httpClient = new HttpClient();
 
-            httpClient2.BaseAddress = new Uri(NuuvemUri);
+            httpClient.BaseAddress = new Uri(NuuvemUri);
 
-            var response = httpClient2.GetAsync(string.Concat(NuuvemSearchPath, gameName)).Result;
+            var response = httpClient.GetAsync(string.Concat(NuuvemSearchPath, gameName)).Result;
 
             return response.Content.ReadAsStringAsync().Result;
+        }
+
+        public async Task<Link[]> GetToPsn(string gameName)
+        {
+            var httpClient = new HttpClient();
+
+            httpClient.BaseAddress = new Uri(PsnUri);
+
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var response = httpClient.GetAsync(string.Concat(PsnFirstSearchPath, gameName, PsnSecondSearchPath)).Result;
+
+            var json = response.Content.ReadAsStringAsync().Result;
+
+            var deserializedPsnResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<PsnResponse>(json);
+
+            return deserializedPsnResponse.links;
         }
 
     }
