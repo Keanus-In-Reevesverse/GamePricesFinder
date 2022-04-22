@@ -169,7 +169,7 @@
         public string website { get; set; }
         public PcRequirements pc_requirements { get; set; }
         //public MacRequirements mac_requirements { get; set; }
-        public List<object> linux_requirements { get; set; }
+        //public List<object> linux_requirements { get; set; }
         public List<string> developers { get; set; }
         public List<string> publishers { get; set; }
         public List<Demo> demos { get; set; }

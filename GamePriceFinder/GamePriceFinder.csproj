@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="ScriptEngine.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="NuuvemPriceFinder.js" />
   </ItemGroup>
 

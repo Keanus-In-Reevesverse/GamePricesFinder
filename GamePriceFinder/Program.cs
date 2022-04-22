@@ -16,9 +16,4 @@ app.MapGet("/", async() =>
     }
 });
 
-app.MapGet("/sendGameList/{gameArray}", (string gameArray) => {
-    var game = Newtonsoft.Json.JsonConvert.DeserializeObject<JSGame[]>(gameArray); ;
-    return new Game(game[0].Title);
-});
-
 app.Run();
