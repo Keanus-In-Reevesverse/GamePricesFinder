@@ -1,5 +1,4 @@
 using GamePriceFinder;
-using GamePriceFinder.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();

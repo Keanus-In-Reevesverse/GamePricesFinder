@@ -24,8 +24,6 @@ namespace GamePriceFinder.Http
 
         private readonly PriceHandler _priceHandler;
 
-        
-
         public ApiStoresHandler(PriceHandler priceHandler)
         {
             _priceHandler = priceHandler;
@@ -69,10 +67,6 @@ namespace GamePriceFinder.Http
             return JsonConvert.DeserializeObject<EpicGamesStoreNET.Models.Response>(respString);
         }
 
-        const string BASE_URL = "https://www.nuuvem.com";
-
-        const string SERCH_PATH = "/catalog/search/";
-
         public async Task<string> GetToNuuvem(string gameName)
         {
             var httpClient = new HttpClient();
@@ -100,6 +94,5 @@ namespace GamePriceFinder.Http
 
             return deserializedPsnResponse.links;
         }
-
     }
 }
