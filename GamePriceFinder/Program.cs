@@ -1,34 +1,18 @@
-using GamePriceFinder.Responses;
-using System.Net.Http.Headers;
-
+using GamePriceFinder;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
 
-//app.MapGet("/", () => "Hello World!");
-const int tropicoId = 57690;
-const int rSixId = 1922250;
 app.MapGet("/", async() =>
 {
-    var url = "http://store.steampowered.com/api/";
-    var parameters = $"appdetails?appids={rSixId}&cc=br&l=br";
+    var priceSearcher = new PriceSearcher();
+    var games = await priceSearcher.GetPrices("for honor");
 
-    var client = new HttpClient();
-    client.BaseAddress = new Uri(url);
-
-    client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
-    var response = client.GetAsync(parameters).Result;
-
-    var jsonString = await response.Content.ReadAsStringAsync();
-
-    var steamResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, AppIds>>(jsonString);
-
-    if (response.IsSuccessStatusCode)
+    foreach (var game in games)
     {
-
+        global::System.Console.WriteLine($"Name: {game.Name}.\nStore: {game.Store}.\nPrice: R$ {game.GameData.CurrentPrice}.");
+        global::System.Console.WriteLine();
     }
-
 });
 
 app.Run();

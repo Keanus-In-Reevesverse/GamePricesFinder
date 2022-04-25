@@ -2,6 +2,27 @@
   "version": 3,
   "targets": {
     "net6.0": {
+      "EpicGamesStoreNET/1.0.2": {
+        "type": "package",
+        "dependencies": {
+          "Newtonsoft.Json": "12.0.1"
+        },
+        "compile": {
+          "lib/netstandard2.0/EpicGamesStoreNET.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/EpicGamesStoreNET.dll": {}
+        }
+      },
+      "HtmlAgilityPack/1.11.42": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/HtmlAgilityPack.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/HtmlAgilityPack.dll": {}
+        }
+      },
       "Newtonsoft.Json/13.0.1": {
         "type": "package",
         "compile": {
@@ -10,10 +31,79 @@
         "runtime": {
           "lib/netstandard2.0/Newtonsoft.Json.dll": {}
         }
+      },
+      "RevolutionaryLib/1.0.0": {
+        "type": "project",
+        "compile": {
+          "bin/placeholder/RevolutionaryLib.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/RevolutionaryLib.dll": {}
+        }
       }
     }
   },
   "libraries": {
+    "EpicGamesStoreNET/1.0.2": {
+      "sha512": "+20i4CQ3CHa/J4Rc+3eTMJd8IUgY5925IYXEUq/b8BE8g7QG2Mulin2AIYy3shk3PLYZ1a2NC+Zan1aicrsJ/g==",
+      "type": "package",
+      "path": "epicgamesstorenet/1.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "epicgamesstorenet.1.0.2.nupkg.sha512",
+        "epicgamesstorenet.nuspec",
+        "lib/netstandard2.0/EpicGamesStoreNET.dll"
+      ]
+    },
+    "HtmlAgilityPack/1.11.42": {
+      "sha512": "LDc1bEfF14EY2DZzak4xvzWvbpNXK3vi1u0KQbBpLUN4+cx/VrvXhgCAMSJhSU5vz0oMfW9JZIR20vj/PkDHPA==",
+      "type": "package",
+      "path": "htmlagilitypack/1.11.42",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "htmlagilitypack.1.11.42.nupkg.sha512",
+        "htmlagilitypack.nuspec",
+        "lib/Net35/HtmlAgilityPack.dll",
+        "lib/Net35/HtmlAgilityPack.pdb",
+        "lib/Net35/HtmlAgilityPack.xml",
+        "lib/Net40-client/HtmlAgilityPack.dll",
+        "lib/Net40-client/HtmlAgilityPack.pdb",
+        "lib/Net40-client/HtmlAgilityPack.xml",
+        "lib/Net40/HtmlAgilityPack.XML",
+        "lib/Net40/HtmlAgilityPack.dll",
+        "lib/Net40/HtmlAgilityPack.pdb",
+        "lib/Net45/HtmlAgilityPack.XML",
+        "lib/Net45/HtmlAgilityPack.dll",
+        "lib/Net45/HtmlAgilityPack.pdb",
+        "lib/NetCore45/HtmlAgilityPack.XML",
+        "lib/NetCore45/HtmlAgilityPack.dll",
+        "lib/NetCore45/HtmlAgilityPack.pdb",
+        "lib/netstandard1.3/HtmlAgilityPack.deps.json",
+        "lib/netstandard1.3/HtmlAgilityPack.dll",
+        "lib/netstandard1.3/HtmlAgilityPack.pdb",
+        "lib/netstandard1.3/HtmlAgilityPack.xml",
+        "lib/netstandard1.6/HtmlAgilityPack.deps.json",
+        "lib/netstandard1.6/HtmlAgilityPack.dll",
+        "lib/netstandard1.6/HtmlAgilityPack.pdb",
+        "lib/netstandard1.6/HtmlAgilityPack.xml",
+        "lib/netstandard2.0/HtmlAgilityPack.deps.json",
+        "lib/netstandard2.0/HtmlAgilityPack.dll",
+        "lib/netstandard2.0/HtmlAgilityPack.pdb",
+        "lib/netstandard2.0/HtmlAgilityPack.xml",
+        "lib/portable-net45+netcore45+wp8+MonoAndroid+MonoTouch/HtmlAgilityPack.XML",
+        "lib/portable-net45+netcore45+wp8+MonoAndroid+MonoTouch/HtmlAgilityPack.dll",
+        "lib/portable-net45+netcore45+wp8+MonoAndroid+MonoTouch/HtmlAgilityPack.pdb",
+        "lib/portable-net45+netcore45+wpa81+wp8+MonoAndroid+MonoTouch/HtmlAgilityPack.XML",
+        "lib/portable-net45+netcore45+wpa81+wp8+MonoAndroid+MonoTouch/HtmlAgilityPack.dll",
+        "lib/portable-net45+netcore45+wpa81+wp8+MonoAndroid+MonoTouch/HtmlAgilityPack.pdb",
+        "lib/uap10.0/HtmlAgilityPack.XML",
+        "lib/uap10.0/HtmlAgilityPack.dll",
+        "lib/uap10.0/HtmlAgilityPack.pdb",
+        "lib/uap10.0/HtmlAgilityPack.pri"
+      ]
+    },
     "Newtonsoft.Json/13.0.1": {
       "sha512": "ppPFpBcvxdsfUonNcvITKqLl3bqxWbDCZIzDWHzjpdAHRFfZe0Dw9HmA0+za13IdyrgJwpkDTDA9fHaxOrt20A==",
       "type": "package",
@@ -40,11 +130,19 @@
         "newtonsoft.json.nuspec",
         "packageIcon.png"
       ]
+    },
+    "RevolutionaryLib/1.0.0": {
+      "type": "project",
+      "path": "../RevolutionaryLib/RevolutionaryLib.csproj",
+      "msbuildProject": "../RevolutionaryLib/RevolutionaryLib.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net6.0": [
-      "Newtonsoft.Json >= 13.0.1"
+      "EpicGamesStoreNET >= 1.0.2",
+      "HtmlAgilityPack >= 1.11.42",
+      "Newtonsoft.Json >= 13.0.1",
+      "RevolutionaryLib >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -73,7 +171,11 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\Ricardo\\Documents\\FATEC\\TG\\BuscaJogosPlus\\RevolutionaryLib\\RevolutionaryLib.csproj": {
+              "projectPath": "C:\\Users\\Ricardo\\Documents\\FATEC\\TG\\BuscaJogosPlus\\RevolutionaryLib\\RevolutionaryLib.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
@@ -86,6 +188,14 @@
       "net6.0": {
         "targetAlias": "net6.0",
         "dependencies": {
+          "EpicGamesStoreNET": {
+            "target": "Package",
+            "version": "[1.0.2, )"
+          },
+          "HtmlAgilityPack": {
+            "target": "Package",
+            "version": "[1.11.42, )"
+          },
           "Newtonsoft.Json": {
             "target": "Package",
             "version": "[13.0.1, )"
@@ -109,7 +219,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
       }
     }
   }
