@@ -68,8 +68,6 @@ namespace GamePriceFinder
         {
             var epicResponse = await _apiStoresHandler.PostToEpic(gameName);
 
-            var searchedGame = epicResponse.Data.Catalog.SearchStore.Elements[0];
-
             var games = new List<Game>();
 
             for (int i = 0; i < epicResponse.Data.Catalog.SearchStore.Elements.Length; i++)
@@ -105,7 +103,7 @@ namespace GamePriceFinder
                         gameList.Add(ExtractNuuvemPrices(div));
                     }
                 }
-                catch (Exception)
+                catch
                 {
                     //ignored
                 }
@@ -123,7 +121,8 @@ namespace GamePriceFinder
             foreach (var responseGame in responseGameList)
             {
                 var title = responseGame.name;
-                var price = PriceHandler.ConvertPriceToDatabaseType(responseGame.default_sku.display_price, 2);
+                var price = PriceHandler.ConvertPriceToDatabaseType(
+                    responseGame.default_sku.display_price, 2);
                 var game = new Game(title, StoresEnum.PlaystationStore);
                 game.GameData.CurrentPrice = price;
                 games.Add(game);
