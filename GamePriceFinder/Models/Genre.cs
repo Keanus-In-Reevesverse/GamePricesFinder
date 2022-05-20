@@ -1,8 +1,9 @@
-﻿using GamePriceFinder.Intefaces;
+﻿using GamePriceFinder.Enums;
+using GamePriceFinder.Intefaces;
 
 namespace GamePriceFinder.Models
 {
-    public class GameGenre : IGenre
+    public class Genre
     {
         public int GenreId { get; set; }
         public string Description { get; set; }

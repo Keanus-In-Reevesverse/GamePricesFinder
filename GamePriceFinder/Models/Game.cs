@@ -8,21 +8,14 @@ namespace GamePriceFinder.Models
         public Game (string name, StoresEnum store)
         {
             Name = name;
-            Store = store;
-            GameData = new GameData();
-            History = new History();
         }
 
-        public string Name { get; set; }
-
-        public StoresEnum Store { get; private set; }
-
+        public int GenreId { get; set; }
         public int GameId { get; set; }
-
-        public GameData GameData { get; set; }
-
-        public History History { get; set; }
-
-        public GameGenre Genre { get; set; }
+        public string Video { get; set; }
+        public string Image { get; set; }
+        public string Description { get; set; }
+        public string Publisher { get; set; }
+        public string Name { get; set; }
     }
 }

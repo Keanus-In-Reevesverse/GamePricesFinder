@@ -1,12 +1,11 @@
-﻿using GamePriceFinder.Handlers;
-using GamePriceFinder.Responses;
+﻿using GamePriceFinder.Responses;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Web;
 
 namespace GamePriceFinder.Http
 {
-    public class ApiStoresHandler
+    public class HttpHandler
     {
         private const string SteamUri = "http://store.steampowered.com/api/";
 
@@ -21,13 +20,6 @@ namespace GamePriceFinder.Http
         private const string PsnFirstSearchPath = "tumbler/br/pt/999/";
 
         private const string PsnSecondSearchPath = "?size=10&start=0";
-
-        private readonly PriceHandler _priceHandler;
-
-        public ApiStoresHandler(PriceHandler priceHandler)
-        {
-            _priceHandler = priceHandler;
-        }
 
         public async Task<Dictionary<string, AppIds>> GetToSteam(int gameId)
         {
