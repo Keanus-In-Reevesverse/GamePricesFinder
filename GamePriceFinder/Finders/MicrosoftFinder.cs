@@ -69,6 +69,7 @@ namespace GamePriceFinder.Finders
             encodedString = encodedString.Replace("&#243;", "ó");
             encodedString = encodedString.Replace("&#231;&#227;", "çã");
             encodedString = encodedString.Replace("&#227;", "ã");
+            encodedString = encodedString.Replace("&#174;", "®");
             encodedString = encodedString.Replace("&amp", String.Empty);
             return encodedString;
         }
