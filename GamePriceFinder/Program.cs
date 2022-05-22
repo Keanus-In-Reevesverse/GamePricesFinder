@@ -4,7 +4,6 @@ using GamePriceFinder.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 var app = builder.Build();
-
 //app.Urls.Add("http://localhost:5000");
 
 app.MapGet("/", async() =>

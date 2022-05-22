@@ -30,4 +30,8 @@
     <PackageReference Include="PuppeteerSharp" Version="7.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\RevolutionaryLib\RevolutionaryLib.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -22,9 +22,7 @@ namespace GamePriceFinder
         public EpicFinder EpicFinder { get; }
         public NuuvemFinder NuuvemFinder { get; }
         public PlaystationStoreFinder PlaystationStoreFinder { get; }
-
         public MicrosoftFinder MicrosoftFinder { get; set; }
-
         public async Task<List<DatabaseEntitiesHandler>> GetPrices(string gameName)
         {
             var steamEntities = await SteamFinder.GetPrice(string.Empty);
@@ -36,7 +34,6 @@ namespace GamePriceFinder
             var psnEntities = await PlaystationStoreFinder.GetPrice(gameName);
 
             var xboxEntities = await MicrosoftFinder.GetPrice(gameName.Replace(" ", "%20"));
-
             steamEntities.AddRange(epicEntities);
 
             steamEntities.AddRange(nuuvemEntities);
@@ -44,7 +41,6 @@ namespace GamePriceFinder
             steamEntities.AddRange(psnEntities);
 
             steamEntities.AddRange(xboxEntities);
-
             return steamEntities;
         }
 
