@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net6.0-windows10.0.22000.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
@@ -27,10 +27,7 @@
     <PackageReference Include="EpicGamesStoreNET" Version="1.0.2" />
     <PackageReference Include="HtmlAgilityPack" Version="1.11.42" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\RevolutionaryLib\RevolutionaryLib.csproj" />
+    <PackageReference Include="PuppeteerSharp" Version="7.0.0" />
   </ItemGroup>
 
 </Project>
