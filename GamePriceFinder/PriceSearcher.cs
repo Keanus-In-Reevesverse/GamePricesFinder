@@ -41,6 +41,12 @@ namespace GamePriceFinder
             steamEntities.AddRange(psnEntities);
 
             steamEntities.AddRange(xboxEntities);
+
+            //foreach (var entity in steamEntities)
+            //{
+            //    entity.
+            //}
+
             return steamEntities;
         }
 

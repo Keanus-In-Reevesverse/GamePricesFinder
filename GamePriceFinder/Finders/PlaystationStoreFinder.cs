@@ -28,13 +28,15 @@ namespace GamePriceFinder.Finders
 
                 var price = PriceHandler.ConvertPriceToDatabaseType(responseGame.default_sku.display_price, 2);
 
-                var game = new Game(title, StoresEnum.PlaystationStore);
+                var game = new Game(title);
 
                 var gamePrices = new GamePrices(game.GameId, ((int)StoresEnum.PlaystationStore).ToString(), price);
 
                 var history = new History(game.GameId, StoresEnum.PlaystationStore.ToString(), gamePrices.CurrentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
 
-                entities.Add(new DatabaseEntitiesHandler(game, gamePrices, history));
+                var genre = new Genre("Action");
+
+                entities.Add(new DatabaseEntitiesHandler(game, gamePrices, history, genre));
             }
 
             return entities;

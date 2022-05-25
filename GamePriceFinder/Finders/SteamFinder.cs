@@ -33,7 +33,7 @@ namespace GamePriceFinder.Finders
 
                 price = steamResponse[forHonorSteamId.ToString()].data.price_overview.final_formatted;
 
-                var game = new Game(gameName, StoresEnum.Steam);
+                var game = new Game(gameName);
 
                 //await FillGameInformation(ref game, price, 3);
 
@@ -43,7 +43,9 @@ namespace GamePriceFinder.Finders
 
                 var history = new History(game.GameId, StoresEnum.Steam.ToString(), currentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
 
-                entities.Add(new DatabaseEntitiesHandler(game, gamePrices, history));
+                var genre = new Genre("Action");
+
+                entities.Add(new DatabaseEntitiesHandler(game, gamePrices, history, genre));
             }
 
             return entities;

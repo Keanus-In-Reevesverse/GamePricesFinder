@@ -1,4 +1,5 @@
-﻿using GamePriceFinder.Intefaces;
+﻿using GamePriceFinder.Database;
+using GamePriceFinder.Intefaces;
 using GamePriceFinder.Models;
 
 namespace GamePriceFinder.Repositories

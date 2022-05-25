@@ -51,10 +51,11 @@ namespace GamePriceFinder.Finders
             newDoc.LoadHtml(div.InnerHtml);
             var price = newDoc.DocumentNode.SelectSingleNode("//span[@class='product-price--val']").InnerText.Trim();
             var name = newDoc.DocumentNode.SelectSingleNode("//h3[@class='product-title double-line-name']").InnerText.Trim();
-            var game = new Game(name, StoresEnum.Nuuvem);
+            var game = new Game(name);
             var gamePrice = new GamePrices(game.GameId, ((int)StoresEnum.Nuuvem).ToString(), PriceHandler.ConvertPriceToDatabaseType(price, 3));
             var history = new History(game.GameId, StoresEnum.Nuuvem.ToString(), gamePrice.CurrentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
-            return new DatabaseEntitiesHandler(game, gamePrice, history);
+            var genre = new Genre("Action");
+            return new DatabaseEntitiesHandler(game, gamePrice, history, genre);
         }
     }
 }

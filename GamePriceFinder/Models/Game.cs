@@ -5,7 +5,7 @@ namespace GamePriceFinder.Models
 {
     public class Game : IGame
     {
-        public Game (string name, StoresEnum store)
+        public Game (string name)
         {
             Name = name;
         }

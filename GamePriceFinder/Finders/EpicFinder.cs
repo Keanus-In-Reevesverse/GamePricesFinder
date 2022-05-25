@@ -27,7 +27,7 @@ namespace GamePriceFinder.Finders
 
                 var title = currentGame.Title;
 
-                var game = new Game(title, StoresEnum.Epic);
+                var game = new Game(title);
 
                 //await FillGameInformation(ref game, currentGame.Price.TotalPrice.FmtPrice.DiscountPrice, 2);
 
@@ -39,7 +39,9 @@ namespace GamePriceFinder.Finders
                     currentPrice);
                 var history = new History(game.GenreId, StoresEnum.Epic.ToString(), currentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
 
-                entities.Add(new DatabaseEntitiesHandler(game, gamePrices, history));
+                var genre = new Genre("Action");
+
+                entities.Add(new DatabaseEntitiesHandler(game, gamePrices, history, genre));
             }
 
 

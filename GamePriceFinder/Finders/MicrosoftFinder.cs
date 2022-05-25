@@ -3,10 +3,7 @@ using GamePriceFinder.Handlers;
 using GamePriceFinder.Http;
 using GamePriceFinder.Intefaces;
 using GamePriceFinder.Models;
-using PuppeteerSharp;
 using System.Net;
-using System.Text;
-using System.Web;
 
 namespace GamePriceFinder.Finders
 {
@@ -38,17 +35,23 @@ namespace GamePriceFinder.Finders
                             var encodedName = newDoc.DocumentNode.SelectSingleNode("//h3[@class='c-subheading-6']").InnerText.Trim();
                             var name = DecodeWithBruteForce(ref encodedName);
                             var price = newDoc.DocumentNode.SelectSingleNode("//span[@itemprop='price']").InnerText.Trim();
-                            var game = new Game(name, StoresEnum.XboxStore);
+                            
+                            var game = new Game(name);
+
                             var gamePrices = new GamePrices(
                                 game.GameId, ((int)StoresEnum.XboxStore).ToString(), 
                                 PriceHandler.ConvertPriceToDatabaseType(price, 3));
-                            var history = new History(
-                                game.GameId, StoresEnum.XboxStore.ToString(), gamePrices.CurrentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
+
                             if (gamePrices.CurrentPrice == 0)
                             {
                                 continue;
                             }
-                            entities.Add(new DatabaseEntitiesHandler(game, gamePrices, history));
+
+                            var history = new History(
+                                game.GameId, StoresEnum.XboxStore.ToString(), gamePrices.CurrentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
+                            var genre = new Genre("Action");
+
+                            entities.Add(new DatabaseEntitiesHandler(game, gamePrices, history, genre));
                         }
                     }
                     catch (Exception e)
@@ -70,17 +73,9 @@ namespace GamePriceFinder.Finders
             encodedString = encodedString.Replace("&#231;&#227;", "çã");
             encodedString = encodedString.Replace("&#227;", "ã");
             encodedString = encodedString.Replace("&#174;", "®");
-            encodedString = encodedString.Replace("&amp", String.Empty);
+            encodedString = encodedString.Replace("&#225;", "á");
+            encodedString = encodedString.Replace("&amp", string.Empty);
             return encodedString;
         }
-
-        private static string DecodeUrlString(string url)
-        {
-            string newUrl;
-            while ((newUrl = Uri.UnescapeDataString(url)) != url)
-                url = newUrl;
-            return newUrl;
-        }
-
     }
 }
