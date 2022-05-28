@@ -1,5 +1,8 @@
 ﻿namespace GamePriceFinder.Responses
 {
+    /// <summary>
+    /// Represents the response from http request to Steam API.
+    /// </summary>
     public class SteamResponse
     {
         public AppIds AppIds { get; set; }

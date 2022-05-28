@@ -7,19 +7,33 @@ using System.Net;
 
 namespace GamePriceFinder.Finders
 {
+    /// <summary>
+    /// Represents the Xbox price finder, implements IPriceFinder.
+    /// </summary>
     public class MicrosoftFinder : IPriceFinder
     {
+        /// <summary>
+        /// Uri to execute the http request.
+        /// </summary>
         public string StoreUri { get; set; }
+        /// <summary>
+        /// HttpHandler for Microsoft.
+        /// </summary>
         public HttpHandler HttpHandler { get; set; }
 
+        /// <summary>
+        /// Gets Xbox prices.
+        /// </summary>
+        /// <param name="gameName"></param>
         public async Task<List<DatabaseEntitiesHandler>> GetPrice(string gameName)
         {
             var entities = new List<DatabaseEntitiesHandler>();
             try
             {
                 using var webClient = new WebClient();
-                var urlToDownload = string.Concat("https://www.microsoft.com/pt-br/search/shop?q=",gameName);
-                string html = webClient.DownloadString(urlToDownload);
+                var urlToDownload = string.Concat("https://xbdeals.net/br-store/search?search_query=", gameName);
+                var kind = new UriKind();
+                string html = webClient.DownloadString(new Uri(urlToDownload, kind));
                 var doc = new HtmlAgilityPack.HtmlDocument();
                 doc.LoadHtml(html);
                 var divs = doc.DocumentNode.Descendants("div");
@@ -28,18 +42,39 @@ namespace GamePriceFinder.Finders
                 {
                     try
                     {
-                        if (div.Attributes["class"].Value == "c-channel-placement-content")
+                        if (div.Attributes["class"].Value == "game-collection-item-details")
                         {
                             var newDoc = new HtmlAgilityPack.HtmlDocument();
                             newDoc.LoadHtml(div.InnerHtml);
-                            var encodedName = newDoc.DocumentNode.SelectSingleNode("//h3[@class='c-subheading-6']").InnerText.Trim();
+                            var encodedName = newDoc.DocumentNode.SelectSingleNode("//p[@class='game-collection-item-details-title']").InnerText.Trim();
                             var name = DecodeWithBruteForce(ref encodedName);
-                            var price = newDoc.DocumentNode.SelectSingleNode("//span[@itemprop='price']").InnerText.Trim();
+
+                            var newDoc2 = new HtmlAgilityPack.HtmlDocument();
+                            var spans = newDoc.DocumentNode.Descendants("span").ToList();
+
+                            var price = string.Empty;
+
+                            foreach (var span in spans)
+                            {
+                                try
+                                {
+                                    if (span.Attributes["itemprop"].Value == "price")
+                                    {
+                                        price = newDoc.DocumentNode.SelectSingleNode("//span[@itemprop='price']").InnerText.Trim();
+                                        break;
+                                    }
+                                }
+                                catch (Exception e)
+                                {
+                                    //ignored
+                                }
+
+                            }
                             
                             var game = new Game(name);
 
                             var gamePrices = new GamePrices(
-                                game.GameId, ((int)StoresEnum.XboxStore).ToString(), 
+                                game.GameId, ((int)StoresEnum.Xbox).ToString(), 
                                 PriceHandler.ConvertPriceToDatabaseType(price, 3));
 
                             if (gamePrices.CurrentPrice == 0)
@@ -48,7 +83,7 @@ namespace GamePriceFinder.Finders
                             }
 
                             var history = new History(
-                                game.GameId, StoresEnum.XboxStore.ToString(), gamePrices.CurrentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
+                                game.GameId, StoresEnum.Xbox.ToString(), gamePrices.CurrentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
                             var genre = new Genre("Action");
 
                             entities.Add(new DatabaseEntitiesHandler(game, gamePrices, history, genre));

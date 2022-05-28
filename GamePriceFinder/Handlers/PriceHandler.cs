@@ -1,7 +1,16 @@
 ﻿namespace GamePriceFinder.Handlers
 {
+    /// <summary>
+    /// Static class for price conversion.
+    /// </summary>
     public static class PriceHandler
     {
+        /// <summary>
+        /// Converts price from string to decimal.
+        /// </summary>
+        /// <param name="commaFormattedPrice"></param>
+        /// <param name="cutString"></param>
+        /// <returns></returns>
         public static decimal ConvertPriceToDatabaseType(string commaFormattedPrice, int cutString)
         {
             decimal price;

@@ -6,15 +6,28 @@ using GamePriceFinder.Models;
 
 namespace GamePriceFinder.Finders
 {
+    /// <summary>
+    /// Represents the Nuuvem price finder, implements IPriceFinder.
+    /// </summary>
     public class NuuvemFinder : IPriceFinder
     {
         public NuuvemFinder()
         {
             HttpHandler = new HttpHandler();
         }
+        /// <summary>
+        /// Uri to execute the http request.
+        /// </summary>
         public string StoreUri { get; set; }
+        /// <summary>
+        /// HttpHandler for Nuuvem.
+        /// </summary>
         public HttpHandler HttpHandler { get; set; }
 
+        /// <summary>
+        /// Gets Nuuvem prices.
+        /// </summary>
+        /// <param name="gameName"></param>
         public async Task<List<DatabaseEntitiesHandler>> GetPrice(string gameName)
         {
             var html = await HttpHandler.GetToNuuvem(gameName);

@@ -6,15 +6,28 @@ using GamePriceFinder.Models;
 
 namespace GamePriceFinder.Finders
 {
+    /// <summary>
+    /// Represents the Xbox price finder, implements IPriceFinder.
+    /// </summary>
     public class EpicFinder : IPriceFinder
     {
         public EpicFinder()
         {
             HttpHandler = new HttpHandler();
         }
+        /// <summary>
+        /// Uri to execute the http request.
+        /// </summary>
         public string StoreUri { get; set; }
+        /// <summary>
+        /// HttpHandler for Epic.
+        /// </summary>
         public HttpHandler HttpHandler { get; set; }
 
+        /// <summary>
+        /// Gets Epic Games prices.
+        /// </summary>
+        /// <param name="gameName"></param>
         public async Task<List<DatabaseEntitiesHandler>> GetPrice(string gameName)
         {
             var epicResponse = await HttpHandler.PostToEpic(gameName);

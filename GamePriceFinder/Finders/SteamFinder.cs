@@ -6,6 +6,9 @@ using GamePriceFinder.Models;
 
 namespace GamePriceFinder.Finders
 {
+    /// <summary>
+    /// Represents the Steam price finder, implements IPriceFinder.
+    /// </summary>
     public class SteamFinder : IPriceFinder
     {
         private const int forHonorSteamId = 304390;
@@ -14,9 +17,20 @@ namespace GamePriceFinder.Finders
             HttpHandler = new HttpHandler();
         }
 
+        /// <summary>
+        /// Uri to execute the http request.
+        /// </summary>
         public string StoreUri { get; set; }
+        /// <summary>
+        /// HttpHandler for Playstation Store.
+        /// </summary>
         public HttpHandler HttpHandler { get; set; }
 
+        /// <summary>
+        /// Gets Steam prices.
+        /// </summary>
+        /// <param name="gameName"></param>
+        /// <returns></returns>
         public async Task<List<DatabaseEntitiesHandler>> GetPrice(string gameName)
         {
             var steamResponse = await HttpHandler.GetToSteam(forHonorSteamId);

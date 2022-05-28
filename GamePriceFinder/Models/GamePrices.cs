@@ -3,6 +3,9 @@ using GamePriceFinder.Intefaces;
 
 namespace GamePriceFinder.Models
 {
+    /// <summary>
+    /// Represents a game price, with a game id, store id and price.
+    /// </summary>
     public class GamePrices
     {
         public GamePrices(int gameId, string storeId, decimal currentPrice)
