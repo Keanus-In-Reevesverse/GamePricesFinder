@@ -64,7 +64,7 @@ namespace GamePriceFinder.Http
 
             var method = new HttpMethod("POST");
             HttpContent body = new StringContent(payload);
-            body.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+            body.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             var resp = await httpClient.PostAsync(EpicUri, body);
             var respString = await resp.Content.ReadAsStringAsync();

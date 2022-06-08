@@ -1,5 +1,7 @@
 ﻿using GamePriceFinder.Enums;
 using GamePriceFinder.Intefaces;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GamePriceFinder.Models
 {
@@ -14,7 +16,10 @@ namespace GamePriceFinder.Models
             StoreId = storeId;
             CurrentPrice = currentPrice;
         }
+
+        [Column("game_ID")]
         public int GameId { get; set; }
+        [Column("store_name")]
         public string StoreId { get; set; }
         public decimal CurrentPrice { get; set; }
     }

@@ -54,6 +54,7 @@ namespace GamePriceFinder.Repositories
             try
             {
                 a =  DatabaseContext.Games.First(g => g.Name == name);
+                //Convert.db
 
             }
             catch (Exception e)

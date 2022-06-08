@@ -16,9 +16,10 @@
             decimal price;
             try
             {
+                var convertedPrice = commaFormattedPrice.Contains(".") ? commaFormattedPrice.Replace(".", ",") : commaFormattedPrice;
                 price = commaFormattedPrice.Length > 0 && commaFormattedPrice.Length >= cutString
-                ? Convert.ToDecimal(commaFormattedPrice.Remove(0, cutString))
-                : Convert.ToDecimal(commaFormattedPrice);
+                ? Convert.ToDecimal(convertedPrice.Remove(0, cutString))
+                : Convert.ToDecimal(convertedPrice);
             }
             catch
             {

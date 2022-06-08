@@ -42,35 +42,31 @@ namespace GamePriceFinder.Finders
                 {
                     try
                     {
-                        if (div.Attributes["class"].Value == "game-collection-item-details")
+                        if (div.Attributes["class"].Value == "col-md-2 col-sm-4 col-xs-6 game-collection-item-col")
                         {
                             var newDoc = new HtmlAgilityPack.HtmlDocument();
                             newDoc.LoadHtml(div.InnerHtml);
-                            var encodedName = newDoc.DocumentNode.SelectSingleNode("//p[@class='game-collection-item-details-title']").InnerText.Trim();
-                            var name = DecodeWithBruteForce(ref encodedName);
 
-                            var newDoc2 = new HtmlAgilityPack.HtmlDocument();
-                            var spans = newDoc.DocumentNode.Descendants("span").ToList();
+                            var insideDivs = newDoc.DocumentNode.Descendants("div");
 
+                            var name = string.Empty;
                             var price = string.Empty;
 
-                            foreach (var span in spans)
+                            foreach (var insideDiv in insideDivs)
                             {
-                                try
-                                {
-                                    if (span.Attributes["itemprop"].Value == "price")
-                                    {
-                                        price = newDoc.DocumentNode.SelectSingleNode("//span[@itemprop='price']").InnerText.Trim();
-                                        break;
-                                    }
-                                }
-                                catch (Exception e)
-                                {
-                                    //ignored
-                                }
+                                name = 
+                                    newDoc.DocumentNode.SelectSingleNode("//p[@class='game-collection-item-details-title']").InnerText.Trim();
+                                price =
+                                    newDoc.DocumentNode.SelectSingleNode("//span[@class='game-collection-item-regular-price ']").InnerText.Trim();
 
+                                if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(price))
+                                {
+                                    break;
+                                }
                             }
-                            
+
+                            var convertedPrice = price.Remove(0, 3);
+
                             var game = new Game(name);
 
                             var gamePrices = new GamePrices(

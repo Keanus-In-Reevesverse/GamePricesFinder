@@ -46,7 +46,14 @@ namespace GamePriceFinder.Finders
                 {
                     if (div.Attributes["class"].Value == "product-card--grid")
                     {
-                        entities.Add(ExtractNuuvemPrices(div));
+                        var entity = ExtractNuuvemPrices(div);
+
+                        if (entity == null)
+                        {
+                            throw new ArgumentNullException(nameof(entity));
+                        }
+
+                        entities.Add(entity);
                     }
                 }
                 catch
@@ -62,13 +69,26 @@ namespace GamePriceFinder.Finders
         {
             var newDoc = new HtmlAgilityPack.HtmlDocument();
             newDoc.LoadHtml(div.InnerHtml);
-            var price = newDoc.DocumentNode.SelectSingleNode("//span[@class='product-price--val']").InnerText.Trim();
-            var name = newDoc.DocumentNode.SelectSingleNode("//h3[@class='product-title double-line-name']").InnerText.Trim();
-            var game = new Game(name);
-            var gamePrice = new GamePrices(game.GameId, ((int)StoresEnum.Nuuvem).ToString(), PriceHandler.ConvertPriceToDatabaseType(price, 3));
-            var history = new History(game.GameId, StoresEnum.Nuuvem.ToString(), gamePrice.CurrentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
-            var genre = new Genre("Action");
-            return new DatabaseEntitiesHandler(game, gamePrice, history, genre);
+            var bundle = string.Empty;
+            var dlc = string.Empty;
+
+            bundle = newDoc.DocumentNode.SelectSingleNode("//span[@class='product-badge product-badge__package']")?.InnerHtml.Trim();
+            dlc = newDoc.DocumentNode.SelectSingleNode("//span[@class='product-badge product-badge__dlc']")?.InnerHtml.Trim();
+
+            if (!string.IsNullOrEmpty(bundle) || !string.IsNullOrEmpty(dlc))
+            {
+                return null;
+            }
+            else
+            {
+                var price = newDoc.DocumentNode.SelectSingleNode("//span[@class='product-price--val']").InnerText.Trim();
+                var name = newDoc.DocumentNode.SelectSingleNode("//h3[@class='product-title double-line-name']").InnerText.Trim();
+                var game = new Game(name);
+                var gamePrice = new GamePrices(game.GameId, ((int)StoresEnum.Nuuvem).ToString(), PriceHandler.ConvertPriceToDatabaseType(price, 3));
+                var history = new History(game.GameId, StoresEnum.Nuuvem.ToString(), gamePrice.CurrentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
+                var genre = new Genre("Action");
+                return new DatabaseEntitiesHandler(game, gamePrice, history, genre);
+            }
         }
     }
 }

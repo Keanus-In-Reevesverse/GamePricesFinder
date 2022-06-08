@@ -14,7 +14,8 @@ namespace GamePriceFinder.Database
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //modelBuilder.Entity<History>().HasNoKey();
+            modelBuilder.Entity<GamePrices>()
+                .HasKey("GameId", "StoreId");
         }
 
         /// <summary>

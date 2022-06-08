@@ -25,7 +25,7 @@ namespace GamePriceFinder.Models
         public string Video { get; set; }
 
         [Column("game_image")]
-        public string Image { get => _image; set => _image = ConvertFromDBVal<string>(value); }
+        public string Image{ get; set; }
 
 
         [Column("description")]

@@ -37,6 +37,10 @@ namespace GamePriceFinder.Finders
 
             foreach (var responseGame in responseGameList)
             {
+                if (!responseGame.default_sku.name.Equals("Jogo Completo", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    continue;
+                }
                 var title = responseGame.name;
 
                 var price = PriceHandler.ConvertPriceToDatabaseType(responseGame.default_sku.display_price, 2);
