@@ -1,5 +1,8 @@
 ﻿namespace GamePriceFinder.Responses
 {
+    /// <summary>
+    /// Represents the response from http request to PlaystationNetwork API.
+    /// </summary>
     public class PsnResponse
     {
         public int age_limit { get; set; }

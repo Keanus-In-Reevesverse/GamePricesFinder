@@ -1,12 +1,14 @@
-﻿using GamePriceFinder.Handlers;
-using GamePriceFinder.Responses;
+﻿using GamePriceFinder.Responses;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Web;
 
 namespace GamePriceFinder.Http
 {
-    public class ApiStoresHandler
+    /// <summary>
+    /// Unifies all the http requests.
+    /// </summary>
+    public class HttpHandler
     {
         private const string SteamUri = "http://store.steampowered.com/api/";
 
@@ -22,13 +24,11 @@ namespace GamePriceFinder.Http
 
         private const string PsnSecondSearchPath = "?size=10&start=0";
 
-        private readonly PriceHandler _priceHandler;
-
-        public ApiStoresHandler(PriceHandler priceHandler)
-        {
-            _priceHandler = priceHandler;
-        }
-
+        /// <summary>
+        /// Use for the http request to Steam.
+        /// </summary>
+        /// <param name="gameId"></param>
+        /// <returns></returns>
         public async Task<Dictionary<string, AppIds>> GetToSteam(int gameId)
         {
             var parameters = $"appdetails?appids={gameId}&cc=br&l=br";
@@ -46,6 +46,11 @@ namespace GamePriceFinder.Http
             return Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, AppIds>>(jsonString);
         }
 
+        /// <summary>
+        /// Use for the http request to Epic Games.
+        /// </summary>
+        /// <param name="gameId"></param>
+        /// <returns></returns>
         public async Task<EpicGamesStoreNET.Models.Response> PostToEpic(string gameName)
         {
             var httpClient = new HttpClient();
@@ -59,7 +64,7 @@ namespace GamePriceFinder.Http
 
             var method = new HttpMethod("POST");
             HttpContent body = new StringContent(payload);
-            body.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/json");
+            body.Headers.ContentType = new MediaTypeHeaderValue("application/json");
 
             var resp = await httpClient.PostAsync(EpicUri, body);
             var respString = await resp.Content.ReadAsStringAsync();
@@ -67,6 +72,11 @@ namespace GamePriceFinder.Http
             return JsonConvert.DeserializeObject<EpicGamesStoreNET.Models.Response>(respString);
         }
 
+        /// <summary>
+        /// Use for the http request to Nuuvem.
+        /// </summary>
+        /// <param name="gameId"></param>
+        /// <returns></returns>
         public async Task<string> GetToNuuvem(string gameName)
         {
             var httpClient = new HttpClient();
@@ -78,6 +88,11 @@ namespace GamePriceFinder.Http
             return response.Content.ReadAsStringAsync().Result;
         }
 
+        /// <summary>
+        /// Use for the http request to Playstation Store.
+        /// </summary>
+        /// <param name="gameId"></param>
+        /// <returns></returns>
         public async Task<Link[]> GetToPsn(string gameName)
         {
             var httpClient = new HttpClient();

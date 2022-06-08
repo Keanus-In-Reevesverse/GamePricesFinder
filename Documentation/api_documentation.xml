@@ -1,0 +1,427 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GamePriceFinder</name>
+    </assembly>
+    <members>
+        <member name="T:GamePriceFinder.Database.DatabaseContext">
+            <summary>
+            Declares the database tables in the code for database interaction.
+            </summary>
+        </member>
+        <member name="M:GamePriceFinder.Database.DatabaseContext.OnConfiguring(Microsoft.EntityFrameworkCore.DbContextOptionsBuilder)">
+            <summary>
+            Configures the connection string and defines the database to be used as MySQL.
+            </summary>
+            <param name="optionsBuilder"></param>
+        </member>
+        <member name="P:GamePriceFinder.Database.DatabaseContext.Games">
+            <summary>
+            Game table.
+            </summary>
+        </member>
+        <member name="P:GamePriceFinder.Database.DatabaseContext.Genre">
+            <summary>
+            Genre table.
+            </summary>
+        </member>
+        <member name="P:GamePriceFinder.Database.DatabaseContext.History">
+            <summary>
+            History table.
+            </summary>
+        </member>
+        <member name="P:GamePriceFinder.Database.DatabaseContext.GamePrices">
+            <summary>
+            Game_Prices table.
+            </summary>
+        </member>
+        <member name="T:GamePriceFinder.Enums.StoresEnum">
+            <summary>
+            Represents the stores from where the prices will be acquired.
+            </summary>
+        </member>
+        <member name="T:GamePriceFinder.Finders.EpicFinder">
+            <summary>
+            Represents the Xbox price finder, implements IPriceFinder.
+            </summary>
+        </member>
+        <member name="P:GamePriceFinder.Finders.EpicFinder.StoreUri">
+            <summary>
+            Uri to execute the http request.
+            </summary>
+        </member>
+        <member name="P:GamePriceFinder.Finders.EpicFinder.HttpHandler">
+            <summary>
+            HttpHandler for Epic.
+            </summary>
+        </member>
+        <member name="M:GamePriceFinder.Finders.EpicFinder.GetPrice(System.String)">
+            <summary>
+            Gets Epic Games prices.
+            </summary>
+            <param name="gameName"></param>
+        </member>
+        <member name="T:GamePriceFinder.Finders.MicrosoftFinder">
+            <summary>
+            Represents the Xbox price finder, implements IPriceFinder.
+            </summary>
+        </member>
+        <member name="P:GamePriceFinder.Finders.MicrosoftFinder.StoreUri">
+            <summary>
+            Uri to execute the http request.
+            </summary>
+        </member>
+        <member name="P:GamePriceFinder.Finders.MicrosoftFinder.HttpHandler">
+            <summary>
+            HttpHandler for Microsoft.
+            </summary>
+        </member>
+        <member name="M:GamePriceFinder.Finders.MicrosoftFinder.GetPrice(System.String)">
+            <summary>
+            Gets Xbox prices.
+            </summary>
+            <param name="gameName"></param>
+        </member>
+        <member name="T:GamePriceFinder.Finders.NuuvemFinder">
+            <summary>
+            Represents the Nuuvem price finder, implements IPriceFinder.
+            </summary>
+        </member>
+        <member name="P:GamePriceFinder.Finders.NuuvemFinder.StoreUri">
+            <summary>
+            Uri to execute the http request.
+            </summary>
+        </member>
+        <member name="P:GamePriceFinder.Finders.NuuvemFinder.HttpHandler">
+            <summary>
+            HttpHandler for Nuuvem.
+            </summary>
+        </member>
+        <member name="M:GamePriceFinder.Finders.NuuvemFinder.GetPrice(System.String)">
+            <summary>
+            Gets Nuuvem prices.
+            </summary>
+            <param name="gameName"></param>
+        </member>
+        <member name="T:GamePriceFinder.Finders.PlaystationStoreFinder">
+            <summary>
+            Represents the Playstation price finder, implements IPriceFinder.
+            </summary>
+        </member>
+        <member name="P:GamePriceFinder.Finders.PlaystationStoreFinder.StoreUri">
+            <summary>
+            Uri to execute the http request.
+            </summary>
+        </member>
+        <member name="P:GamePriceFinder.Finders.PlaystationStoreFinder.HttpHandler">
+            <summary>
+            HttpHandler for Playstation Store.
+            </summary>
+        </member>
+        <member name="M:GamePriceFinder.Finders.PlaystationStoreFinder.GetPrice(System.String)">
+            <summary>
+            Gets Playstation prices.
+            </summary>
+            <param name="gameName"></param>
+        </member>
+        <member name="T:GamePriceFinder.Finders.SteamFinder">
+            <summary>
+            Represents the Steam price finder, implements IPriceFinder.
+            </summary>
+        </member>
+        <member name="P:GamePriceFinder.Finders.SteamFinder.StoreUri">
+            <summary>
+            Uri to execute the http request.
+            </summary>
+        </member>
+        <member name="P:GamePriceFinder.Finders.SteamFinder.HttpHandler">
+            <summary>
+            HttpHandler for Playstation Store.
+            </summary>
+        </member>
+        <member name="M:GamePriceFinder.Finders.SteamFinder.GetPrice(System.String)">
+            <summary>
+            Gets Steam prices.
+            </summary>
+            <param name="gameName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:GamePriceFinder.Handlers.DatabaseEntitiesHandler">
+            <summary>
+            Class the unifies all the models to facilitate the database access.
+            </summary>
+        </member>
+        <member name="P:GamePriceFinder.Handlers.DatabaseEntitiesHandler.Game">
+            <summary>
+            Game in the handler.
+            </summary>
+        </member>
+        <member name="P:GamePriceFinder.Handlers.DatabaseEntitiesHandler.GamePrices">
+            <summary>
+            Gameprices in the handler.
+            </summary>
+        </member>
+        <member name="P:GamePriceFinder.Handlers.DatabaseEntitiesHandler.History">
+            <summary>
+            History in the handler.
+            </summary>
+        </member>
+        <member name="P:GamePriceFinder.Handlers.DatabaseEntitiesHandler.Genre">
+            <summary>
+            Genre in the handler.
+            </summary>
+        </member>
+        <member name="T:GamePriceFinder.Handlers.PriceHandler">
+            <summary>
+            Static class for price conversion.
+            </summary>
+        </member>
+        <member name="M:GamePriceFinder.Handlers.PriceHandler.ConvertPriceToDatabaseType(System.String,System.Int32)">
+            <summary>
+            Converts price from string to decimal.
+            </summary>
+            <param name="commaFormattedPrice"></param>
+            <param name="cutString"></param>
+            <returns></returns>
+        </member>
+        <member name="T:GamePriceFinder.Http.HttpHandler">
+            <summary>
+            Unifies all the http requests.
+            </summary>
+        </member>
+        <member name="M:GamePriceFinder.Http.HttpHandler.GetToSteam(System.Int32)">
+            <summary>
+            Use for the http request to Steam.
+            </summary>
+            <param name="gameId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GamePriceFinder.Http.HttpHandler.PostToEpic(System.String)">
+            <summary>
+            Use for the http request to Epic Games.
+            </summary>
+            <param name="gameId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GamePriceFinder.Http.HttpHandler.GetToNuuvem(System.String)">
+            <summary>
+            Use for the http request to Nuuvem.
+            </summary>
+            <param name="gameId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:GamePriceFinder.Http.HttpHandler.GetToPsn(System.String)">
+            <summary>
+            Use for the http request to Playstation Store.
+            </summary>
+            <param name="gameId"></param>
+            <returns></returns>
+        </member>
+        <member name="T:GamePriceFinder.Intefaces.IPriceFinder">
+            <summary>
+            Interface to get the prices, implemented by EpicFinder, MicrosoftFinder, NuuvemFinder, PlaystationStoreFinder, SteamFinder.
+            </summary>
+        </member>
+        <member name="T:GamePriceFinder.Intefaces.IRepository`1">
+            <summary>
+            Repository interface, implemented by GameRepository, GamePricesRepository, GenreRepository, HistoryRepository.
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="T:GamePriceFinder.Models.Game">
+            <summary>
+            Represents a game, with game id, genre id, promotional video url, image path, a short description, the publisher name and the name of the game.
+            </summary>
+        </member>
+        <member name="T:GamePriceFinder.Models.GamePrices">
+            <summary>
+            Represents a game price, with a game id, store id and price.
+            </summary>
+        </member>
+        <member name="T:GamePriceFinder.Models.Genre">
+            <summary>
+            Represents available game genres, with game ids and genre description.
+            </summary>
+        </member>
+        <member name="T:GamePriceFinder.Models.History">
+            <summary>
+            Represents the historic of a game price, with history id, game id, store name, the price, and a timestamp indicating when that price was found.
+            </summary>
+        </member>
+        <member name="T:GamePriceFinder.PriceSearcher">
+            <summary>
+            Unificates the price finders for each store.
+            </summary>
+        </member>
+        <member name="P:GamePriceFinder.PriceSearcher.SteamFinder">
+            <summary>
+            Steam price finder.
+            </summary>
+        </member>
+        <member name="P:GamePriceFinder.PriceSearcher.EpicFinder">
+            <summary>
+            Epic Games price finder.
+            </summary>
+        </member>
+        <member name="P:GamePriceFinder.PriceSearcher.NuuvemFinder">
+            <summary>
+            Nuuvem price finder.
+            </summary>
+        </member>
+        <member name="P:GamePriceFinder.PriceSearcher.PlaystationStoreFinder">
+            <summary>
+            Playstation Store price finder.
+            </summary>
+        </member>
+        <member name="P:GamePriceFinder.PriceSearcher.MicrosoftFinder">
+            <summary>
+            Xbox store price finder.
+            </summary>
+        </member>
+        <member name="M:GamePriceFinder.PriceSearcher.GetPrices(System.String)">
+            <summary>
+            Retrieves prices of each store.
+            </summary>
+            <param name="gameName"></param>
+            <returns></returns>
+        </member>
+        <member name="T:GamePriceFinder.Repositories.GamePricesRepository">
+            <summary>
+            Repository for GamePrices class, implements IRepository of GamePrices type.
+            </summary>
+        </member>
+        <member name="M:GamePriceFinder.Repositories.GamePricesRepository.AddMany(System.Collections.Generic.List{GamePriceFinder.Models.GamePrices})">
+            <summary>
+            Adds many rows to database.
+            </summary>
+            <param name="entities"></param>
+        </member>
+        <member name="M:GamePriceFinder.Repositories.GamePricesRepository.AddOne(GamePriceFinder.Models.GamePrices)">
+            <summary>
+            Adds one row to the database.
+            </summary>
+            <param name="entity"></param>
+        </member>
+        <member name="M:GamePriceFinder.Repositories.GamePricesRepository.EditOne(GamePriceFinder.Models.GamePrices)">
+            <summary>
+            Updates one row in the database.
+            </summary>
+            <param name="entity"></param>
+        </member>
+        <member name="M:GamePriceFinder.Repositories.GamePricesRepository.GamePriceFinder#Intefaces#IRepository{GamePriceFinder#Models#GamePrices}#FindOne(System.String)">
+            <summary>
+            Selects one row from the database.
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="T:GamePriceFinder.Repositories.GameRepository">
+            <summary>
+            Repository for Game class, implements IRepository of Game type.
+            </summary>
+        </member>
+        <member name="M:GamePriceFinder.Repositories.GameRepository.AddMany(System.Collections.Generic.List{GamePriceFinder.Models.Game})">
+            <summary>
+            Adds many rows to database.
+            </summary>
+            <param name="entities"></param>
+        </member>
+        <member name="M:GamePriceFinder.Repositories.GameRepository.AddOne(GamePriceFinder.Models.Game)">
+            <summary>
+            Adds one row to the database.
+            </summary>
+            <param name="entity"></param>
+        </member>
+        <member name="M:GamePriceFinder.Repositories.GameRepository.EditOne(GamePriceFinder.Models.Game)">
+            <summary>
+            Updates one row in the database.
+            </summary>
+            <param name="entity"></param>
+        </member>
+        <member name="M:GamePriceFinder.Repositories.GameRepository.FindOne(System.String)">
+            <summary>
+            Selects one row from the database matching the name of the game.
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="T:GamePriceFinder.Repositories.GenreRepository">
+            <summary>
+            Repository for Genre class, implements IRepository of Genre type.
+            </summary>
+        </member>
+        <member name="P:GamePriceFinder.Repositories.GenreRepository.DatabaseContext">
+            <summary>
+            Database handler.
+            </summary>
+        </member>
+        <member name="M:GamePriceFinder.Repositories.GenreRepository.AddMany(System.Collections.Generic.List{GamePriceFinder.Models.Genre})">
+            <summary>
+            Adds many rows to database.
+            </summary>
+            <param name="entities"></param>
+        </member>
+        <member name="M:GamePriceFinder.Repositories.GenreRepository.AddOne(GamePriceFinder.Models.Genre)">
+            <summary>
+            Adds one row to the database.
+            </summary>
+            <param name="entity"></param>
+        </member>
+        <member name="M:GamePriceFinder.Repositories.GenreRepository.EditOne(GamePriceFinder.Models.Genre)">
+            <summary>
+            Updates one row in the database.
+            </summary>
+            <param name="entity"></param>
+        </member>
+        <member name="M:GamePriceFinder.Repositories.GenreRepository.FindOne(System.String)">
+            <summary>
+            Selects one row from the database matching the name of the genre.
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+        </member>
+        <member name="T:GamePriceFinder.Repositories.HistoryRepository">
+            <summary>
+            Repository for History class, implements IRepository of History type.
+            </summary>
+        </member>
+        <member name="M:GamePriceFinder.Repositories.HistoryRepository.AddMany(System.Collections.Generic.List{GamePriceFinder.Models.History})">
+            <summary>
+            Inserts many rows in the database.
+            </summary>
+            <param name="entities"></param>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:GamePriceFinder.Repositories.HistoryRepository.AddOne(GamePriceFinder.Models.History)">
+            <summary>
+            Inserts only one row in database.
+            </summary>
+            <param name="history"></param>
+        </member>
+        <member name="M:GamePriceFinder.Repositories.HistoryRepository.EditOne(GamePriceFinder.Models.History)">
+            <summary>
+            Updates data of one row in database.
+            </summary>
+            <param name="entity"></param>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="M:GamePriceFinder.Repositories.HistoryRepository.FindOne(System.String)">
+            <summary>
+            Selects one row from database.
+            </summary>
+            <param name="name"></param>
+            <returns></returns>
+            <exception cref="T:System.NotImplementedException"></exception>
+        </member>
+        <member name="T:GamePriceFinder.Responses.PsnResponse">
+            <summary>
+            Represents the response from http request to PlaystationNetwork API.
+            </summary>
+        </member>
+        <member name="T:GamePriceFinder.Responses.SteamResponse">
+            <summary>
+            Represents the response from http request to Steam API.
+            </summary>
+        </member>
+    </members>
+</doc>
