@@ -1,5 +1,3 @@
-<<<<<<< HEAD
-<<<<<<< HEAD
 # User-specific files
 *.suo
 *.user
@@ -217,15 +215,6 @@ project.lock.json
 #####
 
 GamePriceFinder/.local-chromium/Win64-970485/chrome-win/chrome.dll
-=======
-=======
->>>>>>> main
-.vs
-/bin/
-/obj/
-*.bak
-*.vs
-<<<<<<< HEAD
->>>>>>> c5f7aea1a17f77cafe047684c05ca7d443a1b828
-=======
->>>>>>> main
+
+.vs/BuscaJogosPlus/v17/.suo
+GamePriceFinder/obj/staticwebassets.pack.sentinel
