@@ -10,7 +10,7 @@ namespace GamePriceFinder.Models
     public class Genre
     {
         public Genre(string description)
-        {
+    {
             Description = description;
         }
 

@@ -1,5 +1,7 @@
 ﻿using GamePriceFinder.Finders;
 using GamePriceFinder.Handlers;
+using GamePriceFinder.Http;
+using GamePriceFinder.Models;
 
 namespace GamePriceFinder
 {

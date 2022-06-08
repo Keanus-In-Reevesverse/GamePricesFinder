@@ -27,6 +27,7 @@ namespace GamePriceFinder.Models
         [Column("game_image")]
         public string Image{ get; set; }
 
+        public History History { get; set; }
 
         [Column("description")]
         public string Description { get; set; }
