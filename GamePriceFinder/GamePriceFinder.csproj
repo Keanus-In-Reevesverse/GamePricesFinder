@@ -28,6 +28,7 @@
 	<ItemGroup>
 		<PackageReference Include="EpicGamesStoreNET" Version="1.0.2" />
 		<PackageReference Include="EWSoftware.SHFB" Version="2022.2.6" />
+		<PackageReference Include="Google.Apis.YouTube.v3" Version="1.57.0.2693" />
 		<PackageReference Include="HtmlAgilityPack" Version="1.11.42" />
 		<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.5">
 		  <PrivateAssets>all</PrivateAssets>

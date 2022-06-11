@@ -42,6 +42,15 @@ namespace GamePriceFinder.Finders
 
                 var game = new Game(title);
 
+                try
+                {
+                    //Google.Apis.YouTube.v3.Data.sea
+                }
+                catch
+                {
+                    //ignored
+                }
+
                 //await FillGameInformation(ref game, currentGame.Price.TotalPrice.FmtPrice.DiscountPrice, 2);
 
                 var currentPrice = PriceHandler.ConvertPriceToDatabaseType(currentGame.Price.TotalPrice.FmtPrice.DiscountPrice.Replace(".", ","), 2);

@@ -49,6 +49,8 @@ namespace GamePriceFinder.Finders
 
                 var game = new Game(gameName);
 
+                game.Video = steamResponse[forHonorSteamId.ToString()].data.movies[0].webm.max;
+
                 //await FillGameInformation(ref game, price, 3);
 
                 var currentPrice = PriceHandler.ConvertPriceToDatabaseType(price.Replace(".", ","), 3);

@@ -1,11 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "r76kIW0yw/guZfJPOLBrP2TodNHV9jkpIaEZ53NJhvpoCbHesLWN6HxkwyRmAr3ft2TpviBsilYByv1AX6EZpA==",
+  "dgSpecHash": "H/MDafQTJZFTymkHRNV16X5GHtxs/jrKU2R5Ggf87ljbfDeRVAmX3unguTKt8ungQz8DDIO4sJV2GrMEVNTsLQ==",
   "success": true,
   "projectFilePath": "C:\\Users\\Ricardo\\Documents\\FATEC\\TG\\BuscaJogosPlus\\GamePriceFinder\\GamePriceFinder.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\Ricardo\\.nuget\\packages\\epicgamesstorenet\\1.0.2\\epicgamesstorenet.1.0.2.nupkg.sha512",
     "C:\\Users\\Ricardo\\.nuget\\packages\\ewsoftware.shfb\\2022.2.6\\ewsoftware.shfb.2022.2.6.nupkg.sha512",
+    "C:\\Users\\Ricardo\\.nuget\\packages\\google.apis\\1.57.0\\google.apis.1.57.0.nupkg.sha512",
+    "C:\\Users\\Ricardo\\.nuget\\packages\\google.apis.auth\\1.57.0\\google.apis.auth.1.57.0.nupkg.sha512",
+    "C:\\Users\\Ricardo\\.nuget\\packages\\google.apis.core\\1.57.0\\google.apis.core.1.57.0.nupkg.sha512",
+    "C:\\Users\\Ricardo\\.nuget\\packages\\google.apis.youtube.v3\\1.57.0.2693\\google.apis.youtube.v3.1.57.0.2693.nupkg.sha512",
     "C:\\Users\\Ricardo\\.nuget\\packages\\htmlagilitypack\\1.11.42\\htmlagilitypack.1.11.42.nupkg.sha512",
     "C:\\Users\\Ricardo\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\Ricardo\\.nuget\\packages\\microsoft.entityframeworkcore\\6.0.5\\microsoft.entityframeworkcore.6.0.5.nupkg.sha512",
