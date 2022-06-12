@@ -3,6 +3,8 @@ using GamePriceFinder.Handlers;
 using GamePriceFinder.Http;
 using GamePriceFinder.Intefaces;
 using GamePriceFinder.Models;
+using Google.Apis.Services;
+using Google.Apis.YouTube.v3;
 
 namespace GamePriceFinder.Finders
 {
@@ -12,6 +14,9 @@ namespace GamePriceFinder.Finders
     public class SteamFinder : IPriceFinder
     {
         private const int forHonorSteamId = 304390;
+        
+        private const string TRAILER = " trailer";
+
         public SteamFinder()
         {
             HttpHandler = new HttpHandler();
@@ -35,7 +40,7 @@ namespace GamePriceFinder.Finders
         {
             var steamResponse = await HttpHandler.GetToSteam(forHonorSteamId);
 
-            gameName = string.Empty;
+            var name = string.Empty;
 
             var price = string.Empty;
 
@@ -43,13 +48,15 @@ namespace GamePriceFinder.Finders
 
             for (int responseObject = 0; responseObject < steamResponse.Count; responseObject++)
             {
-                gameName = steamResponse[forHonorSteamId.ToString()].data.name;
+                name = steamResponse[forHonorSteamId.ToString()].data.name;
 
                 price = steamResponse[forHonorSteamId.ToString()].data.price_overview.final_formatted;
 
-                var game = new Game(gameName);
+                var game = new Game(name);
 
-                game.Video = steamResponse[forHonorSteamId.ToString()].data.movies[0].webm.max;
+                //game.Video = steamResponse[forHonorSteamId.ToString()].data.movies[0].webm.max;
+
+                game.Video = await YoutubeHandler.GetGameTrailer(string.Concat(name, TRAILER));
 
                 //await FillGameInformation(ref game, price, 3);
 

@@ -4,7 +4,6 @@ using GamePriceFinder.Finders;
 using GamePriceFinder.Intefaces;
 using GamePriceFinder.Models;
 using GamePriceFinder.Repositories;
-using GamePriceFinder.Responses;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -49,6 +48,7 @@ var connectionString = builder.Configuration.GetSection("MySqlConnection:MySqlCo
             global::System.Console.WriteLine(string.Concat("Store: ", entity.History.StoreName), ".");
             global::System.Console.WriteLine(string.Concat("Name: ", entity.Game.Name), ".");
             global::System.Console.WriteLine(string.Concat("Current price: R$ ", entity.GamePrices.CurrentPrice), ".");
+            global::System.Console.WriteLine(string.Concat("Video url ", entity.Game.Video), ".");
         }
 
         foreach (var entity in entities)

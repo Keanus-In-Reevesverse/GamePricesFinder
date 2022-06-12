@@ -3,6 +3,7 @@ using GamePriceFinder.Handlers;
 using GamePriceFinder.Http;
 using GamePriceFinder.Intefaces;
 using GamePriceFinder.Models;
+using Google.Apis.YouTube.v3;
 
 namespace GamePriceFinder.Finders
 {
@@ -25,6 +26,8 @@ namespace GamePriceFinder.Finders
         /// </summary>
         public HttpHandler HttpHandler { get; set; }
 
+        private const string TRAILER = " trailer";
+
         /// <summary>
         /// Gets Playstation prices.
         /// </summary>
@@ -46,6 +49,8 @@ namespace GamePriceFinder.Finders
                 var price = PriceHandler.ConvertPriceToDatabaseType(responseGame.default_sku.display_price, 2);
 
                 var game = new Game(title);
+
+                game.Video = await YoutubeHandler.GetGameTrailer(string.Concat(title, TRAILER));
 
                 var gamePrices = new GamePrices(game.GameId, ((int)StoresEnum.Playstation).ToString(), price);
 

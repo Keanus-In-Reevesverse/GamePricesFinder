@@ -3,6 +3,7 @@ using GamePriceFinder.Handlers;
 using GamePriceFinder.Http;
 using GamePriceFinder.Intefaces;
 using GamePriceFinder.Models;
+using Google.Apis.YouTube.v3;
 
 namespace GamePriceFinder.Finders
 {
@@ -24,6 +25,8 @@ namespace GamePriceFinder.Finders
         /// </summary>
         public HttpHandler HttpHandler { get; set; }
 
+        private const string TRAILER = " trailer";
+
         /// <summary>
         /// Gets Epic Games prices.
         /// </summary>
@@ -42,14 +45,7 @@ namespace GamePriceFinder.Finders
 
                 var game = new Game(title);
 
-                try
-                {
-                    //Google.Apis.YouTube.v3.Data.sea
-                }
-                catch
-                {
-                    //ignored
-                }
+                game.Video = await YoutubeHandler.GetGameTrailer(string.Concat(title, TRAILER));
 
                 //await FillGameInformation(ref game, currentGame.Price.TotalPrice.FmtPrice.DiscountPrice, 2);
 
@@ -59,6 +55,7 @@ namespace GamePriceFinder.Finders
                     game.GameId,
                     ((int)StoresEnum.Epic).ToString(),
                     currentPrice);
+
                 var history = new History(game.GenreId, StoresEnum.Epic.ToString(), currentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
 
                 var genre = new Genre("Action");

@@ -3,6 +3,7 @@ using GamePriceFinder.Handlers;
 using GamePriceFinder.Http;
 using GamePriceFinder.Intefaces;
 using GamePriceFinder.Models;
+using Google.Apis.YouTube.v3;
 
 namespace GamePriceFinder.Finders
 {
@@ -23,6 +24,8 @@ namespace GamePriceFinder.Finders
         /// HttpHandler for Nuuvem.
         /// </summary>
         public HttpHandler HttpHandler { get; set; }
+
+        private const string TRAILER = " trailer";
 
         /// <summary>
         /// Gets Nuuvem prices.
@@ -46,7 +49,7 @@ namespace GamePriceFinder.Finders
                 {
                     if (div.Attributes["class"].Value == "product-card--grid")
                     {
-                        var entity = ExtractNuuvemPrices(div);
+                        var entity = await ExtractNuuvemPrices(div);
 
                         if (entity == null)
                         {
@@ -65,7 +68,7 @@ namespace GamePriceFinder.Finders
             return entities;
         }
 
-        private DatabaseEntitiesHandler ExtractNuuvemPrices(HtmlAgilityPack.HtmlNode div)
+        private async Task<DatabaseEntitiesHandler> ExtractNuuvemPrices(HtmlAgilityPack.HtmlNode div)
         {
             var newDoc = new HtmlAgilityPack.HtmlDocument();
             newDoc.LoadHtml(div.InnerHtml);
@@ -84,6 +87,7 @@ namespace GamePriceFinder.Finders
                 var price = newDoc.DocumentNode.SelectSingleNode("//span[@class='product-price--val']").InnerText.Trim();
                 var name = newDoc.DocumentNode.SelectSingleNode("//h3[@class='product-title double-line-name']").InnerText.Trim();
                 var game = new Game(name);
+                game.Video = await YoutubeHandler.GetGameTrailer(string.Concat(name, TRAILER));
                 var gamePrice = new GamePrices(game.GameId, ((int)StoresEnum.Nuuvem).ToString(), PriceHandler.ConvertPriceToDatabaseType(price, 3));
                 var history = new History(game.GameId, StoresEnum.Nuuvem.ToString(), gamePrice.CurrentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
                 var genre = new Genre("Action");

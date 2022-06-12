@@ -3,6 +3,7 @@ using GamePriceFinder.Handlers;
 using GamePriceFinder.Http;
 using GamePriceFinder.Intefaces;
 using GamePriceFinder.Models;
+using Google.Apis.YouTube.v3;
 using System.Net;
 
 namespace GamePriceFinder.Finders
@@ -20,6 +21,8 @@ namespace GamePriceFinder.Finders
         /// HttpHandler for Microsoft.
         /// </summary>
         public HttpHandler HttpHandler { get; set; }
+
+        private const string TRAILER = " trailer";
 
         /// <summary>
         /// Gets Xbox prices.
@@ -68,6 +71,8 @@ namespace GamePriceFinder.Finders
                             var convertedPrice = price.Remove(0, 3);
 
                             var game = new Game(name);
+
+                            game.Video = await YoutubeHandler.GetGameTrailer(string.Concat(name, TRAILER));
 
                             var gamePrices = new GamePrices(
                                 game.GameId, ((int)StoresEnum.Xbox).ToString(), 
