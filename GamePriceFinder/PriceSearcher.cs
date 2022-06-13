@@ -49,9 +49,9 @@ namespace GamePriceFinder
         /// </summary>
         /// <param name="gameName"></param>
         /// <returns></returns>
-        public async Task<List<DatabaseEntitiesHandler>> GetPrices(string gameName)
+        public async Task<List<DatabaseEntitiesHandler>> GetPrices(string gameName, int id)
         {
-            var steamEntities = await SteamFinder.GetPrice(string.Empty);
+            var steamEntities = await SteamFinder.GetPrice(string.Empty, id);
 
             var epicEntities = await EpicFinder.GetPrice(gameName);
 

@@ -44,9 +44,9 @@ namespace GamePriceFinder.Finders
                 var title = currentGame.Title;
 
                 var game = new Game(title);
-
+#if !DEBUG
                 game.Video = await YoutubeHandler.GetGameTrailer(string.Concat(title, TRAILER));
-
+#endif
                 //await FillGameInformation(ref game, currentGame.Price.TotalPrice.FmtPrice.DiscountPrice, 2);
 
                 var currentPrice = PriceHandler.ConvertPriceToDatabaseType(currentGame.Price.TotalPrice.FmtPrice.DiscountPrice.Replace(".", ","), 2);

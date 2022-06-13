@@ -14,33 +14,57 @@ builder.Services.AddEndpointsApiExplorer();
 
 var connectionString = builder.Configuration.GetSection("MySqlConnection:MySqlConnectionString").Value;
 
-    builder.Services.AddTransient<IRepository<GamePriceFinder.Models.Genre>, GenreRepository>();
-    builder.Services.AddTransient<IRepository<Game>, GameRepository>();
-    builder.Services.AddTransient<IRepository<History>, HistoryRepository>();
-    builder.Services.AddTransient<PriceSearcher>();
-    builder.Services.AddTransient<SteamFinder>();
-    builder.Services.AddTransient<EpicFinder>();
-    builder.Services.AddTransient<NuuvemFinder>();
-    builder.Services.AddTransient<PlaystationStoreFinder>();
-    builder.Services.AddTransient<MicrosoftFinder>();
+builder.Services.AddTransient<IRepository<GamePriceFinder.Models.Genre>, GenreRepository>();
+builder.Services.AddTransient<IRepository<Game>, GameRepository>();
+builder.Services.AddTransient<IRepository<History>, HistoryRepository>();
+builder.Services.AddTransient<PriceSearcher>();
+builder.Services.AddTransient<SteamFinder>();
+builder.Services.AddTransient<EpicFinder>();
+builder.Services.AddTransient<NuuvemFinder>();
+builder.Services.AddTransient<PlaystationStoreFinder>();
+builder.Services.AddTransient<MicrosoftFinder>();
 
-    builder.Services.AddScoped<DbContextOptions<DbContext>>();
-    builder.Services.
-        AddDbContext<DatabaseContext>(opts => opts.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+builder.Services.AddScoped<DbContextOptions<DbContext>>();
+builder.Services.
+    AddDbContext<DatabaseContext>(opts => opts.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
-    var app = builder.Build();
-    //app.Urls.Add("http://localhost:5000");
-    app.MapGet("/", async (
-        [FromServices] IRepository<GamePriceFinder.Models.Genre> genreRepository,
-        [FromServices] IRepository<History> historyRepository,
-        [FromServices] IRepository<Game> gameRepository,
-        [FromServices] PriceSearcher priceSearcher) =>
+var app = builder.Build();
+
+//app.Urls.Add("http://localhost:5000");
+
+app.MapGet("/", async (
+    [FromServices] IRepository<GamePriceFinder.Models.Genre> genreRepository,
+    [FromServices] IRepository<History> historyRepository,
+    [FromServices] IRepository<Game> gameRepository,
+    [FromServices] PriceSearcher priceSearcher) =>
+{
+    // var gameId = gameRepository.FindOne(gameName).GameId;
+
+    var gameNames = new List<string>() { "for honor", "scribblenauts", "lego batman 3", "the witcher 3" };
+    var steamGameIds = new List<int>() { 304390, 218680, 313690, 292030 };
+
+    for (int i = 0; i < 4; i++)
     {
-        var gameName = "FOR HONOR";
+        var idToDefine = i + 1;
 
-        var gameId = gameRepository.FindOne(gameName).GameId;
+        var entities = await priceSearcher.GetPrices(gameNames[i], steamGameIds[0]);
 
-        var entities = await priceSearcher.GetPrices(gameName);
+        var dict = new Dictionary<string, int>();
+
+        for (int j = 0; j < entities.Count; j++)
+        {
+            for (int k = j+1; k < entities.Count; k++)
+            {
+                if (entities[j].History.StoreName != entities[k].History.StoreName)
+                {
+
+                }
+                else
+                {
+                    
+                }
+            }
+        }
 
         foreach (var entity in entities)
         {
@@ -50,17 +74,20 @@ var connectionString = builder.Configuration.GetSection("MySqlConnection:MySqlCo
             global::System.Console.WriteLine(string.Concat("Current price: R$ ", entity.GamePrices.CurrentPrice), ".");
             global::System.Console.WriteLine(string.Concat("Video url ", entity.Game.Video), ".");
         }
+        global::System.Console.WriteLine();
+    }
 
-        foreach (var entity in entities)
-        {
-            entity.History.GameId = gameId;
-            historyRepository.AddOne(entity.History);
-            //if (response.IsSuccessStatusCode)
-            //    var gamePricesRepository = new GamePricesRepository();
 
-        }
+    //foreach (var entity in entities)
+    //{
+    //    // entity.History.GameId = gameId;
+    //    historyRepository.AddOne(entity.History);
+    //    //if (response.IsSuccessStatusCode)
+    //    //    var gamePricesRepository = new GamePricesRepository();
 
-    });
+    //}
+
+});
 
 
 app.Run();

@@ -139,7 +139,7 @@
             HttpHandler for Playstation Store.
             </summary>
         </member>
-        <member name="M:GamePriceFinder.Finders.SteamFinder.GetPrice(System.String)">
+        <member name="M:GamePriceFinder.Finders.SteamFinder.GetPrice(System.String,System.Int32)">
             <summary>
             Gets Steam prices.
             </summary>
@@ -228,6 +228,26 @@
             </summary>
             <typeparam name="T"></typeparam>
         </member>
+        <member name="M:GamePriceFinder.JaroWinkler.distance(System.String,System.String)">
+            <summary>
+            Returns the Jaro-Winkler distance between the specified  
+            strings. The distance is symmetric and will fall in the 
+            range 0 (perfect match) to 1 (no match). 
+            </summary>
+            <param name="aString1">First String</param>
+            <param name="aString2">Second String</param>
+            <returns></returns>
+        </member>
+        <member name="M:GamePriceFinder.JaroWinkler.proximity(System.String,System.String)">
+            <summary>
+            Returns the Jaro-Winkler distance between the specified  
+            strings. The distance is symmetric and will fall in the 
+            range 0 (no match) to 1 (perfect match). 
+            </summary>
+            <param name="aString1">First String</param>
+            <param name="aString2">Second String</param>
+            <returns></returns>
+        </member>
         <member name="T:GamePriceFinder.Models.Game">
             <summary>
             Represents a game, with game id, genre id, promotional video url, image path, a short description, the publisher name and the name of the game.
@@ -278,7 +298,7 @@
             Xbox store price finder.
             </summary>
         </member>
-        <member name="M:GamePriceFinder.PriceSearcher.GetPrices(System.String)">
+        <member name="M:GamePriceFinder.PriceSearcher.GetPrices(System.String,System.Int32)">
             <summary>
             Retrieves prices of each store.
             </summary>

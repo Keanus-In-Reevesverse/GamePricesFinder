@@ -71,8 +71,9 @@ namespace GamePriceFinder.Finders
                             var convertedPrice = price.Remove(0, 3);
 
                             var game = new Game(name);
-
+#if !DEBUG
                             game.Video = await YoutubeHandler.GetGameTrailer(string.Concat(name, TRAILER));
+#endif
 
                             var gamePrices = new GamePrices(
                                 game.GameId, ((int)StoresEnum.Xbox).ToString(), 

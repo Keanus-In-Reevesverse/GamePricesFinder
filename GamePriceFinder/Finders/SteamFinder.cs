@@ -13,8 +13,8 @@ namespace GamePriceFinder.Finders
     /// </summary>
     public class SteamFinder : IPriceFinder
     {
-        private const int forHonorSteamId = 304390;
-        
+        private const int forHonorSteamId = 292030;
+
         private const string TRAILER = " trailer";
 
         public SteamFinder()
@@ -36,9 +36,9 @@ namespace GamePriceFinder.Finders
         /// </summary>
         /// <param name="gameName"></param>
         /// <returns></returns>
-        public async Task<List<DatabaseEntitiesHandler>> GetPrice(string gameName)
+        public async Task<List<DatabaseEntitiesHandler>> GetPrice(string gameName, int id)
         {
-            var steamResponse = await HttpHandler.GetToSteam(forHonorSteamId);
+            var steamResponse = await HttpHandler.GetToSteam(id);
 
             var name = string.Empty;
 
@@ -48,15 +48,16 @@ namespace GamePriceFinder.Finders
 
             for (int responseObject = 0; responseObject < steamResponse.Count; responseObject++)
             {
-                name = steamResponse[forHonorSteamId.ToString()].data.name;
+                name = steamResponse[id.ToString()].data.name;
 
-                price = steamResponse[forHonorSteamId.ToString()].data.price_overview.final_formatted;
+                price = steamResponse[id.ToString()].data.price_overview.final_formatted;
 
                 var game = new Game(name);
 
                 //game.Video = steamResponse[forHonorSteamId.ToString()].data.movies[0].webm.max;
-
+#if !DEBUG
                 game.Video = await YoutubeHandler.GetGameTrailer(string.Concat(name, TRAILER));
+#endif
 
                 //await FillGameInformation(ref game, price, 3);
 

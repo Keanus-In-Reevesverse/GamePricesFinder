@@ -12,6 +12,5 @@ namespace GamePriceFinder.Intefaces
     {
         public string StoreUri { get; set; }
         public HttpHandler HttpHandler { get; set; }
-        public Task<List<DatabaseEntitiesHandler>> GetPrice(string gameName);
     }
 }

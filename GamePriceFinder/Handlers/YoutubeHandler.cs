@@ -1,5 +1,6 @@
 ﻿using Google.Apis.Services;
 using Google.Apis.YouTube.v3;
+using Google.Apis.YouTube.v3.Data;
 
 namespace GamePriceFinder.Handlers
 {
@@ -45,7 +46,16 @@ namespace GamePriceFinder.Handlers
             searchRequest.Q = search;
             searchRequest.MaxResults = 10;
 
-            var searchResponse = await searchRequest.ExecuteAsync();
+            SearchListResponse searchResponse = null;
+
+            try
+            {
+                searchResponse = await searchRequest.ExecuteAsync();
+            }
+            catch
+            {
+                return string.Empty;
+            }
 
             var videos = new List<string>();
 

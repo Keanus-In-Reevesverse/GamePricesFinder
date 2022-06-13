@@ -87,7 +87,11 @@ namespace GamePriceFinder.Finders
                 var price = newDoc.DocumentNode.SelectSingleNode("//span[@class='product-price--val']").InnerText.Trim();
                 var name = newDoc.DocumentNode.SelectSingleNode("//h3[@class='product-title double-line-name']").InnerText.Trim();
                 var game = new Game(name);
+
+#if !DEBUG
                 game.Video = await YoutubeHandler.GetGameTrailer(string.Concat(name, TRAILER));
+#endif
+
                 var gamePrice = new GamePrices(game.GameId, ((int)StoresEnum.Nuuvem).ToString(), PriceHandler.ConvertPriceToDatabaseType(price, 3));
                 var history = new History(game.GameId, StoresEnum.Nuuvem.ToString(), gamePrice.CurrentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
                 var genre = new Genre("Action");

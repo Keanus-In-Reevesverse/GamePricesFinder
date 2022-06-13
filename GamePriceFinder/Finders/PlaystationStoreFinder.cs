@@ -40,25 +40,32 @@ namespace GamePriceFinder.Finders
 
             foreach (var responseGame in responseGameList)
             {
-                if (!responseGame.default_sku.name.Equals("Jogo Completo", StringComparison.CurrentCultureIgnoreCase))
+                if (responseGame.default_sku == null)
                 {
                     continue;
                 }
-                var title = responseGame.name;
 
-                var price = PriceHandler.ConvertPriceToDatabaseType(responseGame.default_sku.display_price, 2);
+                if (responseGame.default_sku.name.Equals("Jogo Completo", StringComparison.CurrentCultureIgnoreCase) ||
+                    responseGame.default_sku.name.Equals("Jogo", StringComparison.CurrentCultureIgnoreCase) ||
+                    responseGame.default_sku.name.Equals("Jogo Completo e Conteúdo Complementar", StringComparison.CurrentCultureIgnoreCase))
+                {
+                    var title = responseGame.name;
 
-                var game = new Game(title);
+                    var price = PriceHandler.ConvertPriceToDatabaseType(responseGame.default_sku.display_price, 2);
 
-                game.Video = await YoutubeHandler.GetGameTrailer(string.Concat(title, TRAILER));
+                    var game = new Game(title);
+#if !DEBUG
+                    game.Video = await YoutubeHandler.GetGameTrailer(string.Concat(title, TRAILER));
+#endif
 
-                var gamePrices = new GamePrices(game.GameId, ((int)StoresEnum.Playstation).ToString(), price);
+                    var gamePrices = new GamePrices(game.GameId, ((int)StoresEnum.Playstation).ToString(), price);
 
-                var history = new History(game.GameId, StoresEnum.Playstation.ToString(), gamePrices.CurrentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
+                    var history = new History(game.GameId, StoresEnum.Playstation.ToString(), gamePrices.CurrentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
 
-                var genre = new Genre("Action");
+                    var genre = new Genre("Action");
 
-                entities.Add(new DatabaseEntitiesHandler(game, gamePrices, history, genre));
+                    entities.Add(new DatabaseEntitiesHandler(game, gamePrices, history, genre));
+                }
             }
 
             return entities;
