@@ -1,4 +1,6 @@
-﻿namespace GamePriceFinder.Intefaces
+﻿using GamePriceFinder.Models;
+
+namespace GamePriceFinder.Intefaces
 {
     /// <summary>
     /// Repository interface, implemented by GameRepository, GamePricesRepository, GenreRepository, HistoryRepository.
@@ -6,9 +8,11 @@
     /// <typeparam name="T"></typeparam>
     public interface IRepository<T> where T : class
     {
-        public T FindOne(string name);
+        public T FindOneByName(string name);
         public void AddOne(T entity);
         public void AddMany(List<T> entities);
         public void EditOne(T entity);
+        public int GetId(string gameName);
+        public void Update(Game game);
     }
 }

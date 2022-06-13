@@ -328,7 +328,7 @@
             </summary>
             <param name="entity"></param>
         </member>
-        <member name="M:GamePriceFinder.Repositories.GamePricesRepository.GamePriceFinder#Intefaces#IRepository{GamePriceFinder#Models#GamePrices}#FindOne(System.String)">
+        <member name="M:GamePriceFinder.Repositories.GamePricesRepository.GamePriceFinder#Intefaces#IRepository{GamePriceFinder#Models#GamePrices}#FindOneByName(System.String)">
             <summary>
             Selects one row from the database.
             </summary>
@@ -358,7 +358,7 @@
             </summary>
             <param name="entity"></param>
         </member>
-        <member name="M:GamePriceFinder.Repositories.GameRepository.FindOne(System.String)">
+        <member name="M:GamePriceFinder.Repositories.GameRepository.FindOneByName(System.String)">
             <summary>
             Selects one row from the database matching the name of the game.
             </summary>
@@ -393,7 +393,7 @@
             </summary>
             <param name="entity"></param>
         </member>
-        <member name="M:GamePriceFinder.Repositories.GenreRepository.FindOne(System.String)">
+        <member name="M:GamePriceFinder.Repositories.GenreRepository.FindOneByName(System.String)">
             <summary>
             Selects one row from the database matching the name of the genre.
             </summary>
@@ -425,7 +425,7 @@
             <param name="entity"></param>
             <exception cref="T:System.NotImplementedException"></exception>
         </member>
-        <member name="M:GamePriceFinder.Repositories.HistoryRepository.FindOne(System.String)">
+        <member name="M:GamePriceFinder.Repositories.HistoryRepository.FindOneByName(System.String)">
             <summary>
             Selects one row from database.
             </summary>

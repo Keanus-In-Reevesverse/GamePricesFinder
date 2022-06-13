@@ -48,14 +48,12 @@ namespace GamePriceFinder.Repositories
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Game FindOne(string name)
+        public Game FindOneByName(string name)
         {
-            Game a = null;
+            Game game = null;
             try
             {
-                a =  DatabaseContext.Games.First(g => g.Name == name);
-                //Convert.db
-
+                game =  DatabaseContext.Games.First(g => g.Name == name);
             }
             catch (Exception e)
             {
@@ -63,7 +61,21 @@ namespace GamePriceFinder.Repositories
 
             }
 
-            return a;
+            return game;
+        }
+
+        public int GetId(string gameName)
+        {
+            return DatabaseContext.Games.First(g => g.Name.Equals(gameName)).GameId;
+        }
+
+        public void Update(Game game)
+        {
+            var databaseGame = DatabaseContext.Games.First(g => g.GameId == game.GameId);
+            databaseGame.Video = game.Video;
+            databaseGame.Image = game.Image;
+            DatabaseContext.Entry(databaseGame).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            DatabaseContext.SaveChanges();
         }
     }
 }

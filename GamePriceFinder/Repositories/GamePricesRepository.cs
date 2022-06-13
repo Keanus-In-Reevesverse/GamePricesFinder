@@ -40,6 +40,16 @@ namespace GamePriceFinder.Repositories
             throw new NotImplementedException();
         }
 
+        public int GetId(string gameName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update(Game game)
+        {
+            throw new NotImplementedException();
+        }
+
         void IRepository<GamePrices>.AddMany(List<GamePrices> entities)
         {
             throw new NotImplementedException();
@@ -60,7 +70,7 @@ namespace GamePriceFinder.Repositories
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        GamePrices IRepository<GamePrices>.FindOne(string name)
+        GamePrices IRepository<GamePrices>.FindOneByName(string name)
         {
             throw new NotImplementedException();
         }

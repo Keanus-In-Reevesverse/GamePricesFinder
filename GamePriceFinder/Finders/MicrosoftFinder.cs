@@ -41,11 +41,17 @@ namespace GamePriceFinder.Finders
                 doc.LoadHtml(html);
                 var divs = doc.DocumentNode.Descendants("div");
 
+                var image = string.Empty;
+                var filled = false;
+                Game game = null;
+                GamePrices gamePrices = null;
+                History history = null;
+                Genre genre = null;
                 foreach (var div in divs)
                 {
                     try
                     {
-                        if (div.Attributes["class"].Value == "col-md-2 col-sm-4 col-xs-6 game-collection-item-col")
+                        if (div.Attributes["class"].Value.Equals("col-md-2 col-sm-4 col-xs-6 game-collection-item-col", StringComparison.CurrentCultureIgnoreCase))
                         {
                             var newDoc = new HtmlAgilityPack.HtmlDocument();
                             newDoc.LoadHtml(div.InnerHtml);
@@ -57,10 +63,16 @@ namespace GamePriceFinder.Finders
 
                             foreach (var insideDiv in insideDivs)
                             {
-                                name = 
-                                    newDoc.DocumentNode.SelectSingleNode("//p[@class='game-collection-item-details-title']").InnerText.Trim();
+                                name =
+                                    newDoc.DocumentNode.SelectSingleNode("//p[@class='game-collection-item-details-title']")?.InnerText?.Trim();
+
                                 price =
-                                    newDoc.DocumentNode.SelectSingleNode("//span[@class='game-collection-item-regular-price ']").InnerText.Trim();
+                                    newDoc.DocumentNode.SelectSingleNode("//span[@class='game-collection-item-regular-price ']")?.InnerText?.Trim();
+
+                                if (string.IsNullOrEmpty(price))
+                                {
+                                    price = newDoc.DocumentNode.SelectSingleNode("//span[@class='game-collection-item-discount-price']")?.InnerText?.Trim();
+                                }
 
                                 if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(price))
                                 {
@@ -70,13 +82,17 @@ namespace GamePriceFinder.Finders
 
                             var convertedPrice = price.Remove(0, 3);
 
-                            var game = new Game(name);
+                            game = new Game(name);
+
+                            game.Image = image;
+                            image = string.Empty;
+
 #if !DEBUG
                             game.Video = await YoutubeHandler.GetGameTrailer(string.Concat(name, TRAILER));
 #endif
 
-                            var gamePrices = new GamePrices(
-                                game.GameId, ((int)StoresEnum.Xbox).ToString(), 
+                            gamePrices = new GamePrices(
+                                game.GameId, ((int)StoresEnum.Xbox).ToString(),
                                 PriceHandler.ConvertPriceToDatabaseType(price, 3));
 
                             if (gamePrices.CurrentPrice == 0)
@@ -84,16 +100,67 @@ namespace GamePriceFinder.Finders
                                 continue;
                             }
 
-                            var history = new History(
+                            history = new History(
                                 game.GameId, StoresEnum.Xbox.ToString(), gamePrices.CurrentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
-                            var genre = new Genre("Action");
+                            genre = new Genre("Action");
 
                             entities.Add(new DatabaseEntitiesHandler(game, gamePrices, history, genre));
                         }
+                        
                     }
                     catch (Exception e)
                     {
                         //ignored
+                    }
+                }
+
+                var imagesToGet = entities.Count;
+                var imagesFound = 0;
+                var imageIndex = 0;
+                foreach (var div in divs)
+                {
+                    if (imagesToGet == imagesFound)
+                    {
+                        break;
+                    }
+                    if (div.Attributes["class"].Value.Equals("game-collection-item", StringComparison.CurrentCultureIgnoreCase))
+                    {
+                        var newDoc = new HtmlAgilityPack.HtmlDocument();
+
+                        newDoc.LoadHtml(div.InnerHtml);
+
+                        var insideDivs = newDoc.DocumentNode.Descendants("div");
+
+
+                        foreach (var insideDiv in insideDivs)
+                        {
+                            if (insideDiv.Attributes["class"].Value.Equals("game-collection-item-image-placeholder", StringComparison.CurrentCultureIgnoreCase))
+                            {
+                                var imageDoc = new HtmlAgilityPack.HtmlDocument();
+
+                                imageDoc.LoadHtml(insideDiv.InnerHtml);
+
+                                var pictures = imageDoc.DocumentNode.Descendants("picture").ToList();
+
+                                if (pictures.Any())
+                                {
+                                    imageDoc.LoadHtml(pictures[0].InnerHtml);
+
+                                    image = imageDoc.DocumentNode.SelectSingleNode("//img")?.Attributes["data-src"]?.Value;
+
+                                    imagesFound++;
+
+                                    entities[imageIndex].Game.Image = image;
+
+                                    imageIndex++;
+                                }
+
+                                if (!string.IsNullOrEmpty(image))
+                                {
+                                    break;
+                                }
+                            }
+                        }
                     }
                 }
             }

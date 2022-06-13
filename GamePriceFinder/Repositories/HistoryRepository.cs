@@ -52,7 +52,17 @@ namespace GamePriceFinder.Repositories
         /// <param name="name"></param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public History FindOne(string name)
+        public History FindOneByName(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetId(string gameName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update(Game game)
         {
             throw new NotImplementedException();
         }

@@ -3,8 +3,6 @@ using GamePriceFinder.Handlers;
 using GamePriceFinder.Http;
 using GamePriceFinder.Intefaces;
 using GamePriceFinder.Models;
-using Google.Apis.Services;
-using Google.Apis.YouTube.v3;
 
 namespace GamePriceFinder.Finders
 {
@@ -53,6 +51,11 @@ namespace GamePriceFinder.Finders
                 price = steamResponse[id.ToString()].data.price_overview.final_formatted;
 
                 var game = new Game(name);
+
+                if (steamResponse[id.ToString()].data.screenshots.Any())
+                {
+                    game.Image = steamResponse[id.ToString()].data.screenshots[0].path_full;
+                }
 
                 //game.Video = steamResponse[forHonorSteamId.ToString()].data.movies[0].webm.max;
 #if !DEBUG

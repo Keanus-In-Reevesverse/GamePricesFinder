@@ -4,6 +4,7 @@ using GamePriceFinder.Http;
 using GamePriceFinder.Intefaces;
 using GamePriceFinder.Models;
 using Google.Apis.YouTube.v3;
+using System.Text.RegularExpressions;
 
 namespace GamePriceFinder.Finders
 {
@@ -77,16 +78,26 @@ namespace GamePriceFinder.Finders
 
             bundle = newDoc.DocumentNode.SelectSingleNode("//span[@class='product-badge product-badge__package']")?.InnerHtml.Trim();
             dlc = newDoc.DocumentNode.SelectSingleNode("//span[@class='product-badge product-badge__dlc']")?.InnerHtml.Trim();
-
             if (!string.IsNullOrEmpty(bundle) || !string.IsNullOrEmpty(dlc))
             {
                 return null;
             }
             else
             {
+
                 var price = newDoc.DocumentNode.SelectSingleNode("//span[@class='product-price--val']").InnerText.Trim();
                 var name = newDoc.DocumentNode.SelectSingleNode("//h3[@class='product-title double-line-name']").InnerText.Trim();
                 var game = new Game(name);
+
+                var divWithImage = newDoc.DocumentNode.SelectSingleNode("//div[@class='product-img']")?.InnerHtml.Trim();
+
+                var imageDoc = new HtmlAgilityPack.HtmlDocument();
+
+                if (imageDoc != null)
+                {
+                    imageDoc.LoadHtml(divWithImage);
+                    game.Image = imageDoc.DocumentNode.SelectSingleNode("//img")?.Attributes["src"]?.Value;
+                }
 
 #if !DEBUG
                 game.Video = await YoutubeHandler.GetGameTrailer(string.Concat(name, TRAILER));

@@ -44,6 +44,12 @@ namespace GamePriceFinder.Finders
                 var title = currentGame.Title;
 
                 var game = new Game(title);
+
+                if (currentGame.KeyImages.Any())
+                {
+                    game.Image = currentGame.KeyImages[0].Url;
+                }
+
 #if !DEBUG
                 game.Video = await YoutubeHandler.GetGameTrailer(string.Concat(title, TRAILER));
 #endif

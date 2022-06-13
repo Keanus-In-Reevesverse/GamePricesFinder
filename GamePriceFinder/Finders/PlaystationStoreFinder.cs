@@ -54,6 +54,12 @@ namespace GamePriceFinder.Finders
                     var price = PriceHandler.ConvertPriceToDatabaseType(responseGame.default_sku.display_price, 2);
 
                     var game = new Game(title);
+
+                    if (responseGame.images.Any())
+                    {
+                        game.Image = responseGame.images[0].url;
+                    }
+
 #if !DEBUG
                     game.Video = await YoutubeHandler.GetGameTrailer(string.Concat(title, TRAILER));
 #endif

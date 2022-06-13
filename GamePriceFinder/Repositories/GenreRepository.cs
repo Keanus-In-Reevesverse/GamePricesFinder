@@ -60,7 +60,17 @@ namespace GamePriceFinder.Repositories
         /// </summary>
         /// <param name="name"></param>
         /// <returns></returns>
-        public Genre FindOne(string name)
+        public Genre FindOneByName(string name)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int GetId(string gameName)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update(Game game)
         {
             throw new NotImplementedException();
         }
