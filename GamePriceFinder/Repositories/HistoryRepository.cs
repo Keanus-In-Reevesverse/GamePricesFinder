@@ -46,9 +46,24 @@ namespace GamePriceFinder.Repositories
             throw new NotImplementedException();
         }
 
-        public History FindByGameId(int gameId)
+        public List<History> FindAll()
         {
             throw new NotImplementedException();
+        }
+
+        public History FindByGameId(int gameId)
+        {
+            History history;
+            try
+            {
+                history = DatabaseContext.History.First(h => h.GameId == gameId);
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+
+            return history;
         }
 
         /// <summary>

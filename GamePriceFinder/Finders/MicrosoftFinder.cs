@@ -87,7 +87,7 @@ namespace GamePriceFinder.Finders
                             game.Image = image;
                             image = string.Empty;
 
-#if !DEBUG
+#if DEBUG
                             game.Video = await YoutubeHandler.GetGameTrailer(string.Concat(name, TRAILER));
 #endif
 
@@ -109,7 +109,7 @@ namespace GamePriceFinder.Finders
                     }
                     catch (Exception e)
                     {
-                        //ignored
+                        return null;
                     }
                 }
 

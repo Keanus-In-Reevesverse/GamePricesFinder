@@ -43,9 +43,34 @@ namespace GamePriceFinder.Repositories
             throw new NotImplementedException();
         }
 
+        public List<Game> FindAll()
+        {
+            List<Game> games;
+            try
+            {
+                games = DatabaseContext.Games.ToList();
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+
+            return games;
+        }
+
         public Game FindByGameId(int gameId)
         {
-            throw new NotImplementedException();
+            Game game;
+            try
+            {
+                game = DatabaseContext.Games.First(g => g.GameId == gameId);
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
+
+            return game;
         }
 
         /// <summary>

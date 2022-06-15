@@ -34,7 +34,15 @@ namespace GamePriceFinder.Finders
         /// <param name="gameName"></param>
         public async Task<List<DatabaseEntitiesHandler>> GetPrice(string gameName)
         {
-            var responseGameList = await HttpHandler.GetToPsn(FormatName(gameName));
+            Responses.Link[] responseGameList;
+            try
+            {
+                responseGameList = await HttpHandler.GetToPsn(FormatName(gameName));
+            }
+            catch (Exception)
+            {
+                return null;
+            }
 
             var entities = new List<DatabaseEntitiesHandler>();
 
@@ -60,7 +68,7 @@ namespace GamePriceFinder.Finders
                         game.Image = responseGame.images[0].url;
                     }
 
-#if !DEBUG
+#if DEBUG
                     game.Video = await YoutubeHandler.GetGameTrailer(string.Concat(title, TRAILER));
 #endif
 

@@ -55,6 +55,11 @@ namespace GamePriceFinder.Repositories
             throw new NotImplementedException();
         }
 
+        public List<Genre> FindAll()
+        {
+            throw new NotImplementedException();
+        }
+
         public Genre FindByGameId(int gameId)
         {
             throw new NotImplementedException();

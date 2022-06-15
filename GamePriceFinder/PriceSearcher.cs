@@ -60,13 +60,14 @@ namespace GamePriceFinder
             var psnEntities = await PlaystationStoreFinder.GetPrice(gameName);
 
             var xboxEntities = await MicrosoftFinder.GetPrice(gameName.Replace(" ", "+"));
-            steamEntities.AddRange(epicEntities);
 
-            steamEntities.AddRange(nuuvemEntities);
+            steamEntities?.AddRange(epicEntities);
 
-            steamEntities.AddRange(psnEntities);
+            steamEntities?.AddRange(nuuvemEntities);
 
-            steamEntities.AddRange(xboxEntities);
+            steamEntities?.AddRange(psnEntities);
+
+            steamEntities?.AddRange(xboxEntities);
 
             //foreach (var entity in steamEntities)
             //{

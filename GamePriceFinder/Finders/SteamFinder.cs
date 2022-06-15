@@ -36,7 +36,15 @@ namespace GamePriceFinder.Finders
         /// <returns></returns>
         public async Task<List<DatabaseEntitiesHandler>> GetPrice(string gameName, int id)
         {
-            var steamResponse = await HttpHandler.GetToSteam(id);
+            Dictionary<string, Responses.AppIds> steamResponse;
+            try
+            {
+                steamResponse = await HttpHandler.GetToSteam(id);
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
 
             var name = string.Empty;
 
@@ -58,7 +66,7 @@ namespace GamePriceFinder.Finders
                 }
 
                 //game.Video = steamResponse[forHonorSteamId.ToString()].data.movies[0].webm.max;
-#if !DEBUG
+#if DEBUG
                 game.Video = await YoutubeHandler.GetGameTrailer(string.Concat(name, TRAILER));
 #endif
 

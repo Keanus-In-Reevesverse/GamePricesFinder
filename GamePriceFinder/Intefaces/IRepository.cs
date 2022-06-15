@@ -15,5 +15,6 @@ namespace GamePriceFinder.Intefaces
         public int GetId(string gameName);
         public void Update(T entity);
         public T FindByGameId(int gameId);
+        public List<T> FindAll();
     }
 }

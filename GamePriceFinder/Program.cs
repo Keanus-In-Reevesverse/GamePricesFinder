@@ -31,7 +31,7 @@ builder.Services.
 
 var app = builder.Build();
 
-//app.Urls.Add("http://localhost:5000");
+app.Urls.Add("http://localhost:5000");
 
 app.MapGet("/", async (
     [FromServices] IRepository<GamePriceFinder.Models.Genre> genreRepository,
@@ -107,10 +107,36 @@ app.MapGet("/", async (
     }
 
     Console.WriteLine("Search end...");
-
-
 });
 
+app.MapGet("/gameInfo/{id}", async (
+    int id,
+    [FromServices] IRepository<GamePriceFinder.Models.Genre> genreRepository,
+    [FromServices] IRepository<History> historyRepository,
+    [FromServices] IRepository<Game> gameRepository,
+    [FromServices] IRepository<GamePrices> gamePricesRepository,
+    [FromServices] PriceSearcher priceSearcher) =>
+{
+    var game = gameRepository.FindByGameId(id);
+    var gamePrice = gamePricesRepository.FindByGameId(id);
+    var history = historyRepository.FindByGameId(id);
+
+    var presentation = new Presentation();
+
+    presentation.GameName = game.Name;
+    presentation.Store = gamePrice.StoreId;
+    presentation.CurrentPrice = gamePrice.CurrentPrice;
+    presentation.Image = game.Image;
+
+    return presentation;
+});
+
+app.MapGet("/all/", async (
+    [FromServices] IRepository<Game> gameRepository) =>
+{
+    var games = gameRepository.FindAll();
+    return games;
+});
 
 app.Run();
 

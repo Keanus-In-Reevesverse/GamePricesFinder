@@ -114,5 +114,10 @@ namespace GamePriceFinder.Repositories
 
             return dbGamePrices;
         }
+
+        public List<GamePrices> FindAll()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

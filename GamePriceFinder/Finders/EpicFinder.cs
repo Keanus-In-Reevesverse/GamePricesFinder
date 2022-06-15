@@ -33,7 +33,15 @@ namespace GamePriceFinder.Finders
         /// <param name="gameName"></param>
         public async Task<List<DatabaseEntitiesHandler>> GetPrice(string gameName)
         {
-            var epicResponse = await HttpHandler.PostToEpic(gameName);
+            EpicGamesStoreNET.Models.Response epicResponse;
+            try
+            {
+                epicResponse = await HttpHandler.PostToEpic(gameName);
+            }
+            catch (Exception e)
+            {
+                return null;
+            }
 
             var entities = new List<DatabaseEntitiesHandler>();
 
@@ -50,7 +58,7 @@ namespace GamePriceFinder.Finders
                     game.Image = currentGame.KeyImages[0].Url;
                 }
 
-#if !DEBUG
+#if DEBUG
                 game.Video = await YoutubeHandler.GetGameTrailer(string.Concat(title, TRAILER));
 #endif
                 //await FillGameInformation(ref game, currentGame.Price.TotalPrice.FmtPrice.DiscountPrice, 2);
