@@ -55,6 +55,11 @@ namespace GamePriceFinder.Repositories
             throw new NotImplementedException();
         }
 
+        public Genre FindByGameId(int gameId)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Selects one row from the database matching the name of the genre.
         /// </summary>
@@ -71,6 +76,11 @@ namespace GamePriceFinder.Repositories
         }
 
         public void Update(Game game)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update(Genre entity)
         {
             throw new NotImplementedException();
         }

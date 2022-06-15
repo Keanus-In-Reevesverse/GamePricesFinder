@@ -64,7 +64,7 @@ namespace GamePriceFinder.Finders
                     game.Video = await YoutubeHandler.GetGameTrailer(string.Concat(title, TRAILER));
 #endif
 
-                    var gamePrices = new GamePrices(game.GameId, ((int)StoresEnum.Playstation).ToString(), price);
+                    var gamePrices = new GamePrices(game.GameId, StoresEnum.Playstation.ToString(), price);
 
                     var history = new History(game.GameId, StoresEnum.Playstation.ToString(), gamePrices.CurrentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
 

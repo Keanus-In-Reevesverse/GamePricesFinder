@@ -310,12 +310,6 @@
             Repository for GamePrices class, implements IRepository of GamePrices type.
             </summary>
         </member>
-        <member name="M:GamePriceFinder.Repositories.GamePricesRepository.AddMany(System.Collections.Generic.List{GamePriceFinder.Models.GamePrices})">
-            <summary>
-            Adds many rows to database.
-            </summary>
-            <param name="entities"></param>
-        </member>
         <member name="M:GamePriceFinder.Repositories.GamePricesRepository.AddOne(GamePriceFinder.Models.GamePrices)">
             <summary>
             Adds one row to the database.

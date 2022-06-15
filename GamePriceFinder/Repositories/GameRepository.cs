@@ -43,6 +43,11 @@ namespace GamePriceFinder.Repositories
             throw new NotImplementedException();
         }
 
+        public Game FindByGameId(int gameId)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Selects one row from the database matching the name of the game.
         /// </summary>
@@ -57,8 +62,7 @@ namespace GamePriceFinder.Repositories
             }
             catch (Exception e)
             {
-
-
+                return null;
             }
 
             return game;
@@ -72,7 +76,7 @@ namespace GamePriceFinder.Repositories
         public void Update(Game game)
         {
             var databaseGame = DatabaseContext.Games.First(g => g.GameId == game.GameId);
-            databaseGame.Video = game.Video;
+            databaseGame.Video = string.IsNullOrEmpty(game.Video) ? string.Empty : game.Video;
             databaseGame.Image = game.Image;
             DatabaseContext.Entry(databaseGame).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
             DatabaseContext.SaveChanges();

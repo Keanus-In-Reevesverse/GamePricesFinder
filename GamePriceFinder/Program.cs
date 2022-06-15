@@ -16,6 +16,7 @@ var connectionString = builder.Configuration.GetSection("MySqlConnection:MySqlCo
 
 builder.Services.AddTransient<IRepository<GamePriceFinder.Models.Genre>, GenreRepository>();
 builder.Services.AddTransient<IRepository<Game>, GameRepository>();
+builder.Services.AddTransient<IRepository<GamePrices>, GamePricesRepository>();
 builder.Services.AddTransient<IRepository<History>, HistoryRepository>();
 builder.Services.AddTransient<PriceSearcher>();
 builder.Services.AddTransient<SteamFinder>();
@@ -36,59 +37,73 @@ app.MapGet("/", async (
     [FromServices] IRepository<GamePriceFinder.Models.Genre> genreRepository,
     [FromServices] IRepository<History> historyRepository,
     [FromServices] IRepository<Game> gameRepository,
+    [FromServices] IRepository<GamePrices> gamePricesRepository,
     [FromServices] PriceSearcher priceSearcher) =>
 {
+    var gameNames = new List<string>() { "for honor", "for honor starter edition", "for honor standard edition", "for honor marching fire edition",
+        "scribblenauts unlimited", "scribblenauts unmasked", "scribblenauts mega pack", "scribblenauts showdown",
+        "lego batman 3", "lego batman 3 além de gotham edição luxo", "lego batman 2", "lego batman",
+        "the witcher 3", "the witcher 3 game of the year edition", "the witcher 3 wild hunt complete edition", "the witcher 2",
+        "nioh complete edition", "thronebreaker the witcher tales" };
 
-    var gameNames = new List<string>() { "for honor", "for honor standard edition", "for honor marching fire edition",
-        "scribblenauts", "lego batman 3", "the witcher 3" };
-    var steamGameIds = new List<int>() { 304390, 304390, 304390, 218680, 313690, 292030 };
+    //var gameNames = new List<string>() { "for honor", "for honor standard edition", "for honor marching fire edition",
+    //    "scribblenauts", "lego batman 3", "the witcher 3" };
+    var steamGameIds = new List<int>() { 304390, 304390, 304390, 304390,
+                                         218680, 218680, 218680, 218680,
+                                         313690, 313690, 313690, 313690,
+                                         292030, 292030, 292030, 292030};
 
-    for (int i = 0; i < 6; i++)
+    for (int i = 0; i < steamGameIds.Count; i++)
     {
-        //var gameId = gameRepository.GetId(gameNames[i]);
-        
-        var idToDefine = i + 1;
-        if (i == 5)
+        int gameId = 0;
+        try
         {
-
+            gameId = gameRepository.GetId(gameNames[i]);
         }
+        catch
+        {
+            continue;
+        }
+
         var entities = await priceSearcher.GetPrices(gameNames[i], steamGameIds[i]);
-
-        var dict = new Dictionary<string, int>();
-
-        //for (int j = 0; j < entities.Count; j++)
-        //{
-        //    for (int k = j+1; k < entities.Count; k++)
-        //    {
-        //        if (entities[j].History.StoreName != entities[k].History.StoreName)
-        //        {
-
-        //        }
-        //        else
-        //        {
-                    
-        //        }
-        //    }
-        //}
 
         foreach (var entity in entities)
         {
-            global::System.Console.WriteLine();
-            global::System.Console.WriteLine(string.Concat("Store: ", entity.History.StoreName), ".");
-            global::System.Console.WriteLine(string.Concat("Name: ", entity.Game.Name), ".");
-            global::System.Console.WriteLine(string.Concat("Current price: R$ ", entity.GamePrices.CurrentPrice), ".");
-            global::System.Console.WriteLine(string.Concat("Video url: ", entity.Game.Video), ".");
-            global::System.Console.WriteLine(string.Concat("Image url: ", entity.Game.Image), ".");
+            Console.WriteLine();
+            Console.WriteLine(string.Concat("Store: ", entity.History.StoreName), ".");
+            Console.WriteLine(string.Concat("Name: ", entity.Game.Name), ".");
+            Console.WriteLine(string.Concat("Current price: R$ ", entity.GamePrices.CurrentPrice), ".");
+            Console.WriteLine(string.Concat("Video url: ", entity.Game.Video), ".");
+            Console.WriteLine(string.Concat("Image url: ", entity.Game.Image), ".");
         }
-        global::System.Console.WriteLine("============================================================================");
 
-        //foreach (var entity in entities)
-        //{
-        //    entity.History.GameId = gameId;
-        //    historyRepository.AddOne(entity.History);
-        //    gameRepository.Update(entity.Game);
-        //}
+        Console.WriteLine("============================================================================");
 
+        foreach (var e in entities)
+        {
+            e.Game.GameId = gameId;
+            e.GamePrices.GameId = gameId;
+            e.History.GameId = gameId;
+            e.GamePrices.GameId = gameId;
+            gameRepository.Update(e.Game);
+            historyRepository.AddOne(e.History);
+
+
+            var formattedGameName = e.Game.Name.Replace(":", string.Empty).Replace("-", string.Empty);
+
+            if (formattedGameName.ToLower().Equals(gameNames[i], StringComparison.CurrentCultureIgnoreCase))
+            {
+                var dbGamePrices = gamePricesRepository.FindByGameId(gameId);
+
+                if (dbGamePrices == null)
+                    gamePricesRepository.AddOne(e.GamePrices);
+                else
+                {
+                    if (dbGamePrices.CurrentPrice != e.GamePrices.CurrentPrice)
+                        gamePricesRepository.Update(e.GamePrices);
+                }
+            }
+        }
     }
 
     Console.WriteLine("Search end...");

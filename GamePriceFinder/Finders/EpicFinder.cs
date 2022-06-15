@@ -57,10 +57,7 @@ namespace GamePriceFinder.Finders
 
                 var currentPrice = PriceHandler.ConvertPriceToDatabaseType(currentGame.Price.TotalPrice.FmtPrice.DiscountPrice.Replace(".", ","), 2);
 
-                var gamePrices = new GamePrices(
-                    game.GameId,
-                    ((int)StoresEnum.Epic).ToString(),
-                    currentPrice);
+                var gamePrices = new GamePrices(game.GameId, StoresEnum.Epic.ToString(), currentPrice);
 
                 var history = new History(game.GenreId, StoresEnum.Epic.ToString(), currentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
 

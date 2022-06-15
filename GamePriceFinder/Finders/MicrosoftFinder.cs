@@ -91,8 +91,7 @@ namespace GamePriceFinder.Finders
                             game.Video = await YoutubeHandler.GetGameTrailer(string.Concat(name, TRAILER));
 #endif
 
-                            gamePrices = new GamePrices(
-                                game.GameId, ((int)StoresEnum.Xbox).ToString(),
+                            gamePrices = new GamePrices(game.GameId, StoresEnum.Xbox.ToString(),
                                 PriceHandler.ConvertPriceToDatabaseType(price, 3));
 
                             if (gamePrices.CurrentPrice == 0)

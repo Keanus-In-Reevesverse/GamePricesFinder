@@ -13,6 +13,7 @@ namespace GamePriceFinder.Intefaces
         public void AddMany(List<T> entities);
         public void EditOne(T entity);
         public int GetId(string gameName);
-        public void Update(Game game);
+        public void Update(T entity);
+        public T FindByGameId(int gameId);
     }
 }

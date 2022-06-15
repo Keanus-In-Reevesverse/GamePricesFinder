@@ -46,6 +46,11 @@ namespace GamePriceFinder.Repositories
             throw new NotImplementedException();
         }
 
+        public History FindByGameId(int gameId)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <summary>
         /// Selects one row from database.
         /// </summary>
@@ -63,6 +68,11 @@ namespace GamePriceFinder.Repositories
         }
 
         public void Update(Game game)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Update(History entity)
         {
             throw new NotImplementedException();
         }

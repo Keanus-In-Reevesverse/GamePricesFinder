@@ -1,5 +1,7 @@
-﻿using GamePriceFinder.Intefaces;
+﻿using GamePriceFinder.Database;
+using GamePriceFinder.Intefaces;
 using GamePriceFinder.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace GamePriceFinder.Repositories
 {
@@ -8,10 +10,13 @@ namespace GamePriceFinder.Repositories
     /// </summary>
     public class GamePricesRepository : IRepository<GamePrices>
     {
-        /// <summary>
-        /// Adds many rows to database.
-        /// </summary>
-        /// <param name="entities"></param>
+        public GamePricesRepository(DatabaseContext databaseContext)
+        {
+            DatabaseContext = databaseContext;
+        }
+
+        public DatabaseContext DatabaseContext { get; }
+        
         public void AddMany(List<GamePrices> entities)
         {
             throw new NotImplementedException();
@@ -55,10 +60,7 @@ namespace GamePriceFinder.Repositories
             throw new NotImplementedException();
         }
 
-        void IRepository<GamePrices>.AddOne(GamePrices entity)
-        {
-            throw new NotImplementedException();
-        }
+        
 
         void IRepository<GamePrices>.EditOne(GamePrices entity)
         {
@@ -73,6 +75,44 @@ namespace GamePriceFinder.Repositories
         GamePrices IRepository<GamePrices>.FindOneByName(string name)
         {
             throw new NotImplementedException();
+        }
+
+        internal GamePrices FindByGameId(int gameId)
+        {
+            return DatabaseContext.GamePrices.First(gp => gp.GameId == gameId);
+        }
+
+        void IRepository<GamePrices>.AddOne(GamePrices entity)
+        {
+            DatabaseContext.GamePrices.Add(entity);
+            DatabaseContext.SaveChanges();
+        }
+
+        public void Update(GamePrices entity)
+        {
+            var dbGamePrice = DatabaseContext.GamePrices.First(gp => gp.GameId == entity.GameId);
+            dbGamePrice.CurrentPrice = entity.CurrentPrice;
+            DatabaseContext.Entry(dbGamePrice).State = EntityState.Modified;
+            DatabaseContext.SaveChanges();
+        }
+
+        GamePrices IRepository<GamePrices>.FindByGameId(int gameId)
+        {
+            GamePrices dbGamePrices = null;
+            try
+            {
+                dbGamePrices = DatabaseContext.GamePrices.First(gp => gp.GameId == gameId);
+            }
+            catch (InvalidOperationException)
+            {
+                return null;
+            }
+            catch(Exception ex)
+            {
+                return null;
+            }
+
+            return dbGamePrices;
         }
     }
 }

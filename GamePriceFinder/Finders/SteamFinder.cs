@@ -66,7 +66,7 @@ namespace GamePriceFinder.Finders
 
                 var currentPrice = PriceHandler.ConvertPriceToDatabaseType(price.Replace(".", ","), 3);
 
-                var gamePrices = new GamePrices(game.GameId, ((int)StoresEnum.Steam).ToString(), currentPrice);
+                var gamePrices = new GamePrices(game.GameId, StoresEnum.Steam.ToString(), currentPrice);
 
                 var history = new History(game.GameId, StoresEnum.Steam.ToString(), currentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
 
