@@ -1,9 +1,6 @@
-﻿using GamePriceFinder.Handlers;
-using GamePriceFinder.Http;
-using GamePriceFinder.Models;
-using Google.Apis.YouTube.v3;
+﻿using GamePriceFinder.MVC.Controllers;
 
-namespace GamePriceFinder.Intefaces
+namespace GamePriceFinder.MVC.Models.Intefaces
 {
     /// <summary>
     /// Interface to get the prices, implemented by EpicFinder, MicrosoftFinder, NuuvemFinder, PlaystationStoreFinder, SteamFinder.
@@ -11,6 +8,6 @@ namespace GamePriceFinder.Intefaces
     public interface IPriceFinder
     {
         public string StoreUri { get; set; }
-        public HttpHandler HttpHandler { get; set; }
+        public HttpController HttpHandler { get; set; }
     }
 }

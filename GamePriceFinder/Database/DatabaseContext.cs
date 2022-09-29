@@ -1,4 +1,4 @@
-﻿using GamePriceFinder.Models;
+﻿using GamePriceFinder.MVC.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace GamePriceFinder.Database

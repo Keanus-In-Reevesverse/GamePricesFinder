@@ -1,8 +1,6 @@
-﻿using GamePriceFinder.Enums;
-using GamePriceFinder.Intefaces;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GamePriceFinder.Models
+namespace GamePriceFinder.MVC.Models
 {
     /// <summary>
     /// Represents available game genres, with game ids and genre description.
@@ -10,7 +8,7 @@ namespace GamePriceFinder.Models
     public class Genre
     {
         public Genre(string description)
-    {
+        {
             Description = description;
         }
 

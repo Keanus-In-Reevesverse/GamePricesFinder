@@ -1,21 +1,18 @@
-﻿using GamePriceFinder.Enums;
-using GamePriceFinder.Handlers;
-using GamePriceFinder.Http;
-using GamePriceFinder.Intefaces;
-using GamePriceFinder.Models;
-using Google.Apis.YouTube.v3;
-using System.Text.RegularExpressions;
+﻿using GamePriceFinder.Handlers;
+using GamePriceFinder.MVC.Models;
+using GamePriceFinder.MVC.Models.Enums;
+using GamePriceFinder.MVC.Models.Intefaces;
 
-namespace GamePriceFinder.Finders
+namespace GamePriceFinder.MVC.Controllers.Finders
 {
     /// <summary>
     /// Represents the Nuuvem price finder, implements IPriceFinder.
     /// </summary>
-    public class NuuvemFinder : IPriceFinder
+    public class NuuvemController : IPriceFinder
     {
-        public NuuvemFinder()
+        public NuuvemController()
         {
-            HttpHandler = new HttpHandler();
+            HttpHandler = new HttpController();
         }
         /// <summary>
         /// Uri to execute the http request.
@@ -24,7 +21,7 @@ namespace GamePriceFinder.Finders
         /// <summary>
         /// HttpHandler for Nuuvem.
         /// </summary>
-        public HttpHandler HttpHandler { get; set; }
+        public HttpController HttpHandler { get; set; }
 
         private const string TRAILER = " trailer";
 

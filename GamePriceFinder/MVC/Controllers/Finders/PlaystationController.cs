@@ -1,20 +1,20 @@
-﻿using GamePriceFinder.Enums;
-using GamePriceFinder.Handlers;
-using GamePriceFinder.Http;
-using GamePriceFinder.Intefaces;
-using GamePriceFinder.Models;
-using Google.Apis.YouTube.v3;
+﻿using GamePriceFinder.Handlers;
+using GamePriceFinder.MVC.Models;
+using GamePriceFinder.MVC.Models.Enums;
+using GamePriceFinder.MVC.Models.Intefaces;
+using GamePriceFinder.MVC.Models.Responses;
+using Genre = GamePriceFinder.MVC.Models.Genre;
 
-namespace GamePriceFinder.Finders
+namespace GamePriceFinder.MVC.Controllers.Finders
 {
     /// <summary>
     /// Represents the Playstation price finder, implements IPriceFinder.
     /// </summary>
-    public class PlaystationStoreFinder : IPriceFinder
+    public class PlaystationController : IPriceFinder
     {
-        public PlaystationStoreFinder()
+        public PlaystationController()
         {
-            HttpHandler = new HttpHandler();
+            HttpHandler = new HttpController();
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace GamePriceFinder.Finders
         /// <summary>
         /// HttpHandler for Playstation Store.
         /// </summary>
-        public HttpHandler HttpHandler { get; set; }
+        public HttpController HttpHandler { get; set; }
 
         private const string TRAILER = " trailer";
 
@@ -34,7 +34,7 @@ namespace GamePriceFinder.Finders
         /// <param name="gameName"></param>
         public async Task<List<DatabaseEntitiesHandler>> GetPrice(string gameName)
         {
-            Responses.Link[] responseGameList;
+            Link[] responseGameList;
             try
             {
                 responseGameList = await HttpHandler.GetToPsn(FormatName(gameName));

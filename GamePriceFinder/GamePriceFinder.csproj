@@ -9,6 +9,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="NewFolder\**" />
+	  <Content Remove="NewFolder\**" />
+	  <EmbeddedResource Remove="NewFolder\**" />
+	  <None Remove="NewFolder\**" />
+	</ItemGroup>
+
+	<ItemGroup>
 		<Compile Remove="ScriptEngine.cs" />
 	</ItemGroup>
 
@@ -37,6 +44,10 @@
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.1" />
 		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql.Design" Version="1.1.2" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="MVC\Views\" />
 	</ItemGroup>
 
 </Project>

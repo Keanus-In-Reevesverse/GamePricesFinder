@@ -1,42 +1,28 @@
-﻿using GamePriceFinder.Enums;
-using GamePriceFinder.Handlers;
-using GamePriceFinder.Http;
-using GamePriceFinder.Intefaces;
-using GamePriceFinder.Models;
+﻿using GamePriceFinder.Handlers;
+using GamePriceFinder.MVC.Models;
+using GamePriceFinder.MVC.Models.Enums;
+using GamePriceFinder.MVC.Models.Intefaces;
+using GamePriceFinder.MVC.Models.Responses;
+using Genre = GamePriceFinder.MVC.Models.Genre;
 
-namespace GamePriceFinder.Finders
+namespace GamePriceFinder.MVC.Controllers.Finders
 {
-    /// <summary>
-    /// Represents the Steam price finder, implements IPriceFinder.
-    /// </summary>
-    public class SteamFinder : IPriceFinder
+    public class SteamController : IPriceFinder
     {
         private const int forHonorSteamId = 292030;
 
         private const string TRAILER = " trailer";
 
-        public SteamFinder()
+        public SteamController()
         {
-            HttpHandler = new HttpHandler();
+            HttpHandler = new HttpController();
         }
 
-        /// <summary>
-        /// Uri to execute the http request.
-        /// </summary>
         public string StoreUri { get; set; }
-        /// <summary>
-        /// HttpHandler for Playstation Store.
-        /// </summary>
-        public HttpHandler HttpHandler { get; set; }
-
-        /// <summary>
-        /// Gets Steam prices.
-        /// </summary>
-        /// <param name="gameName"></param>
-        /// <returns></returns>
+        public HttpController HttpHandler { get; set; }
         public async Task<List<DatabaseEntitiesHandler>> GetPrice(string gameName, int id)
         {
-            Dictionary<string, Responses.AppIds> steamResponse;
+            Dictionary<string, AppIds> steamResponse;
             try
             {
                 steamResponse = await HttpHandler.GetToSteam(id);
@@ -66,7 +52,7 @@ namespace GamePriceFinder.Finders
                 }
 
                 //game.Video = steamResponse[forHonorSteamId.ToString()].data.movies[0].webm.max;
-#if DEBUG
+#if !DEBUG
                 game.Video = await YoutubeHandler.GetGameTrailer(string.Concat(name, TRAILER));
 #endif
 

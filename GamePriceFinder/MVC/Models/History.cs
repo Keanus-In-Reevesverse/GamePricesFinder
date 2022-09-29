@@ -1,9 +1,7 @@
-﻿using GamePriceFinder.Intefaces;
-using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GamePriceFinder.Models
+namespace GamePriceFinder.MVC.Models
 {
     /// <summary>
     /// Represents the historic of a game price, with history id, game id, store name, the price, and a timestamp indicating when that price was found.

@@ -1,6 +1,6 @@
 ﻿using GamePriceFinder.Database;
-using GamePriceFinder.Intefaces;
-using GamePriceFinder.Models;
+using GamePriceFinder.MVC.Models;
+using GamePriceFinder.MVC.Models.Intefaces;
 
 namespace GamePriceFinder.Repositories
 {

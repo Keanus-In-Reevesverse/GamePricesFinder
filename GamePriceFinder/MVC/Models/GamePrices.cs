@@ -1,9 +1,6 @@
-﻿using GamePriceFinder.Enums;
-using GamePriceFinder.Intefaces;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations.Schema;
 
-namespace GamePriceFinder.Models
+namespace GamePriceFinder.MVC.Models
 {
     /// <summary>
     /// Represents a game price, with a game id, store id and price.

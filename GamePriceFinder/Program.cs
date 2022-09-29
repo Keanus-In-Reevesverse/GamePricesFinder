@@ -1,8 +1,9 @@
 using GamePriceFinder;
 using GamePriceFinder.Database;
-using GamePriceFinder.Finders;
-using GamePriceFinder.Intefaces;
-using GamePriceFinder.Models;
+using GamePriceFinder.MVC.Controllers;
+using GamePriceFinder.MVC.Controllers.Finders;
+using GamePriceFinder.MVC.Models;
+using GamePriceFinder.MVC.Models.Intefaces;
 using GamePriceFinder.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,16 +15,16 @@ builder.Services.AddEndpointsApiExplorer();
 
 var connectionString = builder.Configuration.GetSection("MySqlConnection:MySqlConnectionString").Value;
 
-builder.Services.AddTransient<IRepository<GamePriceFinder.Models.Genre>, GenreRepository>();
+builder.Services.AddTransient<IRepository<Genre>, GenreRepository>();
 builder.Services.AddTransient<IRepository<Game>, GameRepository>();
 builder.Services.AddTransient<IRepository<GamePrices>, GamePricesRepository>();
 builder.Services.AddTransient<IRepository<History>, HistoryRepository>();
-builder.Services.AddTransient<PriceSearcher>();
-builder.Services.AddTransient<SteamFinder>();
-builder.Services.AddTransient<EpicFinder>();
-builder.Services.AddTransient<NuuvemFinder>();
-builder.Services.AddTransient<PlaystationStoreFinder>();
-builder.Services.AddTransient<MicrosoftFinder>();
+builder.Services.AddTransient<SearcherController>();
+builder.Services.AddTransient<SteamController>();
+builder.Services.AddTransient<EpicController>();
+builder.Services.AddTransient<NuuvemController>();
+builder.Services.AddTransient<PlaystationController>();
+builder.Services.AddTransient<MicrosoftController>();
 
 builder.Services.AddScoped<DbContextOptions<DbContext>>();
 builder.Services.
@@ -34,11 +35,11 @@ var app = builder.Build();
 app.Urls.Add("http://localhost:5000");
 
 app.MapGet("/", async (
-    [FromServices] IRepository<GamePriceFinder.Models.Genre> genreRepository,
+    [FromServices] IRepository<Genre> genreRepository,
     [FromServices] IRepository<History> historyRepository,
     [FromServices] IRepository<Game> gameRepository,
     [FromServices] IRepository<GamePrices> gamePricesRepository,
-    [FromServices] PriceSearcher priceSearcher) =>
+    [FromServices] SearcherController priceSearcher) =>
 {
     var gameNames = new List<string>() { "for honor", "for honor starter edition", "for honor standard edition", "for honor marching fire edition",
         "scribblenauts unlimited", "scribblenauts unmasked", "scribblenauts mega pack", "scribblenauts showdown",
@@ -55,15 +56,15 @@ app.MapGet("/", async (
 
     for (int i = 0; i < steamGameIds.Count; i++)
     {
-        int gameId = 0;
-        try
-        {
-            gameId = gameRepository.GetId(gameNames[i]);
-        }
-        catch
-        {
-            continue;
-        }
+        //int gameId = 0;
+        //try
+        //{
+        //    gameId = gameRepository.GetId(gameNames[i]);
+        //}
+        //catch
+        //{
+        //    continue;
+        //}
 
         var entities = await priceSearcher.GetPrices(gameNames[i], steamGameIds[i]);
 
@@ -79,31 +80,31 @@ app.MapGet("/", async (
 
         Console.WriteLine("============================================================================");
 
-        foreach (var e in entities)
-        {
-            e.Game.GameId = gameId;
-            e.GamePrices.GameId = gameId;
-            e.History.GameId = gameId;
-            e.GamePrices.GameId = gameId;
-            gameRepository.Update(e.Game);
-            historyRepository.AddOne(e.History);
+        //foreach (var e in entities)
+        //{
+        //    e.Game.GameId = gameId;
+        //    e.GamePrices.GameId = gameId;
+        //    e.History.GameId = gameId;
+        //    e.GamePrices.GameId = gameId;
+        //    gameRepository.Update(e.Game);
+        //    historyRepository.AddOne(e.History);
 
 
-            var formattedGameName = e.Game.Name.Replace(":", string.Empty).Replace("-", string.Empty);
+        //    var formattedGameName = e.Game.Name.Replace(":", string.Empty).Replace("-", string.Empty);
 
-            if (formattedGameName.ToLower().Equals(gameNames[i], StringComparison.CurrentCultureIgnoreCase))
-            {
-                var dbGamePrices = gamePricesRepository.FindByGameId(gameId);
+        //    if (formattedGameName.ToLower().Equals(gameNames[i], StringComparison.CurrentCultureIgnoreCase))
+        //    {
+        //        var dbGamePrices = gamePricesRepository.FindByGameId(gameId);
 
-                if (dbGamePrices == null)
-                    gamePricesRepository.AddOne(e.GamePrices);
-                else
-                {
-                    if (dbGamePrices.CurrentPrice != e.GamePrices.CurrentPrice)
-                        gamePricesRepository.Update(e.GamePrices);
-                }
-            }
-        }
+        //        if (dbGamePrices == null)
+        //            gamePricesRepository.AddOne(e.GamePrices);
+        //        else
+        //        {
+        //            if (dbGamePrices.CurrentPrice != e.GamePrices.CurrentPrice)
+        //                gamePricesRepository.Update(e.GamePrices);
+        //        }
+        //    }
+        //}
     }
 
     Console.WriteLine("Search end...");
@@ -111,11 +112,11 @@ app.MapGet("/", async (
 
 app.MapGet("/gameInfo/{id}", async (
     int id,
-    [FromServices] IRepository<GamePriceFinder.Models.Genre> genreRepository,
+    [FromServices] IRepository<Genre> genreRepository,
     [FromServices] IRepository<History> historyRepository,
     [FromServices] IRepository<Game> gameRepository,
     [FromServices] IRepository<GamePrices> gamePricesRepository,
-    [FromServices] PriceSearcher priceSearcher) =>
+    [FromServices] SearcherController priceSearcher) =>
 {
     var game = gameRepository.FindByGameId(id);
     var gamePrice = gamePricesRepository.FindByGameId(id);

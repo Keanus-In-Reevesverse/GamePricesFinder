@@ -1,6 +1,4 @@
-﻿using GamePriceFinder.Intefaces;
-
-namespace GamePriceFinder.Models
+﻿namespace GamePriceFinder.MVC.Models
 {
     public class GameData
     {

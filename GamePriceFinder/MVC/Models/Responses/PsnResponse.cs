@@ -1,4 +1,4 @@
-﻿namespace GamePriceFinder.Responses
+﻿namespace GamePriceFinder.MVC.Models.Responses
 {
     /// <summary>
     /// Represents the response from http request to PlaystationNetwork API.

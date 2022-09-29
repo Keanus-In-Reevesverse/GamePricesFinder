@@ -1,4 +1,4 @@
-﻿namespace GamePriceFinder.Enums
+﻿namespace GamePriceFinder.MVC.Models.Enums
 {
     /// <summary>
     /// Represents the stores from where the prices will be acquired.

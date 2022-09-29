@@ -1,6 +1,4 @@
-﻿using GamePriceFinder.Models;
-
-namespace GamePriceFinder.Intefaces
+﻿namespace GamePriceFinder.MVC.Models.Intefaces
 {
     /// <summary>
     /// Repository interface, implemented by GameRepository, GamePricesRepository, GenreRepository, HistoryRepository.

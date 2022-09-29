@@ -1,4 +1,4 @@
-﻿using GamePriceFinder.Models;
+﻿using GamePriceFinder.MVC.Models;
 
 namespace GamePriceFinder.Handlers
 {

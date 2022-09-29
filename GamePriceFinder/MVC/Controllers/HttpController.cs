@@ -1,14 +1,14 @@
-﻿using GamePriceFinder.Responses;
+﻿using GamePriceFinder.MVC.Models.Responses;
 using Newtonsoft.Json;
 using System.Net.Http.Headers;
 using System.Web;
 
-namespace GamePriceFinder.Http
+namespace GamePriceFinder.MVC.Controllers
 {
     /// <summary>
     /// Unifies all the http requests.
     /// </summary>
-    public class HttpHandler
+    public class HttpController
     {
         private const string SteamUri = "http://store.steampowered.com/api/";
 
@@ -43,7 +43,7 @@ namespace GamePriceFinder.Http
 
             var jsonString = await response.Content.ReadAsStringAsync();
 
-            return Newtonsoft.Json.JsonConvert.DeserializeObject<Dictionary<string, AppIds>>(jsonString);
+            return JsonConvert.DeserializeObject<Dictionary<string, AppIds>>(jsonString);
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace GamePriceFinder.Http
 
             var json = response.Content.ReadAsStringAsync().Result;
 
-            var deserializedPsnResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<PsnResponse>(json);
+            var deserializedPsnResponse = JsonConvert.DeserializeObject<PsnResponse>(json);
 
             return deserializedPsnResponse.links;
         }

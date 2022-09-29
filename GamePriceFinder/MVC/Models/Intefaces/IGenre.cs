@@ -1,4 +1,4 @@
-﻿namespace GamePriceFinder.Intefaces
+﻿namespace GamePriceFinder.MVC.Models.Intefaces
 {
     public interface IGenre
     {
