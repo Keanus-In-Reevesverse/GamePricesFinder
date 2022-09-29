@@ -3,9 +3,9 @@ using GamePriceFinder.MVC.Controllers.Finders;
 
 namespace GamePriceFinder.MVC.Controllers
 {
-    public class SearcherController
+    public class SearchController
     {
-        public SearcherController(SteamController steamFinder,
+        public SearchController(SteamController steamFinder,
             EpicController epicFinder,
             NuuvemController nuuvemFinder,
             PlaystationController playstationStoreFinder,

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace GamePriceFinder
+﻿namespace GamePriceFinder
 {
     internal class JaroWinkler
     {
@@ -97,10 +91,7 @@ namespace GamePriceFinder
                 ++lPos;
             if (lPos == 0) return lWeight;
             return lWeight + 0.1 * lPos * (1.0 - lWeight);
-
         }
-
-
     }
 }
 

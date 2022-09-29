@@ -12,19 +12,22 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 
-
 var connectionString = builder.Configuration.GetSection("MySqlConnection:MySqlConnectionString").Value;
 
 builder.Services.AddTransient<IRepository<Genre>, GenreRepository>();
 builder.Services.AddTransient<IRepository<Game>, GameRepository>();
 builder.Services.AddTransient<IRepository<GamePrices>, GamePricesRepository>();
 builder.Services.AddTransient<IRepository<History>, HistoryRepository>();
-builder.Services.AddTransient<SearcherController>();
+builder.Services.AddTransient<SearchController>();
+builder.Services.AddTransient<OrganizeController>();
 builder.Services.AddTransient<SteamController>();
 builder.Services.AddTransient<EpicController>();
 builder.Services.AddTransient<NuuvemController>();
 builder.Services.AddTransient<PlaystationController>();
 builder.Services.AddTransient<MicrosoftController>();
+
+builder.Services.AddLogging(config => config.AddConsole());
+
 
 builder.Services.AddScoped<DbContextOptions<DbContext>>();
 builder.Services.
@@ -35,12 +38,11 @@ var app = builder.Build();
 app.Urls.Add("http://localhost:5000");
 
 app.MapGet("/", async (
-    [FromServices] IRepository<Genre> genreRepository,
-    [FromServices] IRepository<History> historyRepository,
-    [FromServices] IRepository<Game> gameRepository,
-    [FromServices] IRepository<GamePrices> gamePricesRepository,
-    [FromServices] SearcherController priceSearcher) =>
+    [FromServices] SearchController searchSearcher,
+    [FromServices] OrganizeController organizeController,
+    [FromServices] ILogger<Program> log)=>
 {
+    log.LogInformation("Searching for games...");
     var gameNames = new List<string>() { "for honor", "for honor starter edition", "for honor standard edition", "for honor marching fire edition",
         "scribblenauts unlimited", "scribblenauts unmasked", "scribblenauts mega pack", "scribblenauts showdown",
         "lego batman 3", "lego batman 3 além de gotham edição luxo", "lego batman 2", "lego batman",
@@ -66,19 +68,21 @@ app.MapGet("/", async (
         //    continue;
         //}
 
-        var entities = await priceSearcher.GetPrices(gameNames[i], steamGameIds[i]);
+        var entities = await searchSearcher.GetPrices(gameNames[i], steamGameIds[i]);
 
-        foreach (var entity in entities)
-        {
-            Console.WriteLine();
-            Console.WriteLine(string.Concat("Store: ", entity.History.StoreName), ".");
-            Console.WriteLine(string.Concat("Name: ", entity.Game.Name), ".");
-            Console.WriteLine(string.Concat("Current price: R$ ", entity.GamePrices.CurrentPrice), ".");
-            Console.WriteLine(string.Concat("Video url: ", entity.Game.Video), ".");
-            Console.WriteLine(string.Concat("Image url: ", entity.Game.Image), ".");
-        }
+        organizeController.JoinByName(entities);
 
-        Console.WriteLine("============================================================================");
+        //foreach (var entity in entities)
+        //{
+        //    Console.WriteLine();
+        //    Console.WriteLine(string.Concat("Store: ", entity.History.StoreName), ".");
+        //    Console.WriteLine(string.Concat("Name: ", entity.Game.Name), ".");
+        //    Console.WriteLine(string.Concat("Current price: R$ ", entity.GamePrices.CurrentPrice), ".");
+        //    Console.WriteLine(string.Concat("Video url: ", entity.Game.Video), ".");
+        //    Console.WriteLine(string.Concat("Image url: ", entity.Game.Image), ".");
+        //}
+
+        //Console.WriteLine("============================================================================");
 
         //foreach (var e in entities)
         //{
@@ -116,7 +120,7 @@ app.MapGet("/gameInfo/{id}", async (
     [FromServices] IRepository<History> historyRepository,
     [FromServices] IRepository<Game> gameRepository,
     [FromServices] IRepository<GamePrices> gamePricesRepository,
-    [FromServices] SearcherController priceSearcher) =>
+    [FromServices] SearchController priceSearcher) =>
 {
     var game = gameRepository.FindByGameId(id);
     var gamePrice = gamePricesRepository.FindByGameId(id);
