@@ -40,6 +40,8 @@ namespace GamePriceFinder.MVC.Controllers.Finders
                 {
                     game.Image = currentGame.KeyImages[0].Url;
                 }
+
+                var link = string.Concat("store.epicgames.com/en-US/p/", currentGame.CatalogNs.Mappings[0].PageSlug);
                 
 #if !DEBUG
                 game.Video = await YoutubeHandler.GetGameTrailer(string.Concat(title, TRAILER));
@@ -48,7 +50,7 @@ namespace GamePriceFinder.MVC.Controllers.Finders
 
                 var currentPrice = PriceHandler.ConvertPriceToDatabaseType(currentGame.Price.TotalPrice.FmtPrice.DiscountPrice.Replace(".", ","), 2);
 
-                var gamePrices = new GamePrices(game.GameId, StoresEnum.Epic.ToString(), currentPrice, "");
+                var gamePrices = new GamePrices(game.GameId, StoresEnum.Epic.ToString(), currentPrice, link);
 
                 var history = new History(game.GenreId, StoresEnum.Epic.ToString(), currentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
 
