@@ -5,17 +5,21 @@ namespace GamePriceFinder.MVC.Controllers
 {
     public class SearchController
     {
+        private readonly ILogger<SearchController> _logger;
+
         public SearchController(SteamController steamFinder,
             EpicController epicFinder,
             NuuvemController nuuvemFinder,
             PlaystationController playstationStoreFinder,
-            MicrosoftController microsoftFinder)
+            MicrosoftController microsoftFinder,
+            ILogger<SearchController> logger)
         {
             SteamFinder = steamFinder;
             EpicFinder = epicFinder;
             NuuvemFinder = nuuvemFinder;
             PlaystationStoreFinder = playstationStoreFinder;
             MicrosoftFinder = microsoftFinder;
+            _logger = logger;
         }
 
         public SteamController SteamFinder { get; }

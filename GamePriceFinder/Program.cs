@@ -40,9 +40,9 @@ var app = builder.Build();
 app.MapGet("/", async (
     [FromServices] SearchController searchSearcher,
     [FromServices] OrganizeController organizeController,
-    [FromServices] ILogger<Program> log)=>
+    [FromServices] ILogger<Program> logger)=>
 {
-    log.LogInformation("Searching for games...");
+    logger.LogInformation("Searching for games...");
     var gameNames = new List<string>() { "for honor", "for honor starter edition", "for honor standard edition", "for honor marching fire edition",
         "scribblenauts unlimited", "scribblenauts unmasked", "scribblenauts mega pack", "scribblenauts showdown",
         "lego batman 3", "lego batman 3 além de gotham edição luxo", "lego batman 2", "lego batman",

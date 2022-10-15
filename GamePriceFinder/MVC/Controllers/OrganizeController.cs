@@ -4,9 +4,12 @@ namespace GamePriceFinder.MVC.Controllers
 {
     public class OrganizeController
     {
-        public OrganizeController()
-        {
+        private readonly ILogger<OrganizeController> _logger;
 
+        public OrganizeController(
+            ILogger<OrganizeController> logger)
+        {
+            _logger = logger;
         }
 
         private string NormalizeName(string name) => name.Replace(":", "").Replace("-", "").Replace("™", "").ToLowerInvariant();
@@ -48,6 +51,7 @@ namespace GamePriceFinder.MVC.Controllers
                     {
                         continue;
                     }
+
                     var proximity = JaroWinkler.proximity(currentNormalizedName, NormalizeName(entities[j].Game.Name));
 
                     if (proximity >= 0.85)
