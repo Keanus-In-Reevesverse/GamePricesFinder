@@ -40,27 +40,54 @@ namespace GamePriceFinder.MVC.Controllers.Finders
 
             for (int responseObject = 0; responseObject < steamResponse.Count; responseObject++)
             {
-                name = steamResponse[id.ToString()].data.name;
+                AppIds currentGame = steamResponse[id.ToString()];
 
-                price = steamResponse[id.ToString()].data.price_overview.final_formatted;
+                name = currentGame.data.name;
+
+                price = currentGame.data.price_overview.final_formatted;
 
                 var game = new Game(name);
 
-                if (steamResponse[id.ToString()].data.screenshots.Any())
+                if (currentGame.data.screenshots.Any())
                 {
-                    game.Image = steamResponse[id.ToString()].data.screenshots[0].path_full;
+                    game.Image = currentGame.data.screenshots[0].path_full;
                 }
 
-                //game.Video = steamResponse[forHonorSteamId.ToString()].data.movies[0].webm.max;
+                var link = string.Concat("store.steampowered.com/app/", id);
+
+                if (currentGame.data.movies.Any())
+                {
+                    foreach (var movie in currentGame.data.movies)
+                    {
+                        try
+                        {
+                            game.Video = movie.mp4.max;
+                        }
+                        catch (Exception e)
+                        {
+                            continue;
+                        }
+
+                        if (!string.IsNullOrEmpty(game.Video))
+                        {
+                            break;
+                        }
+                    }
+                }
+                else
+                {
+                    //game.Video = steamResponse[forHonorSteamId.ToString()].data.movies[0].webm.max;
 #if !DEBUG
-                game.Video = await YoutubeHandler.GetGameTrailer(string.Concat(name, TRAILER));
+                    game.Video = await YoutubeHandler.GetGameTrailer(string.Concat(name, TRAILER));
 #endif
+                }
+
 
                 //await FillGameInformation(ref game, price, 3);
 
                 var currentPrice = PriceHandler.ConvertPriceToDatabaseType(price.Replace(".", ","), 3);
 
-                var gamePrices = new GamePrices(game.GameId, StoresEnum.Steam.ToString(), currentPrice, "");
+                var gamePrices = new GamePrices(game.GameId, StoresEnum.Steam.ToString(), currentPrice, link);
 
                 var history = new History(game.GameId, StoresEnum.Steam.ToString(), currentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
 
