@@ -71,7 +71,7 @@ namespace GamePriceFinder.MVC.Controllers.Finders
                         game.Image = responseGame.images[0].url;
                     }
 
-#if DEBUG
+#if !DEBUG
                     game.Video = await YoutubeHandler.GetGameTrailer(string.Concat(title, TRAILER));
 #endif
 
