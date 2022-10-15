@@ -5,30 +5,15 @@ using GamePriceFinder.MVC.Models.Intefaces;
 
 namespace GamePriceFinder.MVC.Controllers.Finders
 {
-    /// <summary>
-    /// Represents the Nuuvem price finder, implements IPriceFinder.
-    /// </summary>
     public class NuuvemController : IPriceFinder
     {
         public NuuvemController()
         {
             HttpHandler = new HttpController();
         }
-        /// <summary>
-        /// Uri to execute the http request.
-        /// </summary>
         public string StoreUri { get; set; }
-        /// <summary>
-        /// HttpHandler for Nuuvem.
-        /// </summary>
         public HttpController HttpHandler { get; set; }
-
         private const string TRAILER = " trailer";
-
-        /// <summary>
-        /// Gets Nuuvem prices.
-        /// </summary>
-        /// <param name="gameName"></param>
         public async Task<List<DatabaseEntitiesHandler>> GetPrice(string gameName)
         {
             string? html;
@@ -104,11 +89,11 @@ namespace GamePriceFinder.MVC.Controllers.Finders
                     game.Image = imageDoc.DocumentNode.SelectSingleNode("//img")?.Attributes["src"]?.Value;
                 }
 
-#if DEBUG
+#if !DEBUG
                 game.Video = await YoutubeHandler.GetGameTrailer(string.Concat(name, TRAILER));
 #endif
 
-                var gamePrice = new GamePrices(game.GameId, StoresEnum.Nuuvem.ToString(), PriceHandler.ConvertPriceToDatabaseType(price, 3));
+                var gamePrice = new GamePrices(game.GameId, StoresEnum.Nuuvem.ToString(), PriceHandler.ConvertPriceToDatabaseType(price, 3), "");
                 var history = new History(game.GameId, StoresEnum.Nuuvem.ToString(), gamePrice.CurrentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
                 var genre = new Genre("Action");
                 return new DatabaseEntitiesHandler(game, gamePrice, history, genre);

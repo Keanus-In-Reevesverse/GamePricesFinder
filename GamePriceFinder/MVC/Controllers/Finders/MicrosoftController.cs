@@ -4,6 +4,7 @@ using GamePriceFinder.MVC.Models.Enums;
 using GamePriceFinder.MVC.Models.Intefaces;
 using Google.Apis.YouTube.v3;
 using System.Net;
+using System.Text;
 
 namespace GamePriceFinder.MVC.Controllers.Finders
 {
@@ -40,12 +41,15 @@ namespace GamePriceFinder.MVC.Controllers.Finders
                 doc.LoadHtml(html);
                 var divs = doc.DocumentNode.Descendants("div");
 
+                var aS = doc.DocumentNode.Descendants("a");
+
                 var image = string.Empty;
                 var filled = false;
                 Game game = null;
                 GamePrices gamePrices = null;
                 History history = null;
                 Genre genre = null;
+
                 foreach (var div in divs)
                 {
                     try
@@ -91,7 +95,7 @@ namespace GamePriceFinder.MVC.Controllers.Finders
 #endif
 
                             gamePrices = new GamePrices(game.GameId, StoresEnum.Xbox.ToString(),
-                                PriceHandler.ConvertPriceToDatabaseType(price, 3));
+                                PriceHandler.ConvertPriceToDatabaseType(price, 3), "");
 
                             if (gamePrices.CurrentPrice == 0)
                             {
@@ -108,7 +112,7 @@ namespace GamePriceFinder.MVC.Controllers.Finders
                     }
                     catch (Exception e)
                     {
-                        return null;
+                        continue;
                     }
                 }
 
@@ -117,55 +121,100 @@ namespace GamePriceFinder.MVC.Controllers.Finders
                 var imageIndex = 0;
                 foreach (var div in divs)
                 {
-                    if (imagesToGet == imagesFound)
+                    try
                     {
-                        break;
-                    }
-                    if (div.Attributes["class"].Value.Equals("game-collection-item", StringComparison.CurrentCultureIgnoreCase))
-                    {
-                        var newDoc = new HtmlAgilityPack.HtmlDocument();
-
-                        newDoc.LoadHtml(div.InnerHtml);
-
-                        var insideDivs = newDoc.DocumentNode.Descendants("div");
-
-
-                        foreach (var insideDiv in insideDivs)
+                        if (imagesToGet == imagesFound)
                         {
-                            if (insideDiv.Attributes["class"].Value.Equals("game-collection-item-image-placeholder", StringComparison.CurrentCultureIgnoreCase))
+                            break;
+                        }
+                        if (div.Attributes["class"].Value.Equals("game-collection-item", StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            var newDoc = new HtmlAgilityPack.HtmlDocument();
+
+                            newDoc.LoadHtml(div.InnerHtml);
+
+                            var insideDivs = newDoc.DocumentNode.Descendants("div");
+
+
+                            foreach (var insideDiv in insideDivs)
                             {
-                                var imageDoc = new HtmlAgilityPack.HtmlDocument();
-
-                                imageDoc.LoadHtml(insideDiv.InnerHtml);
-
-                                var pictures = imageDoc.DocumentNode.Descendants("picture").ToList();
-
-                                if (pictures.Any())
+                                if (insideDiv.Attributes["class"].Value.Equals("game-collection-item-image-placeholder", StringComparison.CurrentCultureIgnoreCase))
                                 {
-                                    imageDoc.LoadHtml(pictures[0].InnerHtml);
+                                    var imageDoc = new HtmlAgilityPack.HtmlDocument();
 
-                                    image = imageDoc.DocumentNode.SelectSingleNode("//img")?.Attributes["data-src"]?.Value;
+                                    imageDoc.LoadHtml(insideDiv.InnerHtml);
 
-                                    imagesFound++;
+                                    var pictures = imageDoc.DocumentNode.Descendants("picture").ToList();
 
-                                    entities[imageIndex].Game.Image = image;
+                                    if (pictures.Any())
+                                    {
+                                        imageDoc.LoadHtml(pictures[0].InnerHtml);
 
-                                    imageIndex++;
-                                }
+                                        image = imageDoc.DocumentNode.SelectSingleNode("//img")?.Attributes["data-src"]?.Value;
 
-                                if (!string.IsNullOrEmpty(image))
-                                {
-                                    break;
+                                        imagesFound++;
+
+                                        entities[imageIndex].Game.Image = image;
+
+                                        imageIndex++;
+                                    }
+
+                                    if (!string.IsNullOrEmpty(image))
+                                    {
+                                        break;
+                                    }
                                 }
                             }
                         }
                     }
+                    catch (Exception e)
+                    {
+                        continue;
+                    }
                 }
+
+                var urlsToGet = entities.Count;
+                var urlsFound = 0;
+                var urlIndex = 0;
+
+                foreach (var a in aS)
+                {
+                    try
+                    {
+                        if (urlsFound == urlsToGet)
+                        {
+                            break;
+                        }
+
+                        if (a.Attributes["class"].Value.Equals("game-collection-item-link", StringComparison.CurrentCultureIgnoreCase))
+                        {
+                            var link = string.Empty;
+
+                            if (!string.IsNullOrEmpty(a.Attributes["href"].Value))
+                            {
+                                link = string.Concat("xbdeals.net", a.Attributes["href"].Value);
+                            }
+
+                            urlsFound++;
+
+                            entities[urlIndex].GamePrices.Link = link;
+
+                            urlIndex++;
+                        }
+
+                    }
+                    catch (Exception e)
+                    {
+                        continue;
+                    }
+                }
+
             }
             catch (Exception e)
             {
                 Console.WriteLine("Error: ", e.Message);
             }
+
             return entities;
         }
 

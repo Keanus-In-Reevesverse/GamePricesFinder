@@ -2,19 +2,15 @@
 
 namespace GamePriceFinder.MVC.Models
 {
-    /// <summary>
-    /// Represents a game price, with a game id, store id and price.
-    /// </summary>
-
-
     [Table("game_prices")]
     public class GamePrices
     {
-        public GamePrices(int gameId, string storeId, decimal currentPrice)
+        public GamePrices(int gameId, string storeId, decimal currentPrice, string link)
         {
             GameId = gameId;
             StoreId = storeId;
             CurrentPrice = currentPrice;
+            Link = link;
         }
 
         [Column("game_ID")]
@@ -23,5 +19,7 @@ namespace GamePriceFinder.MVC.Models
         public string StoreId { get; set; }
         [Column("current_price")]
         public decimal CurrentPrice { get; set; }
+        [Column("link")]
+        public string Link { get; set; }
     }
 }

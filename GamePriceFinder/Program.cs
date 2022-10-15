@@ -35,7 +35,7 @@ builder.Services.
 
 var app = builder.Build();
 
-app.Urls.Add("http://localhost:5000");
+//app.Urls.Add("http://localhost:5000");
 
 app.MapGet("/", async (
     [FromServices] SearchController searchSearcher,

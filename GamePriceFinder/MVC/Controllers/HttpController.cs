@@ -5,9 +5,6 @@ using System.Web;
 
 namespace GamePriceFinder.MVC.Controllers
 {
-    /// <summary>
-    /// Unifies all the http requests.
-    /// </summary>
     public class HttpController
     {
         private const string SteamUri = "http://store.steampowered.com/api/";
@@ -24,11 +21,6 @@ namespace GamePriceFinder.MVC.Controllers
 
         private const string PsnSecondSearchPath = "?size=10&start=0";
 
-        /// <summary>
-        /// Use for the http request to Steam.
-        /// </summary>
-        /// <param name="gameId"></param>
-        /// <returns></returns>
         public async Task<Dictionary<string, AppIds>> GetToSteam(int gameId)
         {
             var parameters = $"appdetails?appids={gameId}&cc=br&l=br";
@@ -46,11 +38,6 @@ namespace GamePriceFinder.MVC.Controllers
             return JsonConvert.DeserializeObject<Dictionary<string, AppIds>>(jsonString);
         }
 
-        /// <summary>
-        /// Use for the http request to Epic Games.
-        /// </summary>
-        /// <param name="gameId"></param>
-        /// <returns></returns>
         public async Task<EpicGamesStoreNET.Models.Response> PostToEpic(string gameName)
         {
             var httpClient = new HttpClient();
@@ -72,11 +59,6 @@ namespace GamePriceFinder.MVC.Controllers
             return JsonConvert.DeserializeObject<EpicGamesStoreNET.Models.Response>(respString);
         }
 
-        /// <summary>
-        /// Use for the http request to Nuuvem.
-        /// </summary>
-        /// <param name="gameId"></param>
-        /// <returns></returns>
         public async Task<string> GetToNuuvem(string gameName)
         {
             var httpClient = new HttpClient();
@@ -88,11 +70,6 @@ namespace GamePriceFinder.MVC.Controllers
             return response.Content.ReadAsStringAsync().Result;
         }
 
-        /// <summary>
-        /// Use for the http request to Playstation Store.
-        /// </summary>
-        /// <param name="gameId"></param>
-        /// <returns></returns>
         public async Task<Link[]> GetToPsn(string gameName)
         {
             var httpClient = new HttpClient();
