@@ -7,22 +7,30 @@ namespace GamePriceFinder.MVC.Controllers
 {
     public class HttpController
     {
-        private const string SteamUri = "http://store.steampowered.com/api/";
+        
 
         private const string EpicUri = "https://graphql.epicgames.com/graphql";
 
-        private const string NuuvemUri = "https://www.nuuvem.com";
+        private const string SteamIdsUri = "http://api.steampowered.com/ISteamApps/GetAppList/v0001/";
+        public async Task<SteamIdsResponse> GetSteamIds()
+        {
+            var httpClient = new HttpClient();
 
-        private const string NuuvemSearchPath = "/catalog/search/";
+            //httpClient.BaseAddress = new Uri();
 
-        private const string PsnUri = "https://store.playstation.com/store/api/chihiro/00_09_000/";
+            httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-        private const string PsnFirstSearchPath = "tumbler/br/pt/999/";
+            var response = httpClient.GetAsync(SteamIdsUri).Result;
 
-        private const string PsnSecondSearchPath = "?size=10&start=0";
+            var jsonString = await response.Content.ReadAsStringAsync();
 
+            return JsonConvert.DeserializeObject<SteamIdsResponse>(jsonString);
+        }
+
+        private const string SteamUri = "http://store.steampowered.com/api/";
         public async Task<Dictionary<string, AppIds>> GetToSteam(int gameId)
         {
+            await GetSteamIds();
             var parameters = $"appdetails?appids={gameId}&cc=br&l=br";
 
             var httpClient = new HttpClient();
@@ -59,17 +67,23 @@ namespace GamePriceFinder.MVC.Controllers
             return JsonConvert.DeserializeObject<EpicGamesStoreNET.Models.Response>(respString);
         }
 
+        private const string NuuvemUri = "https://www.nuuvem.com";
+        private const string NuuvemSearchPath = "/catalog/search/";
         public async Task<string> GetToNuuvem(string gameName)
         {
             var httpClient = new HttpClient();
 
             httpClient.BaseAddress = new Uri(NuuvemUri);
 
+
             var response = httpClient.GetAsync(string.Concat(NuuvemSearchPath, gameName)).Result;
 
             return response.Content.ReadAsStringAsync().Result;
         }
 
+        private const string PsnUri = "https://store.playstation.com/store/api/chihiro/00_09_000/";
+        private const string PlaystationFirstSearchPathPart = "tumbler/br/pt/999/";
+        private const string PlaystationSecondSearchPathPart = "?size=10&start=0";
         public async Task<Link[]> GetToPsn(string gameName)
         {
             var httpClient = new HttpClient();
@@ -78,7 +92,7 @@ namespace GamePriceFinder.MVC.Controllers
 
             httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
-            var response = httpClient.GetAsync(string.Concat(PsnFirstSearchPath, gameName, PsnSecondSearchPath)).Result;
+            var response = httpClient.GetAsync(string.Concat(PlaystationFirstSearchPathPart, gameName, PlaystationSecondSearchPathPart)).Result;
 
             var json = response.Content.ReadAsStringAsync().Result;
 
