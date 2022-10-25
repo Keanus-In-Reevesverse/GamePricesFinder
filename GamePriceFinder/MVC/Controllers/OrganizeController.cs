@@ -54,7 +54,7 @@ namespace GamePriceFinder.MVC.Controllers
 
                     var proximity = JaroWinkler.proximity(currentNormalizedName, NormalizeName(entities[j].Game.Name));
 
-                    if (proximity >= 0.85)
+                    if (proximity >= 0.9)
                     {
                         match.Add(entities[j]);
                         ignoreComparison.Add(j);

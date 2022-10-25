@@ -5,7 +5,7 @@ namespace GamePriceFinder.MVC.Models
     [Table("game_prices")]
     public class GamePrices
     {
-        public GamePrices(int gameId, string storeId, decimal currentPrice, string link)
+        public GamePrices(int gameId, int storeId, decimal currentPrice, string link)
         {
             GameId = gameId;
             StoreId = storeId;
@@ -15,8 +15,8 @@ namespace GamePriceFinder.MVC.Models
 
         [Column("game_ID")]
         public int GameId { get; set; }
-        [Column("store_name")]
-        public string StoreId { get; set; }
+        [Column("store_id")]
+        public int StoreId { get; set; }
         [Column("current_price")]
         public decimal CurrentPrice { get; set; }
         [Column("link")]

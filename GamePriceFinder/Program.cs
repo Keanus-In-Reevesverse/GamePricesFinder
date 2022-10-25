@@ -126,14 +126,7 @@ app.MapGet("/gameInfo/{id}", async (
     var gamePrice = gamePricesRepository.FindByGameId(id);
     var history = historyRepository.FindByGameId(id);
 
-    var presentation = new Presentation();
-
-    presentation.GameName = game.Name;
-    presentation.Store = gamePrice.StoreId;
-    presentation.CurrentPrice = gamePrice.CurrentPrice;
-    presentation.Image = game.Image;
-
-    return presentation;
+    
 });
 
 app.MapGet("/all/", async (

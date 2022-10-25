@@ -87,9 +87,9 @@ namespace GamePriceFinder.MVC.Controllers.Finders
 
                 var currentPrice = PriceHandler.ConvertPriceToDatabaseType(price.Replace(".", ","), 3);
 
-                var gamePrices = new GamePrices(game.GameId, StoresEnum.Steam.ToString(), currentPrice, link);
+                var gamePrices = new GamePrices(game.GameId, (int)StoresEnum.Steam, currentPrice, link);
 
-                var history = new History(game.GameId, StoresEnum.Steam.ToString(), currentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
+                var history = new History(game.GameId, (int)StoresEnum.Steam, currentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
 
                 var genre = new Genre("Action");
 

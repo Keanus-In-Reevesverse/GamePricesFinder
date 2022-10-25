@@ -101,8 +101,8 @@ namespace GamePriceFinder.MVC.Controllers.Finders
                 game.Video = await YoutubeHandler.GetGameTrailer(string.Concat(name, TRAILER));
 #endif
 
-                var gamePrice = new GamePrices(game.GameId, StoresEnum.Nuuvem.ToString(), PriceHandler.ConvertPriceToDatabaseType(price, 3), link);
-                var history = new History(game.GameId, StoresEnum.Nuuvem.ToString(), gamePrice.CurrentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
+                var gamePrice = new GamePrices(game.GameId, (int)StoresEnum.Nuuvem, PriceHandler.ConvertPriceToDatabaseType(price, 3), link);
+                var history = new History(game.GameId, (int)StoresEnum.Nuuvem, gamePrice.CurrentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
                 var genre = new Genre("Action");
                 return new DatabaseEntitiesHandler(game, gamePrice, history, genre);
             }

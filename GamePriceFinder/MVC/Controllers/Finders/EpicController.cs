@@ -50,9 +50,9 @@ namespace GamePriceFinder.MVC.Controllers.Finders
 
                 var currentPrice = PriceHandler.ConvertPriceToDatabaseType(currentGame.Price.TotalPrice.FmtPrice.DiscountPrice.Replace(".", ","), 2);
 
-                var gamePrices = new GamePrices(game.GameId, StoresEnum.Epic.ToString(), currentPrice, link);
+                var gamePrices = new GamePrices(game.GameId, (int)StoresEnum.Epic, currentPrice, link);
 
-                var history = new History(game.GenreId, StoresEnum.Epic.ToString(), currentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
+                var history = new History(game.GenreId, (int)StoresEnum.Epic, currentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
 
                 var genre = new Genre("Action");
 

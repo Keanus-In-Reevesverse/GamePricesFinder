@@ -2,43 +2,28 @@
 using GamePriceFinder.MVC.Models;
 using GamePriceFinder.MVC.Models.Enums;
 using GamePriceFinder.MVC.Models.Intefaces;
-using Google.Apis.YouTube.v3;
 using System.Net;
-using System.Text;
 
 namespace GamePriceFinder.MVC.Controllers.Finders
 {
-    /// <summary>
-    /// Represents the Xbox price finder, implements IPriceFinder.
-    /// </summary>
     public class MicrosoftController : IPriceFinder
     {
-        /// <summary>
-        /// Uri to execute the http request.
-        /// </summary>
         public string StoreUri { get; set; }
-        /// <summary>
-        /// HttpHandler for Microsoft.
-        /// </summary>
         public HttpController HttpHandler { get; set; }
-
         private const string TRAILER = " trailer";
 
-        /// <summary>
-        /// Gets Xbox prices.
-        /// </summary>
-        /// <param name="gameName"></param>
+        private const string XboxDealsUrl = "https://xbdeals.net/br-store/search?search_query=";
         public async Task<List<DatabaseEntitiesHandler>> GetPrice(string gameName)
         {
             var entities = new List<DatabaseEntitiesHandler>();
             try
             {
                 using var webClient = new WebClient();
-                var urlToDownload = string.Concat("https://xbdeals.net/br-store/search?search_query=", gameName);
-                var kind = new UriKind();
-                string html = webClient.DownloadString(new Uri(urlToDownload, kind));
+                var urlToDownload = string.Concat(XboxDealsUrl, gameName);
+                string html = webClient.DownloadString(new Uri(urlToDownload, new UriKind()));
                 var doc = new HtmlAgilityPack.HtmlDocument();
                 doc.LoadHtml(html);
+
                 var divs = doc.DocumentNode.Descendants("div");
 
                 var aS = doc.DocumentNode.Descendants("a");
@@ -94,7 +79,7 @@ namespace GamePriceFinder.MVC.Controllers.Finders
                             game.Video = await YoutubeHandler.GetGameTrailer(string.Concat(name, TRAILER));
 #endif
 
-                            gamePrices = new GamePrices(game.GameId, StoresEnum.Xbox.ToString(),
+                            gamePrices = new GamePrices(game.GameId, (int)StoresEnum.Xbox,
                                 PriceHandler.ConvertPriceToDatabaseType(price, 3), "");
 
                             if (gamePrices.CurrentPrice == 0)
@@ -103,7 +88,7 @@ namespace GamePriceFinder.MVC.Controllers.Finders
                             }
 
                             history = new History(
-                                game.GameId, StoresEnum.Xbox.ToString(), gamePrices.CurrentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
+                                game.GameId, (int)StoresEnum.Xbox, gamePrices.CurrentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
                             genre = new Genre("Action");
 
                             entities.Add(new DatabaseEntitiesHandler(game, gamePrices, history, genre));

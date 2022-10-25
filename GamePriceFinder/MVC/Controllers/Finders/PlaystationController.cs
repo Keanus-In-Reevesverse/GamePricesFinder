@@ -75,9 +75,9 @@ namespace GamePriceFinder.MVC.Controllers.Finders
                     game.Video = await YoutubeHandler.GetGameTrailer(string.Concat(title, TRAILER));
 #endif
 
-                    var gamePrices = new GamePrices(game.GameId, StoresEnum.Playstation.ToString(), price, link);
+                    var gamePrices = new GamePrices(game.GameId, (int)StoresEnum.Playstation, price, link);
 
-                    var history = new History(game.GameId, StoresEnum.Playstation.ToString(), gamePrices.CurrentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
+                    var history = new History(game.GameId, (int)StoresEnum.Playstation, gamePrices.CurrentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
 
                     var genre = new Genre("Action");
 

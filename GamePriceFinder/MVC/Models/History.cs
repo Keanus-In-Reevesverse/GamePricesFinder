@@ -8,10 +8,10 @@ namespace GamePriceFinder.MVC.Models
     /// </summary>
     public class History
     {
-        public History(int gameId, string storeName, decimal price, string changeDate)
+        public History(int gameId, int storeId, decimal price, string changeDate)
         {
             GameId = gameId;
-            StoreName = storeName;
+            StoreId = storeId;
             Price = price;
             ChangeDate = changeDate;
         }
@@ -22,9 +22,8 @@ namespace GamePriceFinder.MVC.Models
 
         [Column("game_id")]
         public int GameId { get; set; }
-        [Column("store_name")]
-
-        public string StoreName { get; set; }
+        [Column("store_id")]
+        public int StoreId { get; set; }
         [Column("price")]
 
         public decimal Price { get; set; }
