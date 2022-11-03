@@ -30,7 +30,7 @@ namespace GamePriceFinder.MVC.Controllers
         private const string SteamUri = "http://store.steampowered.com/api/";
         public async Task<Dictionary<string, AppIds>> GetToSteam(int gameId)
         {
-            await GetSteamIds();
+            //await GetSteamIds();
             var parameters = $"appdetails?appids={gameId}&cc=br&l=br";
 
             var httpClient = new HttpClient();

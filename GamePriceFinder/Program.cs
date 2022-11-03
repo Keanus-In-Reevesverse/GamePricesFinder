@@ -1,5 +1,6 @@
 using GamePriceFinder;
 using GamePriceFinder.Database;
+using GamePriceFinder.Handlers;
 using GamePriceFinder.MVC.Controllers;
 using GamePriceFinder.MVC.Controllers.Finders;
 using GamePriceFinder.MVC.Models;
@@ -12,7 +13,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddEndpointsApiExplorer();
 
-var connectionString = builder.Configuration.GetSection("MySqlConnection:MySqlConnectionString").Value;
 
 builder.Services.AddTransient<IRepository<Genre>, GenreRepository>();
 builder.Services.AddTransient<IRepository<Game>, GameRepository>();
@@ -25,11 +25,13 @@ builder.Services.AddTransient<EpicController>();
 builder.Services.AddTransient<NuuvemController>();
 builder.Services.AddTransient<PlaystationController>();
 builder.Services.AddTransient<MicrosoftController>();
+builder.Services.AddTransient<DatabaseController>();
 
 builder.Services.AddLogging(config => config.AddConsole());
 
 
 builder.Services.AddScoped<DbContextOptions<DbContext>>();
+var connectionString = builder.Configuration.GetSection("MySqlConnection:MySqlConnectionString").Value;
 builder.Services.
     AddDbContext<DatabaseContext>(opts => opts.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
@@ -40,7 +42,8 @@ var app = builder.Build();
 app.MapGet("/", async (
     [FromServices] SearchController searchSearcher,
     [FromServices] OrganizeController organizeController,
-    [FromServices] ILogger<Program> logger)=>
+    [FromServices] DatabaseController databaseController,
+    [FromServices] ILogger<Program> logger) =>
 {
     logger.LogInformation("Searching for games...");
     var gameNames = new List<string>() { "for honor", "for honor starter edition", "for honor standard edition", "for honor marching fire edition",
@@ -49,67 +52,33 @@ app.MapGet("/", async (
         "the witcher 3", "the witcher 3 game of the year edition", "the witcher 3 wild hunt complete edition", "the witcher 2",
         "nioh complete edition", "thronebreaker the witcher tales" };
 
-    //var gameNames = new List<string>() { "for honor", "for honor standard edition", "for honor marching fire edition",
-    //    "scribblenauts", "lego batman 3", "the witcher 3" };
     var steamGameIds = new List<int>() { 304390, 304390, 304390, 304390,
                                          218680, 218680, 218680, 218680,
                                          313690, 313690, 313690, 313690,
                                          292030, 292030, 292030, 292030};
 
+    var organizedGameLists = new List<List<EntitiesHandler>>();
+    var gamesToOrganize = new List<EntitiesHandler>();
     for (int i = 0; i < steamGameIds.Count; i++)
     {
-        //int gameId = 0;
-        //try
-        //{
-        //    gameId = gameRepository.GetId(gameNames[i]);
-        //}
-        //catch
-        //{
-        //    continue;
-        //}
-
         var entities = await searchSearcher.GetPrices(gameNames[i], steamGameIds[i]);
 
-        organizeController.JoinByName(entities);
+        foreach (var g in entities.Select(a => a.Genre.Description))
+        {
+            Console.WriteLine(g);
+        }
 
-        //foreach (var entity in entities)
-        //{
-        //    Console.WriteLine();
-        //    Console.WriteLine(string.Concat("Store: ", entity.History.StoreName), ".");
-        //    Console.WriteLine(string.Concat("Name: ", entity.Game.Name), ".");
-        //    Console.WriteLine(string.Concat("Current price: R$ ", entity.GamePrices.CurrentPrice), ".");
-        //    Console.WriteLine(string.Concat("Video url: ", entity.Game.Video), ".");
-        //    Console.WriteLine(string.Concat("Image url: ", entity.Game.Image), ".");
-        //}
+        foreach (var gameEntity in entities)
+        {
+            gameEntity.Genre.Description = gameEntity.Genre.Description.Replace("role_playing_games", "RPG").ToUpper();
+        }
 
-        //Console.WriteLine("============================================================================");
-
-        //foreach (var e in entities)
-        //{
-        //    e.Game.GameId = gameId;
-        //    e.GamePrices.GameId = gameId;
-        //    e.History.GameId = gameId;
-        //    e.GamePrices.GameId = gameId;
-        //    gameRepository.Update(e.Game);
-        //    historyRepository.AddOne(e.History);
-
-
-        //    var formattedGameName = e.Game.Name.Replace(":", string.Empty).Replace("-", string.Empty);
-
-        //    if (formattedGameName.ToLower().Equals(gameNames[i], StringComparison.CurrentCultureIgnoreCase))
-        //    {
-        //        var dbGamePrices = gamePricesRepository.FindByGameId(gameId);
-
-        //        if (dbGamePrices == null)
-        //            gamePricesRepository.AddOne(e.GamePrices);
-        //        else
-        //        {
-        //            if (dbGamePrices.CurrentPrice != e.GamePrices.CurrentPrice)
-        //                gamePricesRepository.Update(e.GamePrices);
-        //        }
-        //    }
-        //}
+        entities.ForEach(a => gamesToOrganize.Add(a));
     }
+
+    organizedGameLists = organizeController.JoinByName(gamesToOrganize);
+
+    databaseController.ManageDatabase(organizedGameLists);
 
     Console.WriteLine("Search end...");
 });
@@ -126,7 +95,7 @@ app.MapGet("/gameInfo/{id}", async (
     var gamePrice = gamePricesRepository.FindByGameId(id);
     var history = historyRepository.FindByGameId(id);
 
-    
+
 });
 
 app.MapGet("/all/", async (

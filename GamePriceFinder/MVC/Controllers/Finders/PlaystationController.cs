@@ -32,7 +32,7 @@ namespace GamePriceFinder.MVC.Controllers.Finders
         public string StoreUri { get; set; }
         public HttpController HttpHandler { get; set; }
         private const string TRAILER = " trailer";
-        public async Task<List<DatabaseEntitiesHandler>> GetPrice(string gameName)
+        public async Task<List<EntitiesHandler>> GetPrice(string gameName)
         {
             Link[] responseGameList;
             try
@@ -44,7 +44,7 @@ namespace GamePriceFinder.MVC.Controllers.Finders
                 return null;
             }
 
-            var entities = new List<DatabaseEntitiesHandler>();
+            var entities = new List<EntitiesHandler>();
 
             foreach (var responseGame in responseGameList)
             {
@@ -77,11 +77,27 @@ namespace GamePriceFinder.MVC.Controllers.Finders
 
                     var gamePrices = new GamePrices(game.GameId, (int)StoresEnum.Playstation, price, link);
 
-                    var history = new History(game.GameId, (int)StoresEnum.Playstation, gamePrices.CurrentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
+                    var history = new History(game.GameId, (int)StoresEnum.Playstation, gamePrices.CurrentPrice);
 
-                    var genre = new Genre("Action");
+                    var genreStr = string.Empty;
 
-                    entities.Add(new DatabaseEntitiesHandler(game, gamePrices, history, genre));
+                    try
+                    {
+                        if (responseGame.metadata.game_genre.values.Any())
+                        {
+                            genreStr = responseGame.metadata.game_genre.values[0].ToLower();
+
+                            genreStr = genreStr.Replace("fighting", "Action");
+                        }
+                    }
+                    catch (NullReferenceException)
+                    {
+                        genreStr = "Action";
+                    }
+
+                    var genre = new Genre(genreStr);
+
+                    entities.Add(new EntitiesHandler(game, gamePrices, history, genre));
                 }
             }
 

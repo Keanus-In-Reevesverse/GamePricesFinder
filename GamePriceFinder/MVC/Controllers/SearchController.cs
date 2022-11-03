@@ -17,7 +17,7 @@ namespace GamePriceFinder.MVC.Controllers
             SteamFinder = steamFinder;
             EpicFinder = epicFinder;
             NuuvemFinder = nuuvemFinder;
-            PlaystationStoreFinder = playstationStoreFinder;
+            PlaystationFinder = playstationStoreFinder;
             MicrosoftFinder = microsoftFinder;
             _logger = logger;
         }
@@ -25,10 +25,10 @@ namespace GamePriceFinder.MVC.Controllers
         public SteamController SteamFinder { get; }
         public EpicController EpicFinder { get; }
         public NuuvemController NuuvemFinder { get; }
-        public PlaystationController PlaystationStoreFinder { get; }
+        public PlaystationController PlaystationFinder { get; }
         public MicrosoftController MicrosoftFinder { get; set; }
 
-        public async Task<List<DatabaseEntitiesHandler>> GetPrices(string gameName, int id)
+        public async Task<List<EntitiesHandler>> GetPrices(string gameName, int id)
         {
             var steamEntities = await SteamFinder.GetPrice(string.Empty, id);
 
@@ -36,12 +36,17 @@ namespace GamePriceFinder.MVC.Controllers
 
             var nuuvemEntities = await NuuvemFinder.GetPrice(gameName);
 
-            var psnEntities = await PlaystationStoreFinder.GetPrice(gameName);
+            var psnEntities = await PlaystationFinder.GetPrice(gameName);
 
             var xboxEntities = await MicrosoftFinder.GetPrice(gameName.Replace(" ", "+"));
 
             if (epicEntities != null)
             {
+                foreach (var epicEntity in epicEntities)
+                {
+                    epicEntity.Genre.Description = steamEntities[0].Genre.Description;
+                }
+
                 steamEntities?.AddRange(epicEntities);
             }
 
@@ -57,6 +62,11 @@ namespace GamePriceFinder.MVC.Controllers
 
             if (xboxEntities != null)
             {
+                foreach (var xboxEntity in xboxEntities)
+                {
+                    xboxEntity.Genre.Description = steamEntities[0].Genre.Description;
+                }
+
                 steamEntities?.AddRange(xboxEntities);
             }
 

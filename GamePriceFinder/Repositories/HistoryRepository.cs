@@ -26,21 +26,12 @@ namespace GamePriceFinder.Repositories
             throw new NotImplementedException();
         }
 
-        /// <summary>
-        /// Inserts only one row in database.
-        /// </summary>
-        /// <param name="history"></param>
         public void AddOne(History history)
         {
             DatabaseContext.History.Add(history);
             DatabaseContext.SaveChanges();
         }
 
-        /// <summary>
-        /// Updates data of one row in database.
-        /// </summary>
-        /// <param name="entity"></param>
-        /// <exception cref="NotImplementedException"></exception>
         public void EditOne(History entity)
         {
             throw new NotImplementedException();
@@ -48,7 +39,7 @@ namespace GamePriceFinder.Repositories
 
         public List<History> FindAll()
         {
-            throw new NotImplementedException();
+            return DatabaseContext.History.ToList();
         }
 
         public History FindByGameId(int gameId)
@@ -66,12 +57,6 @@ namespace GamePriceFinder.Repositories
             return history;
         }
 
-        /// <summary>
-        /// Selects one row from database.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         public History FindOneByName(string name)
         {
             throw new NotImplementedException();

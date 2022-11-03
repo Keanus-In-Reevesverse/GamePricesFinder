@@ -20,7 +20,7 @@ namespace GamePriceFinder.MVC.Controllers.Finders
 
         public string StoreUri { get; set; }
         public HttpController HttpHandler { get; set; }
-        public async Task<List<DatabaseEntitiesHandler>> GetPrice(string gameName, int id)
+        public async Task<List<EntitiesHandler>> GetPrice(string gameName, int id)
         {
             Dictionary<string, AppIds> steamResponse;
             try
@@ -36,7 +36,7 @@ namespace GamePriceFinder.MVC.Controllers.Finders
 
             var price = string.Empty;
 
-            var entities = new List<DatabaseEntitiesHandler>();
+            var entities = new List<EntitiesHandler>();
 
             for (int responseObject = 0; responseObject < steamResponse.Count; responseObject++)
             {
@@ -89,11 +89,16 @@ namespace GamePriceFinder.MVC.Controllers.Finders
 
                 var gamePrices = new GamePrices(game.GameId, (int)StoresEnum.Steam, currentPrice, link);
 
-                var history = new History(game.GameId, (int)StoresEnum.Steam, currentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
+                var history = new History(game.GameId, (int)StoresEnum.Steam, currentPrice);
 
-                var genre = new Genre("Action");
+                Genre genre = null;
 
-                entities.Add(new DatabaseEntitiesHandler(game, gamePrices, history, genre));
+                if (currentGame.data.genres.Any())
+                {
+                    genre = new Genre(currentGame.data.genres[0].description);
+                }
+
+                entities.Add(new EntitiesHandler(game, gamePrices, history, genre));
             }
 
             return entities;

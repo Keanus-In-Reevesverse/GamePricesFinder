@@ -31,7 +31,8 @@ namespace GamePriceFinder.Repositories
         /// <param name="entity"></param>
         public void AddOne(Game entity)
         {
-            throw new NotImplementedException();
+            DatabaseContext.Games.Add(entity);
+            DatabaseContext.SaveChanges();
         }
 
         /// <summary>

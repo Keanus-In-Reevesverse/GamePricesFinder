@@ -13,8 +13,7 @@ namespace GamePriceFinder.MVC.Controllers.Finders
         }
         public string StoreUri { get; set; }
         public HttpController HttpHandler { get; set; }
-        private const string TRAILER = " trailer";
-        public async Task<List<DatabaseEntitiesHandler>> GetPrice(string gameName)
+        public async Task<List<EntitiesHandler>> GetPrice(string gameName)
         {
             EpicGamesStoreNET.Models.Response epicResponse;
             try
@@ -26,7 +25,7 @@ namespace GamePriceFinder.MVC.Controllers.Finders
                 return null;
             }
 
-            var entities = new List<DatabaseEntitiesHandler>();
+            var entities = new List<EntitiesHandler>();
 
             for (int i = 0; i < epicResponse.Data.Catalog.SearchStore.Elements.Length; i++)
             {
@@ -52,11 +51,11 @@ namespace GamePriceFinder.MVC.Controllers.Finders
 
                 var gamePrices = new GamePrices(game.GameId, (int)StoresEnum.Epic, currentPrice, link);
 
-                var history = new History(game.GenreId, (int)StoresEnum.Epic, currentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
+                var history = new History(game.GenreId, (int)StoresEnum.Epic, currentPrice);
 
                 var genre = new Genre("Action");
 
-                entities.Add(new DatabaseEntitiesHandler(game, gamePrices, history, genre));
+                entities.Add(new EntitiesHandler(game, gamePrices, history, genre));
             }
 
 

@@ -8,12 +8,12 @@ namespace GamePriceFinder.MVC.Models
     /// </summary>
     public class History
     {
-        public History(int gameId, int storeId, decimal price, string changeDate)
+        public History(int gameId, int storeId, decimal price)
         {
             GameId = gameId;
             StoreId = storeId;
             Price = price;
-            ChangeDate = changeDate;
+            ChangeDate = new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString();
         }
 
         [Key]

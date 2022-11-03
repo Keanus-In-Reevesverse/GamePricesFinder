@@ -14,9 +14,9 @@ namespace GamePriceFinder.MVC.Controllers
 
         private string NormalizeName(string name) => name.Replace(":", "").Replace("-", "").Replace("™", "").ToLowerInvariant();
 
-        internal void JoinByName(List<DatabaseEntitiesHandler> entities)
+        internal List<List<EntitiesHandler>> JoinByName(List<EntitiesHandler> entities)
         {
-            var organizedGames = new List<List<DatabaseEntitiesHandler>>();
+            var organizedGames = new List<List<EntitiesHandler>>();
 
             var ignoreComparison = new List<int>();
 
@@ -41,7 +41,7 @@ namespace GamePriceFinder.MVC.Controllers
 
                 var currentNormalizedName = NormalizeName(current.Game.Name);
 
-                var match = new List<DatabaseEntitiesHandler>();
+                var match = new List<EntitiesHandler>();
 
                 match.Add(current);
 
@@ -63,6 +63,8 @@ namespace GamePriceFinder.MVC.Controllers
 
                 organizedGames.Add(match);
             }
+
+            return organizedGames;
         }
     }
 }

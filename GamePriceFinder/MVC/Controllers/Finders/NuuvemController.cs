@@ -14,8 +14,8 @@ namespace GamePriceFinder.MVC.Controllers.Finders
         }
         public string StoreUri { get; set; }
         public HttpController HttpHandler { get; set; }
-        private const string TRAILER = " trailer";
-        public async Task<List<DatabaseEntitiesHandler>> GetPrice(string gameName)
+        
+        public async Task<List<EntitiesHandler>> GetPrice(string gameName)
         {
             string? html;
             try
@@ -33,7 +33,7 @@ namespace GamePriceFinder.MVC.Controllers.Finders
 
             var divs = doc.DocumentNode.Descendants("div");
 
-            var entities = new List<DatabaseEntitiesHandler>();
+            var entities = new List<EntitiesHandler>();
 
             foreach (var div in divs)
             {
@@ -41,7 +41,7 @@ namespace GamePriceFinder.MVC.Controllers.Finders
                 {
                     if (div.Attributes["class"].Value == "product-card--grid")
                     {
-                        var entity = await ExtractNuuvemPrices(div);
+                        var entity = await ExtractPrices(div);
 
                         if (entity == null)
                         {
@@ -60,14 +60,13 @@ namespace GamePriceFinder.MVC.Controllers.Finders
             return entities;
         }
 
-        private async Task<DatabaseEntitiesHandler> ExtractNuuvemPrices(HtmlAgilityPack.HtmlNode div)
+        private async Task<EntitiesHandler> ExtractPrices(HtmlAgilityPack.HtmlNode div)
         {
             var newDoc = new HtmlAgilityPack.HtmlDocument();
             newDoc.LoadHtml(div.InnerHtml);
             var bundle = string.Empty;
             var dlc = string.Empty;
             var link = string.Empty;
-
             bundle = newDoc.DocumentNode.SelectSingleNode("//span[@class='product-badge product-badge__package']")?.InnerHtml.Trim();
             dlc = newDoc.DocumentNode.SelectSingleNode("//span[@class='product-badge product-badge__dlc']")?.InnerHtml.Trim();
             if (!string.IsNullOrEmpty(bundle) || !string.IsNullOrEmpty(dlc))
@@ -76,6 +75,8 @@ namespace GamePriceFinder.MVC.Controllers.Finders
             }
             else
             {
+                var genreStr = newDoc.DocumentNode.SelectSingleNode("//div[@class='product__available product__purchasable product-card product-card__cover product-btn-add-to-cart--container']")?.Attributes["data-track-product-genre"]?.Value;
+                
                 var linkNode = newDoc.DocumentNode.SelectSingleNode("//a[@class='product-card--wrapper']");
 
                 if (linkNode != null)
@@ -102,9 +103,9 @@ namespace GamePriceFinder.MVC.Controllers.Finders
 #endif
 
                 var gamePrice = new GamePrices(game.GameId, (int)StoresEnum.Nuuvem, PriceHandler.ConvertPriceToDatabaseType(price, 3), link);
-                var history = new History(game.GameId, (int)StoresEnum.Nuuvem, gamePrice.CurrentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
-                var genre = new Genre("Action");
-                return new DatabaseEntitiesHandler(game, gamePrice, history, genre);
+                var history = new History(game.GameId, (int)StoresEnum.Nuuvem, gamePrice.CurrentPrice);
+                var genre = new Genre(genreStr == null ? String.Empty : genreStr);
+                return new EntitiesHandler(game, gamePrice, history, genre);
             }
         }
     }

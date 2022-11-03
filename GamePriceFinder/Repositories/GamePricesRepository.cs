@@ -90,10 +90,12 @@ namespace GamePriceFinder.Repositories
 
         public void Update(GamePrices entity)
         {
-            var dbGamePrice = DatabaseContext.GamePrices.First(gp => gp.GameId == entity.GameId);
-            dbGamePrice.CurrentPrice = entity.CurrentPrice;
-            DatabaseContext.Entry(dbGamePrice).State = EntityState.Modified;
+            DatabaseContext.GamePrices.Update(entity);
             DatabaseContext.SaveChanges();
+            //var dbGamePrice = DatabaseContext.GamePrices.First(gp => gp.GameId == entity.GameId);
+            //dbGamePrice.CurrentPrice = entity.CurrentPrice;
+            //DatabaseContext.Entry(dbGamePrice).State = EntityState.Modified;
+            //DatabaseContext.SaveChanges();
         }
 
         GamePrices IRepository<GamePrices>.FindByGameId(int gameId)
@@ -117,7 +119,7 @@ namespace GamePriceFinder.Repositories
 
         public List<GamePrices> FindAll()
         {
-            throw new NotImplementedException();
+            return DatabaseContext.GamePrices.ToList();
         }
     }
 }

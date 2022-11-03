@@ -13,9 +13,9 @@ namespace GamePriceFinder.MVC.Controllers.Finders
         private const string TRAILER = " trailer";
 
         private const string XboxDealsUrl = "https://xbdeals.net/br-store/search?search_query=";
-        public async Task<List<DatabaseEntitiesHandler>> GetPrice(string gameName)
+        public async Task<List<EntitiesHandler>> GetPrice(string gameName)
         {
-            var entities = new List<DatabaseEntitiesHandler>();
+            var entities = new List<EntitiesHandler>();
             try
             {
                 using var webClient = new WebClient();
@@ -88,10 +88,10 @@ namespace GamePriceFinder.MVC.Controllers.Finders
                             }
 
                             history = new History(
-                                game.GameId, (int)StoresEnum.Xbox, gamePrices.CurrentPrice, DateTimeOffset.Now.ToUnixTimeSeconds().ToString());
+                                game.GameId, (int)StoresEnum.Xbox, gamePrices.CurrentPrice);
                             genre = new Genre("Action");
 
-                            entities.Add(new DatabaseEntitiesHandler(game, gamePrices, history, genre));
+                            entities.Add(new EntitiesHandler(game, gamePrices, history, genre));
                         }
 
                     }

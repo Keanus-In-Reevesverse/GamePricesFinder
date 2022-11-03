@@ -15,7 +15,7 @@
         /// <summary>
         /// Returns the Jaro-Winkler distance between the specified  
         /// strings. The distance is symmetric and will fall in the 
-        /// range 0 (perfect match) to 1 (no match). 
+        /// range 0 (perfect matc') to 1 (no match). 
         /// </summary>
         /// <param name="aString1">First String</param>
         /// <param name="aString2">Second String</param>
