@@ -39,7 +39,14 @@ namespace GamePriceFinder.MVC.Controllers.Finders
                 {
                     try
                     {
-                        if (div.Attributes["class"].Value.Equals("col-md-2 col-sm-4 col-xs-6 game-collection-item-col", StringComparison.CurrentCultureIgnoreCase))
+                        var c = div.Attributes["class"];
+
+                        if (c == null)
+                        {
+                            throw new Exception();
+                        }
+
+                        if (c.Value.Equals("col-md-2 col-sm-4 col-xs-6 game-collection-item-col", StringComparison.CurrentCultureIgnoreCase))
                         {
                             var newDoc = new HtmlAgilityPack.HtmlDocument();
                             newDoc.LoadHtml(div.InnerHtml);
@@ -112,7 +119,15 @@ namespace GamePriceFinder.MVC.Controllers.Finders
                         {
                             break;
                         }
-                        if (div.Attributes["class"].Value.Equals("game-collection-item", StringComparison.CurrentCultureIgnoreCase))
+
+                        var c = div.Attributes["class"];
+
+                        if (c == null)
+                        {
+                            throw new Exception();
+                        }
+
+                        if (c.Value.Equals("game-collection-item", StringComparison.CurrentCultureIgnoreCase))
                         {
                             var newDoc = new HtmlAgilityPack.HtmlDocument();
 
@@ -171,7 +186,14 @@ namespace GamePriceFinder.MVC.Controllers.Finders
                             break;
                         }
 
-                        if (a.Attributes["class"].Value.Equals("game-collection-item-link", StringComparison.CurrentCultureIgnoreCase))
+                        var c = a.Attributes["class"];
+
+                        if (c == null)
+                        {
+                            throw new Exception();
+                        }
+
+                        if (c.Value.Equals("game-collection-item-link", StringComparison.CurrentCultureIgnoreCase))
                         {
                             var link = string.Empty;
 

@@ -83,11 +83,18 @@ namespace GamePriceFinder.MVC.Controllers.Finders
 
                     try
                     {
-                        if (responseGame.metadata.game_genre.values.Any())
+                        if (responseGame.metadata.game_genre != null)
                         {
-                            genreStr = responseGame.metadata.game_genre.values[0].ToLower();
+                            if (responseGame.metadata.game_genre.values.Any())
+                            {
+                                genreStr = responseGame.metadata.game_genre.values[0].ToLower();
 
-                            genreStr = genreStr.Replace("fighting", "Action");
+                                genreStr = genreStr.Replace("fighting", "Action");
+                            }
+                        }
+                        else
+                        {
+                            genreStr = "Action";
                         }
                     }
                     catch (NullReferenceException)

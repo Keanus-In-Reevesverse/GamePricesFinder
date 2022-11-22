@@ -39,7 +39,13 @@ namespace GamePriceFinder.MVC.Controllers.Finders
             {
                 try
                 {
-                    if (div.Attributes["class"].Value == "product-card--grid")
+                    var c = div.Attributes["class"];
+                    if (c == null)
+                    {
+                        throw new Exception();
+                    }
+
+                    if (c?.Value == "product-card--grid")
                     {
                         var entity = await ExtractPrices(div);
 
@@ -75,8 +81,17 @@ namespace GamePriceFinder.MVC.Controllers.Finders
             }
             else
             {
-                var genreStr = newDoc.DocumentNode.SelectSingleNode("//div[@class='product__available product__purchasable product-card product-card__cover product-btn-add-to-cart--container']")?.Attributes["data-track-product-genre"]?.Value;
-                
+
+                var genreStr = string.Empty;
+
+                genreStr = newDoc.DocumentNode.SelectSingleNode("//div[@class='product__available product__purchasable product-card product-card__cover product-btn-add-to-cart--container']")?.Attributes["data-track-product-genre"]?.Value;
+
+                if (string.IsNullOrEmpty(genreStr))
+                {
+                    genreStr = newDoc.DocumentNode.SelectSingleNode("//div[@class='product__has__countdown product__available product__purchasable product-card product-card__cover product-btn-add-to-cart--container']")?.Attributes["data-track-product-genre"]?.Value;
+                }
+
+
                 var linkNode = newDoc.DocumentNode.SelectSingleNode("//a[@class='product-card--wrapper']");
 
                 if (linkNode != null)
@@ -85,7 +100,7 @@ namespace GamePriceFinder.MVC.Controllers.Finders
                 }
 
                 var price = newDoc.DocumentNode.SelectSingleNode("//span[@class='product-price--val']").InnerText.Trim();
-                var name = newDoc.DocumentNode.SelectSingleNode("//h3[@class='product-title double-line-name']").InnerText.Trim();
+                var name = newDoc.DocumentNode.SelectSingleNode("//a[@class='product-card--wrapper']").Attributes["title"].Value;
                 var game = new Game(name);
 
                 var divWithImage = newDoc.DocumentNode.SelectSingleNode("//div[@class='product-img']")?.InnerHtml.Trim();

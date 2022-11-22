@@ -65,7 +65,7 @@ app.MapGet("/", async (
 
         foreach (var g in entities.Select(a => a.Genre.Description))
         {
-            Console.WriteLine(g);
+            //Console.WriteLine(g);
         }
 
         foreach (var gameEntity in entities)

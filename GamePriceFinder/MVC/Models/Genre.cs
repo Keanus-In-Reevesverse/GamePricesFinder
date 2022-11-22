@@ -13,6 +13,10 @@ namespace GamePriceFinder.MVC.Models
         }
         public Genre(string description)
         {
+            if (string.IsNullOrEmpty(description))
+            {
+
+            }
             Description = description;
         }
 

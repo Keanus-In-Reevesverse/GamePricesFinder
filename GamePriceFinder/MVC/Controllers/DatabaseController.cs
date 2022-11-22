@@ -109,12 +109,20 @@ namespace GamePriceFinder.MVC.Controllers
 
                         foreach (var gameName in gameNames)
                         {
-                            game = _gameRepository.FindOneByName(gameEntity.Game.Name);
-
-                            if (game != null)
+                            try
                             {
-                                exists = true;
-                                gameNameToUse = gameEntity.Game.Name;
+                                game = _gameRepository.FindOneByName(gameEntity.Game.Name);
+
+                                if (game != null)
+                                {
+                                    exists = true;
+                                    gameNameToUse = gameEntity.Game.Name;
+                                    break;
+                                }
+                            }
+                            catch
+                            {
+                                exists = false;
                                 break;
                             }
                         }
