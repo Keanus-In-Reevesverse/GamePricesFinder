@@ -3,9 +3,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace GamePriceFinder.Database
 {
-    /// <summary>
-    /// Declares the database tables in the code for database interaction.
-    /// </summary>
     public class DatabaseContext : DbContext
     {
         public DatabaseContext(DbContextOptions<DbContext> dbContextOptions) : base(dbContextOptions)
@@ -16,12 +13,11 @@ namespace GamePriceFinder.Database
         {
             modelBuilder.Entity<GamePrices>()
                 .HasKey("GameId", "StoreId");
+
+            modelBuilder.Entity<History>()
+                .HasKey("GameIdentifier", "StoreIdentifier", "ChangeDate");
         }
 
-        /// <summary>
-        /// Configures the connection string and defines the database to be used as MySQL.
-        /// </summary>
-        /// <param name="optionsBuilder"></param>
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             var configuration = new ConfigurationBuilder().
@@ -31,7 +27,12 @@ namespace GamePriceFinder.Database
 
             var connString = configuration.GetSection("MySqlConnection:MySqlConnectionString").Value;
 
-            optionsBuilder.UseMySql(connString, ServerVersion.AutoDetect(connString));
+            optionsBuilder.UseMySql(connString, ServerVersion.AutoDetect(connString), options =>
+            {
+                options.EnableStringComparisonTranslations();
+            });
+
+            optionsBuilder.EnableSensitiveDataLogging(true);
         }
 
         /// <summary>

@@ -1,6 +1,7 @@
 ﻿using GamePriceFinder.Handlers;
 using GamePriceFinder.MVC.Models;
 using GamePriceFinder.MVC.Models.Intefaces;
+using Windows.Media.Capture;
 
 namespace GamePriceFinder.MVC.Controllers
 {
@@ -37,13 +38,16 @@ namespace GamePriceFinder.MVC.Controllers
             return lowestPriceHistory;
         }
 
-        private void InsertNewGameAndProperties(List<History> histories, EntitiesHandler gameEntity)
+        private void InsertNewGameAndProperties(EntitiesHandler gameEntity, bool gotFirstGame)
         {
             var genreId = _genreRepository.FindOneByName(gameEntity.Genre.Description).GenreId;
 
             gameEntity.Game.GenreId = genreId;
 
-            _gameRepository.AddOne(gameEntity.Game);
+            if (!gotFirstGame)
+            {
+                _gameRepository.AddOne(gameEntity.Game);
+            }
 
             var insertedGame = _gameRepository.FindOneByName(gameEntity.Game.Name);
 
@@ -51,36 +55,37 @@ namespace GamePriceFinder.MVC.Controllers
 
             _gamePricesRepository.AddOne(gameEntity.GamePrices);
 
-            var lowestPriceHistory = GetCheapestPrice(histories);
+            gameEntity.History.GameIdentifier = insertedGame.GameId;
 
-            lowestPriceHistory.GameId = insertedGame.GameId;
-
-            _historyRepository.AddOne(lowestPriceHistory);
+            _historyRepository.AddOne(gameEntity.History);
         }
 
         internal void ManageDatabase(List<List<EntitiesHandler>> organizedGameList)
         {
-            if (!_gameRepository.FindAll().Any())
+            var allGames = _gameRepository.FindAll();
+
+            if (allGames == null)
             {
                 foreach (var gameList in organizedGameList)
                 {
-                    var histories = gameList.Select(gList => gList.History).ToList();
+                    var gotFirstGame = false;
+
+                    var gameNameToUse = gameList.Select(gList => gList.Game.Name).FirstOrDefault();
 
                     foreach (var gameEntity in gameList)
                     {
-                        //TODO AJUSTAR TAMANHO DO CAMPO DE VIDEO
                         //TODO PEGAR PUBLISHER
+
+                        gameEntity.Game.Name = gameNameToUse;
 
                         if (string.IsNullOrEmpty(gameEntity.Game.Publisher))
                         {
-                            gameEntity.Game.Publisher = "iudhfiaufhg";
+                            gameEntity.Game.Publisher = string.Empty;
                         }
 
-                        gameEntity.Game.Video = "isudhfiuasdhf";
+                        InsertNewGameAndProperties(gameEntity, gotFirstGame);
 
-                        InsertNewGameAndProperties(histories, gameEntity);
-
-                        break;
+                        gotFirstGame = true;
                     }
                 }
             }
@@ -88,37 +93,61 @@ namespace GamePriceFinder.MVC.Controllers
             {
                 foreach (var gameList in organizedGameList)
                 {
-                    var histories = gameList.Select(gList => gList.History).ToList();
+                    var gameNames = gameList.Select(g => g.Game.Name);
+
+                    var gameNameToUse = gameNames.FirstOrDefault();
+
+                    var gotFirstGame = false;
 
                     foreach (var gameEntity in gameList)
                     {
-                        var game = _gameRepository.FindOneByName(gameEntity.Game.Name);
+                        gameEntity.Game.Name = gameNameToUse;
 
-                        if (game != null)
+                        var exists = false;
+
+                        Game game = null;
+
+                        foreach (var gameName in gameNames)
+                        {
+                            game = _gameRepository.FindOneByName(gameEntity.Game.Name);
+
+                            if (game != null)
+                            {
+                                exists = true;
+                                gameNameToUse = gameEntity.Game.Name;
+                                break;
+                            }
+                        }
+
+                        if (exists)
                         {
                             var gamePrices = _gamePricesRepository.FindAll();
 
                             var currentGamePrice = gamePrices.FirstOrDefault(
                                 gPrices => gPrices.GameId == game.GameId && gPrices.StoreId == gameEntity.GamePrices.StoreId);
 
-                            currentGamePrice.CurrentPrice = gameEntity.GamePrices.CurrentPrice;
+                            if (currentGamePrice == null)
+                            {
+                                gameEntity.GamePrices.GameId = game.GameId;
+                                _gamePricesRepository.AddOne(gameEntity.GamePrices);
+                            }
+                            else
+                            {
+                                currentGamePrice.CurrentPrice = gameEntity.GamePrices.CurrentPrice;
 
-                            currentGamePrice.Link = gameEntity.GamePrices.Link;
+                                currentGamePrice.Link = gameEntity.GamePrices.Link;
 
-                            _gamePricesRepository.Update(currentGamePrice);
+                                _gamePricesRepository.Update(currentGamePrice);
+                            }
 
-                            var lowestPriceHistory = GetCheapestPrice(histories);
+                            gameEntity.History.GameIdentifier = game.GameId;
 
-                            lowestPriceHistory.GameId = game.GameId;
-
-                            _historyRepository.AddOne(lowestPriceHistory);
-                            
-                            break;
+                            _historyRepository.AddOne(gameEntity.History);
                         }
                         else
                         {
-                            InsertNewGameAndProperties(histories, gameEntity);
-                            break;
+                            InsertNewGameAndProperties(gameEntity, gotFirstGame);
+                            gotFirstGame = true;
                         }
                     }
                 }

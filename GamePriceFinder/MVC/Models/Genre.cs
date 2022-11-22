@@ -7,6 +7,10 @@ namespace GamePriceFinder.MVC.Models
     /// </summary>
     public class Genre
     {
+        public Genre()
+        {
+
+        }
         public Genre(string description)
         {
             Description = description;

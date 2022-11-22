@@ -2,14 +2,15 @@
 
 namespace GamePriceFinder.MVC.Models
 {
-    /// <summary>
-    /// Represents a game, with game id, genre id, promotional video url, image path, a short description, the publisher name and the name of the game.
-    /// </summary>
     [Table("game")]
     public class Game
     {
         private string _image;
 
+        public Game()
+        {
+
+        }
         public Game(string name)
         {
             Name = name;
@@ -20,30 +21,17 @@ namespace GamePriceFinder.MVC.Models
         [Column("game_id")]
         public int GameId { get; set; }
         [Column("video")]
-        public string Video { get; set; }
+        public string Video { get; set; } = string.Empty;
 
         [Column("game_image")]
-        public string Image { get; set; }
-
-        public History History { get; set; }
+        public string Image { get; set; } = string.Empty;
 
         [Column("description")]
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
         [Column("publisher")]
-        public string Publisher { get; set; }
+        public string Publisher { get; set; } = string.Empty;
         [Column("name")]
         public string Name { get; set; }
-        public T ConvertFromDBVal<T>(object obj)
-        {
-            if (obj == null || obj == DBNull.Value)
-            {
-                return default; // returns the default value for the type
-            }
-            else
-            {
-                return (T)obj;
-            }
-        }
     }
 
 }

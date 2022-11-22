@@ -1,6 +1,8 @@
 ﻿using GamePriceFinder.Database;
 using GamePriceFinder.MVC.Models;
 using GamePriceFinder.MVC.Models.Intefaces;
+using Google.Apis.Util;
+using Microsoft.EntityFrameworkCore;
 
 namespace GamePriceFinder.Repositories
 {
@@ -64,15 +66,10 @@ namespace GamePriceFinder.Repositories
         {
             throw new NotImplementedException();
         }
-
-        /// <summary>
-        /// Selects one row from the database matching the name of the genre.
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
         public Genre FindOneByName(string name)
         {
-            throw new NotImplementedException();
+            return 
+                DatabaseContext.Genre.AsNoTracking().FirstOrDefault(gen => gen.Description.Equals(name, StringComparison.CurrentCultureIgnoreCase));
         }
 
         public int GetId(string gameName)

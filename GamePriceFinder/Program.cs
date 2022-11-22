@@ -14,10 +14,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 
 
-builder.Services.AddTransient<IRepository<Genre>, GenreRepository>();
-builder.Services.AddTransient<IRepository<Game>, GameRepository>();
-builder.Services.AddTransient<IRepository<GamePrices>, GamePricesRepository>();
-builder.Services.AddTransient<IRepository<History>, HistoryRepository>();
+builder.Services.AddScoped<IRepository<Genre>, GenreRepository>();
+builder.Services.AddScoped<IRepository<Game>, GameRepository>();
+builder.Services.AddScoped<IRepository<GamePrices>, GamePricesRepository>();
+builder.Services.AddScoped<IRepository<History>, HistoryRepository>();
 builder.Services.AddTransient<SearchController>();
 builder.Services.AddTransient<OrganizeController>();
 builder.Services.AddTransient<SteamController>();
@@ -78,9 +78,16 @@ app.MapGet("/", async (
 
     organizedGameLists = organizeController.JoinByName(gamesToOrganize);
 
-    databaseController.ManageDatabase(organizedGameLists);
+    try
+    {
+        databaseController.ManageDatabase(organizedGameLists);
 
-    Console.WriteLine("Search end...");
+        Console.WriteLine("Search end...");
+    }
+    catch (Exception e)
+    {
+
+    }
 });
 
 app.MapGet("/gameInfo/{id}", async (

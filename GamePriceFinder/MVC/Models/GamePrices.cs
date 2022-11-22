@@ -5,6 +5,10 @@ namespace GamePriceFinder.MVC.Models
     [Table("game_prices")]
     public class GamePrices
     {
+        public GamePrices()
+        {
+
+        }
         public GamePrices(int gameId, int storeId, decimal currentPrice, string link)
         {
             GameId = gameId;

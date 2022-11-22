@@ -2,10 +2,10 @@
 {
     public enum StoresEnum
     {
-        Steam = 0,
-        Epic = 1,
-        Nuuvem = 2,
-        Playstation = 3,
-        Xbox = 4
+        Steam = 1,
+        Epic = 2,
+        Nuuvem = 3,
+        Playstation = 4,
+        Xbox = 5
     }
 }

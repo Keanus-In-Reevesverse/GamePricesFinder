@@ -8,27 +8,26 @@ namespace GamePriceFinder.MVC.Models
     /// </summary>
     public class History
     {
+        public History()
+        {
+
+        }
+
         public History(int gameId, int storeId, decimal price)
         {
-            GameId = gameId;
-            StoreId = storeId;
+            GameIdentifier = gameId;
+            StoreIdentifier = storeId;
             Price = price;
             ChangeDate = new DateTimeOffset(DateTime.Now).ToUnixTimeSeconds().ToString();
         }
 
-        [Key]
-        [Column("change_id")]
-        public int HistoryId { get; set; }
-
         [Column("game_id")]
-        public int GameId { get; set; }
+        public int GameIdentifier { get; set; }
         [Column("store_id")]
-        public int StoreId { get; set; }
+        public int StoreIdentifier { get; set; }
         [Column("price")]
-
         public decimal Price { get; set; }
         [Column("change_date")]
-
         public string ChangeDate { get; set; }
     }
 }

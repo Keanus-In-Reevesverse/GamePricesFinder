@@ -1,6 +1,8 @@
 ﻿using GamePriceFinder.Database;
 using GamePriceFinder.MVC.Models;
 using GamePriceFinder.MVC.Models.Intefaces;
+using Microsoft.EntityFrameworkCore;
+using Windows.Devices.HumanInterfaceDevice;
 
 namespace GamePriceFinder.Repositories
 {
@@ -16,11 +18,6 @@ namespace GamePriceFinder.Repositories
 
         public DatabaseContext DatabaseContext { get; }
 
-        /// <summary>
-        /// Inserts many rows in the database.
-        /// </summary>
-        /// <param name="entities"></param>
-        /// <exception cref="NotImplementedException"></exception>
         public void AddMany(List<History> entities)
         {
             throw new NotImplementedException();
@@ -28,6 +25,27 @@ namespace GamePriceFinder.Repositories
 
         public void AddOne(History history)
         {
+            //var local = DatabaseContext.Set<History>().Local.FirstOrDefault(
+            //    entry => 
+            //    entry.GameIdentifier == history.GameIdentifier &&
+            //    entry.StoreIdentifier == history.StoreIdentifier &&
+            //    entry.ChangeDate == history.ChangeDate);
+
+            var h = DatabaseContext.History.FirstOrDefault(entry => 
+                entry.GameIdentifier == history.GameIdentifier &&
+                entry.StoreIdentifier == history.StoreIdentifier &&
+                entry.ChangeDate == history.ChangeDate);
+
+            if (h != null)
+            {
+                return;
+            }
+
+            DatabaseContext.ChangeTracker.Clear();
+
+            DatabaseContext.Entry(history).State = Microsoft.EntityFrameworkCore.EntityState.Detached;
+
+
             DatabaseContext.History.Add(history);
             DatabaseContext.SaveChanges();
         }
@@ -39,7 +57,7 @@ namespace GamePriceFinder.Repositories
 
         public List<History> FindAll()
         {
-            return DatabaseContext.History.ToList();
+            return DatabaseContext.History.AsNoTracking().ToList();
         }
 
         public History FindByGameId(int gameId)
@@ -47,7 +65,7 @@ namespace GamePriceFinder.Repositories
             History history;
             try
             {
-                history = DatabaseContext.History.First(h => h.GameId == gameId);
+                history = DatabaseContext.History.First(h => h.GameIdentifier == gameId);
             }
             catch (Exception e)
             {
