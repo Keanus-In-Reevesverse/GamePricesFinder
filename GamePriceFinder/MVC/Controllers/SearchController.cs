@@ -30,7 +30,15 @@ namespace GamePriceFinder.MVC.Controllers
 
         public async Task<List<EntitiesHandler>> GetPrices(string gameName, int id)
         {
-            var steamEntities = await SteamFinder.GetPrice(string.Empty, id);
+            List<EntitiesHandler> steamEntities = null;
+            if (id != 0)
+            {
+                steamEntities = await SteamFinder.GetPrice(string.Empty, id);
+            }
+            else
+            {
+                steamEntities = new List<EntitiesHandler>();
+            }
 
             var epicEntities = await EpicFinder.GetPrice(gameName);
 
@@ -40,14 +48,50 @@ namespace GamePriceFinder.MVC.Controllers
 
             var xboxEntities = await MicrosoftFinder.GetPrice(gameName.Replace(" ", "+"));
 
-            if (epicEntities != null)
+            if (id != 0)
             {
-                foreach (var epicEntity in epicEntities)
+                if (epicEntities != null)
                 {
-                    epicEntity.Genre.Description = steamEntities[0].Genre.Description;
+                    foreach (var epicEntity in epicEntities)
+                    {
+                        epicEntity.Genre.Description = steamEntities[0].Genre.Description;
+                    }
+
+                    steamEntities?.AddRange(epicEntities);
                 }
 
-                steamEntities?.AddRange(epicEntities);
+                if (xboxEntities != null)
+                {
+                    foreach (var xboxEntity in xboxEntities)
+                    {
+                        xboxEntity.Genre.Description = steamEntities[0].Genre.Description;
+                    }
+
+                    steamEntities?.AddRange(xboxEntities);
+                }
+            }
+            else
+            {
+                if (epicEntities != null)
+                {
+                    EntitiesHandler entityToUse = null;
+
+                    if (nuuvemEntities != null && nuuvemEntities.Count > 0)
+                    {
+                        entityToUse = nuuvemEntities[0];
+                    }
+                    else if(psnEntities != null && psnEntities.Count > 0)
+                    {
+                        entityToUse = psnEntities[0];
+                    }
+
+                    foreach (var epicEntity in epicEntities)
+                    {
+                        epicEntity.Genre.Description = entityToUse?.Genre?.Description;
+                    }
+
+                    steamEntities?.AddRange(epicEntities);
+                }
             }
 
             if (nuuvemEntities != null)
@@ -58,16 +102,6 @@ namespace GamePriceFinder.MVC.Controllers
             if (psnEntities != null)
             {
                 steamEntities?.AddRange(psnEntities);
-            }
-
-            if (xboxEntities != null)
-            {
-                foreach (var xboxEntity in xboxEntities)
-                {
-                    xboxEntity.Genre.Description = steamEntities[0].Genre.Description;
-                }
-
-                steamEntities?.AddRange(xboxEntities);
             }
 
 

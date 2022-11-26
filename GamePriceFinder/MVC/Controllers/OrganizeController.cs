@@ -12,7 +12,7 @@ namespace GamePriceFinder.MVC.Controllers
             _logger = logger;
         }
 
-        private string NormalizeName(string name) => name.Replace(":", "").Replace("-", "").Replace("™", "").ToLowerInvariant();
+        public static string NormalizeName(string name) => name.Replace(":", "").Replace("-", "").Replace("™", "").ToLowerInvariant();
 
         internal List<List<EntitiesHandler>> JoinByName(List<EntitiesHandler> entities)
         {
@@ -54,7 +54,7 @@ namespace GamePriceFinder.MVC.Controllers
 
                     var proximity = JaroWinkler.proximity(currentNormalizedName, NormalizeName(entities[j].Game.Name));
 
-                    if (proximity >= 0.9)
+                    if (proximity >= 0.98)
                     {
                         match.Add(entities[j]);
                         ignoreComparison.Add(j);

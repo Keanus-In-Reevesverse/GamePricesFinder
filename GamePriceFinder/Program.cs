@@ -50,15 +50,28 @@ app.MapGet("/", async (
         "scribblenauts unlimited", "scribblenauts unmasked", "scribblenauts mega pack", "scribblenauts showdown",
         "lego batman 3", "lego batman 3 além de gotham edição luxo", "lego batman 2", "lego batman",
         "the witcher 3", "the witcher 3 game of the year edition", "the witcher 3 wild hunt complete edition", "the witcher 2",
-        "nioh complete edition", "thronebreaker the witcher tales" };
+        "nioh complete edition", "thronebreaker the witcher tales", "modern warfare", "god of war", "gta", "assassins" };
 
     var steamGameIds = new List<int>() { 304390, 304390, 304390, 304390,
                                          218680, 218680, 218680, 218680,
                                          313690, 313690, 313690, 313690,
                                          292030, 292030, 292030, 292030};
 
+    if (gameNames.Count > steamGameIds.Count)
+    {
+        var difference = gameNames.Count - steamGameIds.Count;
+
+        for (int i = 0; i < difference; i++)
+        {
+            steamGameIds.Add(0);
+        }
+    }
+
     var organizedGameLists = new List<List<EntitiesHandler>>();
     var gamesToOrganize = new List<EntitiesHandler>();
+
+    Console.WriteLine($"Steam ids count: {steamGameIds.Count}");
+
     for (int i = 0; i < steamGameIds.Count; i++)
     {
         var entities = await searchSearcher.GetPrices(gameNames[i], steamGameIds[i]);
@@ -67,6 +80,8 @@ app.MapGet("/", async (
         {
             //Console.WriteLine(g);
         }
+
+        Console.WriteLine($"Searching {i}");
 
         foreach (var gameEntity in entities)
         {
@@ -80,13 +95,23 @@ app.MapGet("/", async (
 
     try
     {
+        foreach (var org in organizedGameLists)
+        {
+            foreach (var o in org)
+            {
+                if (o.Game.Name.Contains("&#39;"))
+                {
+                    o.Game.Name = o.Game.Name.Replace("&#39;", "\'");
+                }
+            }
+        }
         databaseController.ManageDatabase(organizedGameLists);
 
         Console.WriteLine("Search end...");
     }
     catch (Exception e)
     {
-
+        Console.WriteLine($"There was a problem while searching for games\n{e}");
     }
 });
 

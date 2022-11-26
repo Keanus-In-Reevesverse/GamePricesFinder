@@ -102,6 +102,11 @@ namespace GamePriceFinder.MVC.Controllers.Finders
                         }
 
                     }
+                    catch(NullReferenceException nullReferenceException)
+                    
+                    {
+                        continue;
+                    }
                     catch (Exception e)
                     {
                         continue;
