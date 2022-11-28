@@ -57,62 +57,68 @@ app.MapGet("/", async (
                                          313690, 313690, 313690, 313690,
                                          292030, 292030, 292030, 292030};
 
-    if (gameNames.Count > steamGameIds.Count)
+    var periodTimer = new PeriodicTimer(TimeSpan.FromHours(24));
+
+    do
     {
-        var difference = gameNames.Count - steamGameIds.Count;
-
-        for (int i = 0; i < difference; i++)
+        if (gameNames.Count > steamGameIds.Count)
         {
-            steamGameIds.Add(0);
-        }
-    }
+            var difference = gameNames.Count - steamGameIds.Count;
 
-    var organizedGameLists = new List<List<EntitiesHandler>>();
-    var gamesToOrganize = new List<EntitiesHandler>();
-
-    Console.WriteLine($"Steam ids count: {steamGameIds.Count}");
-
-    for (int i = 0; i < steamGameIds.Count; i++)
-    {
-        var entities = await searchSearcher.GetPrices(gameNames[i], steamGameIds[i]);
-
-        foreach (var g in entities.Select(a => a.Genre.Description))
-        {
-            //Console.WriteLine(g);
-        }
-
-        Console.WriteLine($"Searching {i}");
-
-        foreach (var gameEntity in entities)
-        {
-            gameEntity.Genre.Description = gameEntity.Genre.Description.Replace("role_playing_games", "RPG").ToUpper();
-        }
-
-        entities.ForEach(a => gamesToOrganize.Add(a));
-    }
-
-    organizedGameLists = organizeController.JoinByName(gamesToOrganize);
-
-    try
-    {
-        foreach (var org in organizedGameLists)
-        {
-            foreach (var o in org)
+            for (int i = 0; i < difference; i++)
             {
-                if (o.Game.Name.Contains("&#39;"))
-                {
-                    o.Game.Name = o.Game.Name.Replace("&#39;", "\'");
-                }
+                steamGameIds.Add(0);
             }
         }
-        databaseController.ManageDatabase(organizedGameLists);
 
-        Console.WriteLine("Search end...");
-    }
-    catch (Exception e)
-    {
-        Console.WriteLine($"There was a problem while searching for games\n{e}");
-    }
+        var organizedGameLists = new List<List<EntitiesHandler>>();
+        var gamesToOrganize = new List<EntitiesHandler>();
+
+        Console.WriteLine($"Steam ids count: {steamGameIds.Count}");
+
+        for (int i = 0; i < steamGameIds.Count; i++)
+        {
+            var entities = await searchSearcher.GetPrices(gameNames[i], steamGameIds[i]);
+
+            foreach (var g in entities.Select(a => a.Genre.Description))
+            {
+                //Console.WriteLine(g);
+            }
+
+            Console.WriteLine($"Searching {i}");
+
+            foreach (var gameEntity in entities)
+            {
+                gameEntity.Genre.Description = gameEntity.Genre.Description.Replace("role_playing_games", "RPG").ToUpper();
+            }
+
+            entities.ForEach(a => gamesToOrganize.Add(a));
+        }
+
+        organizedGameLists = organizeController.JoinByName(gamesToOrganize);
+
+        try
+        {
+            foreach (var org in organizedGameLists)
+            {
+                foreach (var o in org)
+                {
+                    if (o.Game.Name.Contains("&#39;"))
+                    {
+                        o.Game.Name = o.Game.Name.Replace("&#39;", "\'");
+                    }
+                }
+            }
+            databaseController.ManageDatabase(organizedGameLists);
+
+            Console.WriteLine("Search end...");
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"There was a problem while searching for games\n{e}");
+        }
+    } while (await periodTimer.WaitForNextTickAsync());
+
 });
 
 app.MapGet("/gameInfo/{id}", async (
